@@ -7,7 +7,7 @@
     domain: "ittemmall.com"
   };
   const TRACKING = {
-    metaPixelId: "",
+    metaPixelId: "1288524852852406",
     dailyBudgetKrw: 50000,
     currency: "KRW",
     primaryLandingPath: "/product/coolfit-wide-headband/50/category/25/display/1/",
@@ -18,6 +18,8 @@
   const PRIMARY_PRODUCT_PATH = "/product/coolfit-wide-headband/50/category/25/display/1/";
   const IS_FILE_MODE = window.location.protocol === "file:";
   const APP_BASE_PATH = !IS_FILE_MODE && window.location.hostname.endsWith("github.io") ? "/ittemmall" : "";
+
+  initMetaPixel();
 
   const heroSlides = [
     {
@@ -1901,6 +1903,28 @@
       const standard = ["ViewContent", "AddToCart", "InitiateCheckout"].includes(eventName);
       window.fbq(standard ? "track" : "trackCustom", eventName, payload);
     }
+  }
+
+  function initMetaPixel() {
+    if (!TRACKING.metaPixelId || typeof window.fbq === "function") return;
+    (function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = true;
+      n.version = "2.0";
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = true;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s);
+    })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+    window.fbq("init", TRACKING.metaPixelId);
+    window.fbq("track", "PageView");
   }
 
   function updateCartCount() {
