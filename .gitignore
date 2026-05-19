@@ -1,3 +1,7 @@
 .DS_Store
 *.zip
 hostinger-upload/
+node_modules/
+.env
+data/
+backups/
