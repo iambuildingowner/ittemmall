@@ -1,0 +1,49 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: hostinger-production
+  cancel-in-progress: true
+
+jobs:
+  ftp-deploy:
+    name: Upload public_html
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate FTP password secret
+        env:
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+        run: |
+          if [ -z "$HOSTINGER_FTP_PASSWORD" ]; then
+            echo "::error::Missing GitHub secret: HOSTINGER_FTP_PASSWORD"
+            exit 1
+          fi
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOSTINGER_FTP_SERVER || 'ftp.ittemmall.com' }}
+          username: ${{ secrets.HOSTINGER_FTP_USERNAME || 'u600673882' }}
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: ${{ secrets.HOSTINGER_FTP_SERVER_DIR || '/public_html/' }}
+          dangerous-clean-slate: true
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/.DS_Store
+            **/CNAME
+            **/.nojekyll
+            **/*.zip
