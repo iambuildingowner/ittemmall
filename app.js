@@ -10,12 +10,25 @@
     metaPixelId: "1288524852852406",
     dailyBudgetKrw: 50000,
     currency: "KRW",
-    primaryLandingPath: "/product/coolfit-wide-headband/50/category/25/display/1/",
+    primaryLandingPath: "/headband/",
     primaryCreativeImage: "assets/images/runnerwin-wide-headband-main.png"
   };
   const WON = new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW", maximumFractionDigits: 0 });
   const app = document.getElementById("app");
-  const PRIMARY_PRODUCT_PATH = "/product/coolfit-wide-headband/50/category/25/display/1/";
+  const PRIMARY_PRODUCT_PATH = "/headband/";
+  const LEGACY_PRODUCT_PATH = "/product/coolfit-wide-headband/50/category/25/display/1/";
+  const ROUTE_ALIASES = {
+    "/home": PRIMARY_PRODUCT_PATH,
+    "/index.html": PRIMARY_PRODUCT_PATH,
+    "/product/search.html": "/search/",
+    "/order/basket.html": "/cart/",
+    "/order/checkout.html": "/checkout/",
+    "/myshop/index.html": "/account/",
+    "/myshop/order/list.html": "/orders/",
+    "/myshop//order/list.html": "/orders/",
+    "/myshop/order/detail.html": "/orders/detail/",
+    "/myshop/order/edit.html": "/orders/edit/"
+  };
   const IS_FILE_MODE = window.location.protocol === "file:";
   const APP_BASE_PATH = !IS_FILE_MODE && window.location.hostname.endsWith("github.io") ? "/ittemmall" : "";
 
@@ -139,8 +152,9 @@
 
   function appHref(path) {
     if (!path || path.startsWith("http")) return path;
-    if (!IS_FILE_MODE) return path.startsWith("/") ? `${APP_BASE_PATH}${path}` : path;
-    const route = path.startsWith("#/") ? path.slice(1) : path;
+    const cleanPath = canonicalizePath(path);
+    if (!IS_FILE_MODE) return cleanPath.startsWith("/") ? `${APP_BASE_PATH}${cleanPath}` : cleanPath;
+    const route = cleanPath.startsWith("#/") ? cleanPath.slice(1) : cleanPath;
     if (!route.startsWith("/")) return path;
     return `index.html?route=${encodeURIComponent(route)}#${route}`;
   }
@@ -152,19 +166,26 @@
 
   function routeFromHref(rawHref) {
     if (!rawHref) return PRIMARY_PRODUCT_PATH;
-    if (rawHref.startsWith("#/")) return rawHref.slice(1);
+    if (rawHref.startsWith("#/")) return canonicalizePath(rawHref.slice(1));
     const hashIndex = rawHref.indexOf("#/");
-    if (hashIndex >= 0) return rawHref.slice(hashIndex + 1);
-    if (rawHref.startsWith("/")) return stripBasePath(rawHref);
+    if (hashIndex >= 0) return canonicalizePath(rawHref.slice(hashIndex + 1));
+    if (rawHref.startsWith("/")) return canonicalizePath(stripBasePath(rawHref));
     try {
       const url = new URL(rawHref, window.location.href);
       const hashPath = decodeURIComponent(url.hash.replace(/^#/, ""));
-      if (hashPath.startsWith("/")) return hashPath;
+      if (hashPath.startsWith("/")) return canonicalizePath(hashPath);
+      const routePath = url.searchParams.get("route");
+      if (routePath?.startsWith("/")) {
+        const params = new URLSearchParams(url.search);
+        params.delete("route");
+        const query = params.toString();
+        return canonicalizePath(query ? `${routePath}${routePath.includes("?") ? "&" : "?"}${query}` : routePath);
+      }
       const cleanPath = stripBasePath(url.pathname);
-      if (cleanPath.endsWith("/index.html")) return "/index.html";
-      return cleanPath + url.search;
+      if (cleanPath.endsWith("/index.html")) return canonicalizePath(cleanPath);
+      return canonicalizePath(cleanPath + url.search);
     } catch (error) {
-      return rawHref;
+      return canonicalizePath(rawHref);
     }
   }
 
@@ -182,29 +203,51 @@
   function getPath() {
     const hashPath = decodeURIComponent(window.location.hash.replace(/^#/, ""));
     if (hashPath === "/home" || hashPath === "home") return PRIMARY_PRODUCT_PATH;
-    if (hashPath.startsWith("/")) return hashPath;
+    if (hashPath.startsWith("/")) return canonicalizePath(hashPath);
     const routeParams = new URLSearchParams(window.location.search);
     const routePath = routeParams.get("route");
     if (routePath === "/home" || routePath === "home") return PRIMARY_PRODUCT_PATH;
     if (routePath?.startsWith("/")) {
       routeParams.delete("route");
       const query = routeParams.toString();
-      return query ? `${routePath}${routePath.includes("?") ? "&" : "?"}${query}` : routePath;
+      return canonicalizePath(query ? `${routePath}${routePath.includes("?") ? "&" : "?"}${query}` : routePath);
     }
     if (IS_FILE_MODE) {
-      return "/index.html";
+      return PRIMARY_PRODUCT_PATH;
     }
-    return stripBasePath(window.location.pathname) + window.location.search;
+    return canonicalizePath(stripBasePath(window.location.pathname) + window.location.search);
   }
 
   function routeKey(path = getPath()) {
-    return path.replace(/([?&])state=(loading|empty|error|success)/, "").replace(/\/$/, "") || "/index.html";
+    return canonicalizePath(path).replace(/([?&])state=(loading|empty|error|success)/, "").replace(/\/$/, "") || PRIMARY_PRODUCT_PATH;
   }
 
   function normalizePath(path) {
-    if (path === "/home" || path === "home") return PRIMARY_PRODUCT_PATH;
-    if (!path || path === "/") return "/index.html";
-    return path;
+    return canonicalizePath(path);
+  }
+
+  function canonicalizePath(path) {
+    if (!path || path === "/" || path === "home" || path === "/home") return PRIMARY_PRODUCT_PATH;
+    let next = String(path).trim();
+    const queryIndex = next.indexOf("?");
+    let base = queryIndex >= 0 ? next.slice(0, queryIndex) : next;
+    const query = queryIndex >= 0 ? next.slice(queryIndex) : "";
+    try {
+      base = decodeURIComponent(base);
+    } catch (error) {
+      // Keep the original path if it is not valid percent-encoded text.
+    }
+    if (base.startsWith(APP_BASE_PATH + "/")) base = stripBasePath(base);
+    if (!base.startsWith("/")) base = `/${base}`;
+    base = base.replace(/\/{2,}/g, "/");
+    if (base.endsWith("/index.html")) base = base.replace(/index\.html$/, "");
+    if (base !== "/" && !base.includes(".") && !base.endsWith("/")) base = `${base}/`;
+    if (base === "/" || base === "/index.html") base = PRIMARY_PRODUCT_PATH;
+    if (base === LEGACY_PRODUCT_PATH || base.startsWith("/product/coolfit-wide-headband/")) base = PRIMARY_PRODUCT_PATH;
+    else if (base === "/category/new/44/" || base.startsWith("/category/new/")) base = "/all/";
+    else if (base === "/category/acc/25/" || base.startsWith("/category/acc/")) base = "/acc/";
+    else if (ROUTE_ALIASES[base]) base = ROUTE_ALIASES[base];
+    return `${base}${query}`;
   }
 
   function writeHistory(path, replace = false) {
@@ -218,6 +261,13 @@
       return;
     }
     history[replace ? "replaceState" : "pushState"]({}, "", `${APP_BASE_PATH}${nextPath}`);
+  }
+
+  function syncCanonicalUrl(path) {
+    if (IS_FILE_MODE) return;
+    const target = normalizePath(path);
+    const visible = stripBasePath(window.location.pathname) + window.location.search;
+    if (visible !== target) writeHistory(target, true);
   }
 
   function beforeLeave() {
@@ -245,9 +295,9 @@
 
   function getOriginLabel() {
     const path = getPath();
-    if (path.includes("/category/")) return "CATEGORY";
-    if (path.includes("/product/")) return "PRODUCT";
-    if (path.includes("/order/basket")) return "CART";
+    if (path.includes("/all/") || path.includes("/acc/") || path.includes("/category/")) return "CATEGORY";
+    if (path.includes("/headband/") || path.includes("/product/")) return "PRODUCT";
+    if (path.includes("/cart/") || path.includes("/order/basket")) return "CART";
     if (path.includes("/board/")) return "COMMUNITY";
     if (path.includes("/about/")) return "ABOUT";
     return "HOME";
@@ -296,12 +346,15 @@
   };
 
   function productUrl(product) {
+    if (product.id === "coolfit-wide-headband") return PRIMARY_PRODUCT_PATH;
     return `/product/${product.id}/${product.cafeId}/category/${product.cateNo}/display/1/`;
   }
 
   function categoryUrl(slug) {
     const cat = categories[slug];
     if (!cat) return PRIMARY_PRODUCT_PATH;
+    if (slug === "new") return "/all/";
+    if (slug === "acc") return "/acc/";
     return `/category/${slug}/${cat.cateNo}/`;
   }
 
@@ -313,16 +366,21 @@
     const [routePath, routeQuery = ""] = currentPath.split("?");
     const path = normalizePath(routePath);
     const params = new URLSearchParams(routeQuery);
+    syncCanonicalUrl(currentPath);
     const isHome = path === "/index.html" || path === "/";
     document.body.classList.toggle("st-home", isHome);
     document.body.classList.toggle("st-hero", isHome && window.scrollY < 80);
     document.body.classList.toggle("header_solid", !isHome);
-    if (isHome) {
-      writeHistory(PRIMARY_PRODUCT_PATH, true);
-      document.body.classList.remove("st-home", "st-hero");
-      document.body.classList.add("header_solid");
-      await renderProduct(PRIMARY_PRODUCT_PATH);
-    }
+    if (path === PRIMARY_PRODUCT_PATH) await renderProduct(LEGACY_PRODUCT_PATH);
+    else if (path === "/all/") await renderCategory("new");
+    else if (path === "/acc/") await renderCategory("acc");
+    else if (path === "/cart/") await renderCart();
+    else if (path === "/checkout/") await renderCheckout();
+    else if (path === "/orders/") renderOrders();
+    else if (path === "/orders/detail/") renderOrderDetail(params.get("order_id"));
+    else if (path === "/orders/edit/") renderOrderEdit(params.get("order_id"));
+    else if (path === "/account/") renderAccount();
+    else if (path === "/search/") await renderSearchPage(params.get("keyword") || "");
     else if (path.startsWith("/category/")) await renderCategory(path.split("/")[2]);
     else if (path === "/product/list.html") await renderSubCategory(params.get("cate_no"));
     else if (path.startsWith("/product/search.html")) await renderSearchPage(params.get("keyword") || "");
@@ -2016,7 +2074,7 @@
       const url = new URL(link.href, window.location.href);
       if (url.origin === window.location.origin) {
         event.preventDefault();
-        navigate(rawHref.startsWith("/") ? rawHref : url.pathname + url.search);
+        navigate(target || url.pathname + url.search);
       }
     }
   });
