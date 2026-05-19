@@ -1991,7 +1991,12 @@ body.search_open .search_wrap {
 }
 
 .wide_color_grid .product_visual_section {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 530 / 285;
+  background: #fff;
+}
+
+.wide_color_grid .product_visual_section.has_image {
+  background: #fff;
 }
 
 .wide_color_grid h5 {
