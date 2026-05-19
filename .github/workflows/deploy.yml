@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           local-dir: ./
           server-dir: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
-          dangerous-clean-slate: true
+          dangerous-clean-slate: false
           log-level: standard
           exclude: |
             **/.git*

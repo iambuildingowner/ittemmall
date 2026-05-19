@@ -1,6 +1,7 @@
 (function () {
   const STORAGE_KEY = "runnerwin_state_v2";
   const TRACKING_KEY = "ittemmall_tracking_events_v1";
+  const ATTRIBUTION_KEY = "ittemmall_attribution_v1";
   const BRAND = {
     name: "ITTEMMALL",
     kr: "잇템몰",
@@ -8,6 +9,8 @@
   };
   const TRACKING = {
     metaPixelId: "1288524852852406",
+    serverEndpoint: "/track.php",
+    serverLoggedEvents: ["ViewContent", "AddToCart", "InitiateCheckout", "NpayClick", "CheckoutFormStart", "PaymentGatewayClick", "OptionSelect"],
     dailyBudgetKrw: 50000,
     currency: "KRW",
     primaryLandingPath: "/headband/",
@@ -33,6 +36,7 @@
   const APP_BASE_PATH = !IS_FILE_MODE && window.location.hostname.endsWith("github.io") ? "/ittemmall" : "";
 
   initMetaPixel();
+  captureAttribution();
 
   const heroSlides = [
     {
@@ -1947,6 +1951,8 @@
       payload,
       path: getPath(),
       url: window.location.href,
+      referrer: document.referrer || "",
+      attribution: getAttribution(),
       timestamp: new Date().toISOString()
     };
     try {
@@ -1957,9 +1963,70 @@
     }
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(event);
+    sendServerTrackingEvent(event);
     if (typeof window.fbq === "function") {
       const standard = ["ViewContent", "AddToCart", "InitiateCheckout"].includes(eventName);
       window.fbq(standard ? "track" : "trackCustom", eventName, payload);
+    }
+  }
+
+  function sendServerTrackingEvent(event) {
+    if (IS_FILE_MODE || !TRACKING.serverEndpoint || !TRACKING.serverLoggedEvents.includes(event.event)) return;
+    try {
+      const body = JSON.stringify({
+        ...event,
+        meta_pixel_id: TRACKING.metaPixelId,
+        brand: BRAND.name,
+        product_focus: "runnerwin-wide-headband"
+      });
+      if (navigator.sendBeacon) {
+        const blob = new Blob([body], { type: "application/json" });
+        if (navigator.sendBeacon(TRACKING.serverEndpoint, blob)) return;
+      }
+      fetch(TRACKING.serverEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+        credentials: "same-origin",
+        keepalive: true
+      }).catch(() => {});
+    } catch (error) {
+      // Server logging must never block the shopping flow.
+    }
+  }
+
+  function captureAttribution() {
+    if (IS_FILE_MODE) return;
+    const params = new URLSearchParams(window.location.search);
+    const keys = ["fbclid", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+    const values = {};
+    keys.forEach((key) => {
+      const value = params.get(key);
+      if (value) values[key] = value.slice(0, 300);
+    });
+    const looksLikePaidSocial = values.fbclid || /(^|\.)facebook\.com$|(^|\.)instagram\.com$|l\.facebook\.com|lm\.facebook\.com/i.test(document.referrer || "");
+    if (!Object.keys(values).length && !looksLikePaidSocial) return;
+    const previous = getAttribution();
+    const attribution = {
+      ...previous,
+      ...values,
+      referrer: document.referrer || previous.referrer || "",
+      landing_url: previous.landing_url || window.location.href,
+      first_seen: previous.first_seen || new Date().toISOString(),
+      last_seen: new Date().toISOString()
+    };
+    try {
+      localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(attribution));
+    } catch (error) {
+      // Attribution is helpful, but not required for checkout.
+    }
+  }
+
+  function getAttribution() {
+    try {
+      return JSON.parse(localStorage.getItem(ATTRIBUTION_KEY) || "{}") || {};
+    } catch (error) {
+      return {};
     }
   }
 
