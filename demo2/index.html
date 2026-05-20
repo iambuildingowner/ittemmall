@@ -532,12 +532,15 @@
       }
 
       .main-image {
+        position: relative;
         aspect-ratio: 4 / 3;
         overflow: hidden;
         border-radius: 8px;
         background: white;
+        cursor: grab;
         touch-action: pan-y;
         user-select: none;
+        --drag-offset: 0px;
       }
 
       .main-image.portrait {
@@ -546,12 +549,36 @@
         aspect-ratio: 1024 / 1535;
       }
 
+      .main-image.is-dragging {
+        cursor: grabbing;
+      }
+
+      .gallery-track {
+        display: flex;
+        width: 300%;
+        height: 100%;
+        transform: translateX(calc(-33.333333% + var(--drag-offset)));
+        transition: transform 180ms ease;
+        will-change: transform;
+      }
+
+      .main-image.is-dragging .gallery-track {
+        transition: none;
+      }
+
+      .gallery-slide {
+        flex: 0 0 33.333333%;
+        height: 100%;
+        background: white;
+      }
+
       .main-image img,
       .thumb img {
         width: 100%;
         height: 100%;
         object-fit: contain;
         background: white;
+        pointer-events: none;
         user-select: none;
       }
 
@@ -1803,6 +1830,7 @@
         let historyView = { status: "idle", items: [], error: "" };
         let scrollTimer = 0;
         let gallerySwipe = null;
+        let gallerySwipeCommitTimer = 0;
 
         const savedState = readJson(storageKeys.state, {});
         const state = {
@@ -1849,6 +1877,7 @@
         document.addEventListener("input", handleInput);
         document.addEventListener("change", handleChange);
         document.addEventListener("pointerdown", handleGalleryPointerDown, { passive: true });
+        document.addEventListener("pointermove", handleGalleryPointerMove, { passive: true });
         document.addEventListener("pointerup", handleGalleryPointerUp, { passive: true });
         document.addEventListener("pointercancel", resetGallerySwipe, { passive: true });
         window.addEventListener("hashchange", handleHashChange);
@@ -2257,6 +2286,8 @@
             render();
           }
           if (action === "select-image") {
+            clearGallerySwipeCommit();
+            resetGallerySwipe();
             state.selectedImageIndex = Number(target.dataset.index || 0);
             persistState();
             render();
@@ -2333,28 +2364,100 @@
         }
 
         function handleGalleryPointerDown(event) {
+          if (event.pointerType === "mouse" && event.button !== 0) return;
           const target = event.target.closest("[data-gallery-swipe]");
           if (!target || state.page !== "detail") return;
+          const images = currentProduct().images?.length ? currentProduct().images : [currentProduct().image];
+          if (images.length < 2) return;
+          clearGallerySwipeCommit();
+          target.classList.remove("is-dragging");
+          target.style.setProperty("--drag-offset", "0px");
           gallerySwipe = {
             pointerId: event.pointerId,
+            target,
             startX: event.clientX,
             startY: event.clientY,
+            currentX: event.clientX,
+            currentY: event.clientY,
+            width: target.clientWidth || window.innerWidth,
+            active: false,
           };
+        }
+
+        function handleGalleryPointerMove(event) {
+          if (!gallerySwipe || gallerySwipe.pointerId !== event.pointerId) return;
+          const swipe = gallerySwipe;
+          if (!swipe.target.isConnected) {
+            resetGallerySwipe();
+            return;
+          }
+
+          swipe.currentX = event.clientX;
+          swipe.currentY = event.clientY;
+          const deltaX = swipe.currentX - swipe.startX;
+          const deltaY = swipe.currentY - swipe.startY;
+          const absX = Math.abs(deltaX);
+          const absY = Math.abs(deltaY);
+
+          if (!swipe.active) {
+            if (absY > 18 && absY > absX * 1.15) {
+              resetGallerySwipe();
+              return;
+            }
+            if (absX < 8 || absX < absY * 1.1) return;
+            swipe.active = true;
+            swipe.target.classList.add("is-dragging");
+          }
+
+          const width = swipe.target.clientWidth || swipe.width || window.innerWidth;
+          swipe.width = width;
+          const clampedDelta = clamp(deltaX, -width, width);
+          swipe.target.style.setProperty("--drag-offset", `${clampedDelta}px`);
         }
 
         function handleGalleryPointerUp(event) {
           if (!gallerySwipe || gallerySwipe.pointerId !== event.pointerId) return;
-          const deltaX = event.clientX - gallerySwipe.startX;
-          const deltaY = event.clientY - gallerySwipe.startY;
+          const swipe = gallerySwipe;
+          const deltaX = (swipe.currentX ?? event.clientX) - swipe.startX;
+          const deltaY = (swipe.currentY ?? event.clientY) - swipe.startY;
           const absX = Math.abs(deltaX);
           const absY = Math.abs(deltaY);
-          resetGallerySwipe();
-          if (absX < 44 || absX < absY * 1.2) return;
-          shiftGalleryImage(deltaX < 0 ? 1 : -1);
+          const width = swipe.target.clientWidth || swipe.width || window.innerWidth;
+          const threshold = Math.min(90, width * 0.22);
+          if (!swipe.active || absX < threshold || absX < absY * 1.1) {
+            resetGallerySwipe();
+            return;
+          }
+          commitGallerySwipe(deltaX < 0 ? 1 : -1, swipe.target, width);
         }
 
         function resetGallerySwipe() {
+          const swipe = gallerySwipe;
           gallerySwipe = null;
+          if (!swipe?.target?.isConnected) return;
+          swipe.target.classList.remove("is-dragging");
+          swipe.target.style.setProperty("--drag-offset", "0px");
+        }
+
+        function clearGallerySwipeCommit() {
+          if (!gallerySwipeCommitTimer) return;
+          window.clearTimeout(gallerySwipeCommitTimer);
+          gallerySwipeCommitTimer = 0;
+        }
+
+        function commitGallerySwipe(direction, target, width) {
+          gallerySwipe = null;
+          target.classList.remove("is-dragging");
+          target.style.setProperty("--drag-offset", `${direction > 0 ? -width : width}px`);
+          clearGallerySwipeCommit();
+          gallerySwipeCommitTimer = window.setTimeout(() => {
+            gallerySwipeCommitTimer = 0;
+            shiftGalleryImage(direction);
+          }, 190);
+        }
+
+        function clamp(value, min, max) {
+          return Math.min(Math.max(value, min), max);
         }
 
         function shiftGalleryImage(direction) {
@@ -2772,11 +2875,25 @@
             Math.max(Number(state.selectedImageIndex || 0), 0),
             images.length - 1,
           );
+          const gallerySlides = [-1, 0, 1].map((offset) => {
+            const index = (selectedImageIndex + offset + images.length) % images.length;
+            return { index, src: images[index] };
+          });
           return `
             <main class="has-detail-bottom">
               <section class="image-stage">
-                <div class="main-image ${product.detailMediaClass || ""}" data-gallery-swipe>
-                  <img src="${images[selectedImageIndex]}" alt="${escapeHtml(product.name)}" draggable="false" />
+                <div class="main-image ${product.detailMediaClass || ""}" data-gallery-swipe aria-label="${escapeHtml(product.name)} 이미지 갤러리">
+                  <div class="gallery-track">
+                    ${gallerySlides
+                      .map(
+                        (slide) => `
+                          <div class="gallery-slide" aria-hidden="${slide.index === selectedImageIndex ? "false" : "true"}">
+                            <img src="${slide.src}" alt="${escapeHtml(product.name)} 이미지 ${slide.index + 1}" draggable="false" />
+                          </div>
+                        `,
+                      )
+                      .join("")}
+                  </div>
                 </div>
                 <div class="thumb-grid">
                   ${images
