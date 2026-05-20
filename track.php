@@ -30,6 +30,8 @@ if (!is_array($data)) {
 $allowedEvents = [
     'ViewContent',
     'AddToCart',
+    'CheckoutStartClick',
+    'CheckoutPageView',
     'InitiateCheckout',
     'NpayClick',
     'CheckoutFormStart',

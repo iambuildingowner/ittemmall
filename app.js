@@ -10,7 +10,7 @@
   const TRACKING = {
     metaPixelId: "1288524852852406",
     serverEndpoint: "/track.php",
-    serverLoggedEvents: ["ViewContent", "AddToCart", "InitiateCheckout", "NpayClick", "CheckoutFormStart", "PaymentGatewayClick", "PaymentPageView", "OptionSelect"],
+    serverLoggedEvents: ["ViewContent", "AddToCart", "CheckoutStartClick", "CheckoutPageView", "InitiateCheckout", "NpayClick", "CheckoutFormStart", "PaymentGatewayClick", "PaymentPageView", "OptionSelect"],
     dailyBudgetKrw: 50000,
     currency: "KRW",
     primaryLandingPath: "/headband/",
@@ -803,14 +803,14 @@
 
     try {
       if (!sessionStorage.getItem(marker)) {
-        trackProductIntent("InitiateCheckout", product.id, color, size, qty, {
+        trackProductIntent("CheckoutPageView", product.id, color, size, qty, {
           source: "checkout_start_url",
           __test: isTest
         });
         sessionStorage.setItem(marker, "1");
       }
     } catch (error) {
-      trackProductIntent("InitiateCheckout", product.id, color, size, qty, {
+      trackProductIntent("CheckoutPageView", product.id, color, size, qty, {
         source: "checkout_start_url",
         __test: isTest
       });
@@ -1772,7 +1772,9 @@
         const color = form.querySelector("input[name=color]:checked")?.value || "BLACK";
         const size = form.querySelector("input[name=size]:checked")?.value || "FREE";
         const qty = Math.max(1, Number(form.querySelector("[data-qty-input]")?.value || 1));
-        trackProductIntent("InitiateCheckout", productId, color, size, qty);
+        trackProductIntent("CheckoutStartClick", productId, color, size, qty, {
+          source: "direct_buy_button"
+        });
         startGuestCheckout(productId, color, size, qty, { origin: false });
       });
     });
@@ -1832,7 +1834,7 @@
       repo.getCart().then((cart) => {
         if (!cart.length) return;
         const value = cart.reduce((sum, item) => sum + item.product.price * item.qty, 0);
-        trackEvent("InitiateCheckout", {
+        trackEvent("CheckoutStartClick", {
           content_ids: cart.map((item) => item.productId),
           content_name: "Cart checkout",
           content_type: "product_group",
@@ -1882,12 +1884,23 @@
       saveState();
       repo.getCart().then((cart) => {
         const value = cart.reduce((sum, item) => sum + item.product.price * item.qty, 0);
-        trackEvent("PaymentGatewayClick", {
+        const paymentPayload = {
           content_ids: cart.map((item) => item.productId),
+          content_name: "Headband payment page button",
+          content_type: "product_group",
+          value,
+          currency: TRACKING.currency,
+          source: "payment_gateway_button",
+          __test: state.trackingTest === true
+        };
+        trackEvent("InitiateCheckout", paymentPayload);
+        trackEvent("PaymentGatewayClick", {
+          content_ids: paymentPayload.content_ids,
           content_name: "Payment gateway placeholder",
           content_type: "product_group",
           value,
           currency: TRACKING.currency,
+          source: "payment_gateway_button",
           __test: state.trackingTest === true
         });
         const primaryPaymentItem = cart.find((item) => item.productId === "coolfit-wide-headband") || cart[0];
@@ -1897,7 +1910,7 @@
         const paymentPath = `${productPaymentPath}${state.trackingTest === true ? "?test=1" : ""}`;
         window.setTimeout(() => {
           window.location.href = appHref(paymentPath);
-        }, 120);
+        }, 280);
       });
     });
 
