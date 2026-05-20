@@ -37,6 +37,7 @@ $allowedEvents = [
     'CheckoutFormStart',
     'PaymentGatewayClick',
     'PaymentPageView',
+    'IttemmallHeadbandCheckout',
     'OptionSelect',
 ];
 

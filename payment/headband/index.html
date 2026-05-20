@@ -25,6 +25,8 @@
           value: 7900,
           currency: "KRW",
           product_slug: "headband",
+          site_name: "ittemmall",
+          checkout_scope: "ittemmall_headband",
           source: "payment_headband_placeholder_url"
         };
         if (isTest) payload.__test = true;
@@ -49,6 +51,7 @@
         window.fbq("init", pixelId);
         window.fbq("track", "PageView");
         window.fbq("track", "InitiateCheckout", payload);
+        window.fbq("trackCustom", "IttemmallHeadbandCheckout", payload);
         window.fbq("trackCustom", "PaymentPageView", payload);
 
         function sendServerEvent(eventName) {
@@ -81,6 +84,7 @@
         }
 
         sendServerEvent("InitiateCheckout");
+        sendServerEvent("IttemmallHeadbandCheckout");
         sendServerEvent("PaymentPageView");
       })();
     </script>
