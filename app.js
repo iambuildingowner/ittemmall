@@ -379,6 +379,7 @@
     else if (path === "/all/") await renderCategory("new");
     else if (path === "/acc/") await renderCategory("acc");
     else if (path === "/cart/") await renderCart();
+    else if (path === "/checkout-start/") await renderCheckoutStart(params);
     else if (path === "/checkout/") await renderCheckout();
     else if (path === "/orders/") renderOrders();
     else if (path === "/orders/detail/") renderOrderDetail(params.get("order_id"));
@@ -781,6 +782,39 @@
       </section>
       ${footer()}
     `;
+  }
+
+  async function renderCheckoutStart(params = new URLSearchParams()) {
+    const productId = params.get("product") || "coolfit-wide-headband";
+    const product = products.find((item) => item.id === productId) || products[0];
+    const requestedColor = (params.get("color") || "BLACK").toUpperCase();
+    const requestedSize = (params.get("size") || "FREE").toUpperCase();
+    const color = product.colors.includes(requestedColor) ? requestedColor : product.colors[0];
+    const size = product.sizes.includes(requestedSize) ? requestedSize : product.sizes[0];
+    const qty = Math.max(1, Number(params.get("qty") || 1));
+    const isTest = params.get("test") === "1";
+    const marker = `checkout-start:${product.id}:${color}:${size}:${qty}:${isTest}`;
+
+    state.origin = { path: PRIMARY_PRODUCT_PATH, label: "PRODUCT" };
+    state.cart = [{ productId: product.id, color, size, qty }];
+    saveState();
+
+    try {
+      if (!sessionStorage.getItem(marker)) {
+        trackProductIntent("InitiateCheckout", product.id, color, size, qty, {
+          source: "checkout_start_url",
+          __test: isTest
+        });
+        sessionStorage.setItem(marker, "1");
+      }
+    } catch (error) {
+      trackProductIntent("InitiateCheckout", product.id, color, size, qty, {
+        source: "checkout_start_url",
+        __test: isTest
+      });
+    }
+
+    await renderCheckout();
   }
 
   function renderOrders() {
