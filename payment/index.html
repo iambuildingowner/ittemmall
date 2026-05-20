@@ -47,7 +47,6 @@
 
         window.fbq("init", pixelId);
         window.fbq("track", "PageView");
-        window.fbq("track", "InitiateCheckout", payload);
         window.fbq("trackCustom", "PaymentPageView", payload);
 
         function sendServerEvent(eventName) {
@@ -79,7 +78,6 @@
           } catch (error) {}
         }
 
-        sendServerEvent("InitiateCheckout");
         sendServerEvent("PaymentPageView");
       })();
     </script>

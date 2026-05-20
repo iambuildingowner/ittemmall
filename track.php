@@ -32,7 +32,6 @@ $allowedEvents = [
     'AddToCart',
     'CheckoutStartClick',
     'CheckoutPageView',
-    'InitiateCheckout',
     'NpayClick',
     'CheckoutFormStart',
     'PaymentGatewayClick',

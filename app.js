@@ -10,7 +10,7 @@
   const TRACKING = {
     metaPixelId: "1288524852852406",
     serverEndpoint: "/track.php",
-    serverLoggedEvents: ["ViewContent", "AddToCart", "CheckoutStartClick", "CheckoutPageView", "InitiateCheckout", "NpayClick", "CheckoutFormStart", "PaymentGatewayClick", "PaymentPageView", "OptionSelect"],
+    serverLoggedEvents: ["ViewContent", "AddToCart", "CheckoutStartClick", "CheckoutPageView", "NpayClick", "CheckoutFormStart", "PaymentGatewayClick", "PaymentPageView", "OptionSelect"],
     dailyBudgetKrw: 50000,
     currency: "KRW",
     primaryLandingPath: "/headband/",
@@ -2026,7 +2026,7 @@
     window.dataLayer.push(event);
     sendServerTrackingEvent(event);
     if (typeof window.fbq === "function") {
-      const standard = ["ViewContent", "AddToCart", "InitiateCheckout"].includes(eventName);
+      const standard = ["ViewContent", "AddToCart"].includes(eventName);
       window.fbq(standard ? "track" : "trackCustom", eventName, payload);
     }
   }
