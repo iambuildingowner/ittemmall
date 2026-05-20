@@ -1890,7 +1890,11 @@
           currency: TRACKING.currency,
           __test: state.trackingTest === true
         });
-        const paymentPath = state.trackingTest === true ? "/payment/?test=1" : "/payment/";
+        const primaryPaymentItem = cart.find((item) => item.productId === "coolfit-wide-headband") || cart[0];
+        const productPaymentPath = primaryPaymentItem?.productId === "coolfit-wide-headband"
+          ? "/payment/headband/"
+          : `/payment/${primaryPaymentItem?.productId || "headband"}/`;
+        const paymentPath = `${productPaymentPath}${state.trackingTest === true ? "?test=1" : ""}`;
         window.setTimeout(() => {
           window.location.href = appHref(paymentPath);
         }, 120);

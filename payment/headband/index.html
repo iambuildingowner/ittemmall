@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>헤드밴드 결제 페이지 | ITTEMMALL</title>
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="canonical" href="https://ittemmall.com/payment/headband/">
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #fff;
+      }
+    </style>
+    <script>
+      (function () {
+        var pixelId = "1288524852852406";
+        var isTest = new URLSearchParams(window.location.search).get("test") === "1";
+        var payload = {
+          content_ids: ["coolfit-wide-headband"],
+          content_name: "Runnerwin Technical Headband payment placeholder",
+          content_type: "product",
+          value: 7900,
+          currency: "KRW",
+          product_slug: "headband",
+          source: "payment_headband_placeholder_url"
+        };
+        if (isTest) payload.__test = true;
+
+        (function (f, b, e, v, n, t, s) {
+          if (f.fbq) return;
+          n = f.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+          };
+          if (!f._fbq) f._fbq = n;
+          n.push = n;
+          n.loaded = true;
+          n.version = "2.0";
+          n.queue = [];
+          t = b.createElement(e);
+          t.async = true;
+          t.src = v;
+          s = b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t, s);
+        })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+
+        window.fbq("init", pixelId);
+        window.fbq("track", "PageView");
+        window.fbq("trackCustom", "PaymentPageView", payload);
+
+        try {
+          var event = {
+            event: "PaymentPageView",
+            payload: payload,
+            path: "/payment/headband/",
+            url: window.location.href,
+            referrer: document.referrer || "",
+            attribution: {},
+            timestamp: new Date().toISOString(),
+            meta_pixel_id: pixelId,
+            brand: "ITTEMMALL",
+            product_focus: "runnerwin-wide-headband"
+          };
+          var body = JSON.stringify(event);
+          if (navigator.sendBeacon) {
+            var blob = new Blob([body], { type: "application/json" });
+            if (navigator.sendBeacon("/track.php", blob)) return;
+          }
+          fetch("/track.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: body,
+            credentials: "same-origin",
+            keepalive: true
+          }).catch(function () {});
+        } catch (error) {}
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
