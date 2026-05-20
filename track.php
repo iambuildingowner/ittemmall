@@ -34,6 +34,7 @@ $allowedEvents = [
     'NpayClick',
     'CheckoutFormStart',
     'PaymentGatewayClick',
+    'PaymentPageView',
     'OptionSelect',
 ];
 

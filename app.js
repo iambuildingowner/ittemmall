@@ -10,7 +10,7 @@
   const TRACKING = {
     metaPixelId: "1288524852852406",
     serverEndpoint: "/track.php",
-    serverLoggedEvents: ["ViewContent", "AddToCart", "InitiateCheckout", "NpayClick", "CheckoutFormStart", "PaymentGatewayClick", "OptionSelect"],
+    serverLoggedEvents: ["ViewContent", "AddToCart", "InitiateCheckout", "NpayClick", "CheckoutFormStart", "PaymentGatewayClick", "PaymentPageView", "OptionSelect"],
     dailyBudgetKrw: 50000,
     currency: "KRW",
     primaryLandingPath: "/headband/",
@@ -1872,6 +1872,10 @@
 
     app.querySelector("[data-payment-gateway]")?.addEventListener("click", () => {
       const form = app.querySelector("[data-checkout-form]");
+      if (form && !form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
       if (form) state.checkoutForm = readCheckoutForm(form, "checkout");
       saveState();
       repo.getCart().then((cart) => {
@@ -1883,6 +1887,9 @@
           value,
           currency: TRACKING.currency
         });
+        window.setTimeout(() => {
+          window.location.href = appHref("/payment/");
+        }, 120);
       });
     });
 
