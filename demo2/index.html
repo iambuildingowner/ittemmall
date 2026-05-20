@@ -536,6 +536,8 @@
         overflow: hidden;
         border-radius: 8px;
         background: white;
+        touch-action: pan-y;
+        user-select: none;
       }
 
       .main-image.portrait {
@@ -550,6 +552,7 @@
         height: 100%;
         object-fit: contain;
         background: white;
+        user-select: none;
       }
 
       .thumb-grid {
@@ -1489,7 +1492,7 @@
           mainSubcopy:
             "마르세 스위트 피클볼 패들을 핑크와 블랙 두 가지 컬러로 비교하고 주문서까지 작성할 수 있습니다.",
           heroEyebrow: "MOBILE SHOP",
-          heroImage: "assets/marse/marse-c-hero-model.png",
+          heroImage: "assets/marse/marse-model-floor.png",
           heroButtonText: "대표 상품 보기",
           productSectionTitle: "전체 상품",
           footerLinks: ["고객센터", "사업자 정보", "이용약관", "개인정보처리방침"],
@@ -1799,6 +1802,7 @@
         let suppressHashChange = false;
         let historyView = { status: "idle", items: [], error: "" };
         let scrollTimer = 0;
+        let gallerySwipe = null;
 
         const savedState = readJson(storageKeys.state, {});
         const state = {
@@ -1844,6 +1848,9 @@
         document.addEventListener("click", handleClick);
         document.addEventListener("input", handleInput);
         document.addEventListener("change", handleChange);
+        document.addEventListener("pointerdown", handleGalleryPointerDown, { passive: true });
+        document.addEventListener("pointerup", handleGalleryPointerUp, { passive: true });
+        document.addEventListener("pointercancel", resetGallerySwipe, { passive: true });
         window.addEventListener("hashchange", handleHashChange);
         window.addEventListener(
           "scroll",
@@ -2325,6 +2332,43 @@
           }
         }
 
+        function handleGalleryPointerDown(event) {
+          const target = event.target.closest("[data-gallery-swipe]");
+          if (!target || state.page !== "detail") return;
+          gallerySwipe = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+          };
+        }
+
+        function handleGalleryPointerUp(event) {
+          if (!gallerySwipe || gallerySwipe.pointerId !== event.pointerId) return;
+          const deltaX = event.clientX - gallerySwipe.startX;
+          const deltaY = event.clientY - gallerySwipe.startY;
+          const absX = Math.abs(deltaX);
+          const absY = Math.abs(deltaY);
+          resetGallerySwipe();
+          if (absX < 44 || absX < absY * 1.2) return;
+          shiftGalleryImage(deltaX < 0 ? 1 : -1);
+        }
+
+        function resetGallerySwipe() {
+          gallerySwipe = null;
+        }
+
+        function shiftGalleryImage(direction) {
+          const images = currentProduct().images?.length ? currentProduct().images : [currentProduct().image];
+          if (images.length < 2) return;
+          const currentIndex = Math.min(
+            Math.max(Number(state.selectedImageIndex || 0), 0),
+            images.length - 1,
+          );
+          state.selectedImageIndex = (currentIndex + direction + images.length) % images.length;
+          persistState();
+          render();
+        }
+
         function handleInput(event) {
           const field = event.target.dataset.field;
           const search = event.target.dataset.search;
@@ -2731,8 +2775,8 @@
           return `
             <main class="has-detail-bottom">
               <section class="image-stage">
-                <div class="main-image ${product.detailMediaClass || ""}">
-                  <img src="${images[selectedImageIndex]}" alt="${escapeHtml(product.name)}" />
+                <div class="main-image ${product.detailMediaClass || ""}" data-gallery-swipe>
+                  <img src="${images[selectedImageIndex]}" alt="${escapeHtml(product.name)}" draggable="false" />
                 </div>
                 <div class="thumb-grid">
                   ${images
