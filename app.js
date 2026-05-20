@@ -8,7 +8,7 @@
     domain: "ittemmall.com"
   };
   const TRACKING = {
-    metaPixelId: "1720827069089994",
+    metaPixelId: "1288524852852406",
     serverEndpoint: "/track.php",
     serverLoggedEvents: ["ViewContent", "AddToCart", "InitiateCheckout", "NpayClick", "CheckoutFormStart", "PaymentGatewayClick", "PaymentPageView", "OptionSelect"],
     dailyBudgetKrw: 50000,
