@@ -1893,7 +1893,6 @@
           source: "payment_gateway_button",
           __test: state.trackingTest === true
         };
-        trackEvent("InitiateCheckout", paymentPayload);
         trackEvent("PaymentGatewayClick", {
           content_ids: paymentPayload.content_ids,
           content_name: "Payment gateway placeholder",

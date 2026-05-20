@@ -48,34 +48,40 @@
 
         window.fbq("init", pixelId);
         window.fbq("track", "PageView");
+        window.fbq("track", "InitiateCheckout", payload);
         window.fbq("trackCustom", "PaymentPageView", payload);
 
-        try {
-          var event = {
-            event: "PaymentPageView",
-            payload: payload,
-            path: "/payment/headband/",
-            url: window.location.href,
-            referrer: document.referrer || "",
-            attribution: {},
-            timestamp: new Date().toISOString(),
-            meta_pixel_id: pixelId,
-            brand: "ITTEMMALL",
-            product_focus: "runnerwin-wide-headband"
-          };
-          var body = JSON.stringify(event);
-          if (navigator.sendBeacon) {
-            var blob = new Blob([body], { type: "application/json" });
-            if (navigator.sendBeacon("/track.php", blob)) return;
-          }
-          fetch("/track.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: body,
-            credentials: "same-origin",
-            keepalive: true
-          }).catch(function () {});
-        } catch (error) {}
+        function sendServerEvent(eventName) {
+          try {
+            var event = {
+              event: eventName,
+              payload: payload,
+              path: "/payment/headband/",
+              url: window.location.href,
+              referrer: document.referrer || "",
+              attribution: {},
+              timestamp: new Date().toISOString(),
+              meta_pixel_id: pixelId,
+              brand: "ITTEMMALL",
+              product_focus: "runnerwin-wide-headband"
+            };
+            var body = JSON.stringify(event);
+            if (navigator.sendBeacon) {
+              var blob = new Blob([body], { type: "application/json" });
+              if (navigator.sendBeacon("/track.php", blob)) return;
+            }
+            fetch("/track.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: body,
+              credentials: "same-origin",
+              keepalive: true
+            }).catch(function () {});
+          } catch (error) {}
+        }
+
+        sendServerEvent("InitiateCheckout");
+        sendServerEvent("PaymentPageView");
       })();
     </script>
   </head>
