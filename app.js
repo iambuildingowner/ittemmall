@@ -135,7 +135,8 @@
     origin: { path: "/index.html", label: "HOME" },
     lastPath: "/index.html",
     searchHistory: [],
-    recentProducts: []
+    recentProducts: [],
+    trackingTest: false
   };
 
   let heroTimer = null;
@@ -797,6 +798,7 @@
 
     state.origin = { path: PRIMARY_PRODUCT_PATH, label: "PRODUCT" };
     state.cart = [{ productId: product.id, color, size, qty }];
+    state.trackingTest = isTest;
     saveState();
 
     try {
@@ -1885,10 +1887,12 @@
           content_name: "Payment gateway placeholder",
           content_type: "product_group",
           value,
-          currency: TRACKING.currency
+          currency: TRACKING.currency,
+          __test: state.trackingTest === true
         });
+        const paymentPath = state.trackingTest === true ? "/payment/?test=1" : "/payment/";
         window.setTimeout(() => {
-          window.location.href = appHref("/payment/");
+          window.location.href = appHref(paymentPath);
         }, 120);
       });
     });

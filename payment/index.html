@@ -17,6 +17,7 @@
     <script>
       (function () {
         var pixelId = "1288524852852406";
+        var isTest = new URLSearchParams(window.location.search).get("test") === "1";
         var payload = {
           content_ids: ["coolfit-wide-headband"],
           content_name: "Payment page placeholder",
@@ -25,6 +26,7 @@
           currency: "KRW",
           source: "payment_placeholder_url"
         };
+        if (isTest) payload.__test = true;
 
         (function (f, b, e, v, n, t, s) {
           if (f.fbq) return;
