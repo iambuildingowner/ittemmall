@@ -7,6 +7,10 @@ on:
         description: KST date to read, YYYY-MM-DD. Defaults to today.
         required: false
         type: string
+      since_kst:
+        description: Optional KST lower bound, e.g. 2026-05-21T21:11:00+09:00.
+        required: false
+        type: string
 
 jobs:
   read-counts:
@@ -43,6 +47,7 @@ jobs:
           HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
           INPUT_DATE: ${{ inputs.date }}
+          INPUT_SINCE_KST: ${{ inputs.since_kst }}
         run: |
           set -euo pipefail
           report_date="${INPUT_DATE:-$(TZ=Asia/Seoul date +%F)}"
@@ -50,6 +55,7 @@ jobs:
           remote_path="${target_dir}/data/pixel-events/${report_date}.ndjson"
 
           echo "REPORT_DATE=${report_date}" >> "$GITHUB_ENV"
+          echo "SINCE_KST=${INPUT_SINCE_KST}" >> "$GITHUB_ENV"
           echo "REMOTE_LOG=${remote_path}" >> "$GITHUB_ENV"
 
           set +e
@@ -71,7 +77,14 @@ jobs:
           const raw = fs.existsSync("server-events.ndjson") ? fs.readFileSync("server-events.ndjson", "utf8") : "";
           const lines = raw.split(/\r?\n/).filter(Boolean);
           const counts = new Map();
+          const byHour = new Map();
+          const byProduct = new Map();
+          const byPath = new Map();
+          const visitors = new Set();
+          const recent = [];
+          const since = process.env.SINCE_KST ? Date.parse(process.env.SINCE_KST) : null;
           let parsed = 0;
+          let included = 0;
 
           for (const line of lines) {
             try {
@@ -79,7 +92,32 @@ jobs:
               const name = String(entry.event || "");
               if (!name) continue;
               parsed += 1;
+              const eventTime = Date.parse(entry.server_time_kst || entry.server_time_utc || "");
+              if (since && (!Number.isFinite(eventTime) || eventTime < since)) continue;
+              included += 1;
               counts.set(name, (counts.get(name) || 0) + 1);
+              const hour = String(entry.server_time_kst || "").slice(0, 13).replace("T", " ");
+              if (hour) byHour.set(hour, (byHour.get(hour) || 0) + 1);
+              const product = entry.product_focus || entry.payload?.product_id || entry.payload?.content_name || "(unknown)";
+              byProduct.set(product, (byProduct.get(product) || 0) + 1);
+              let path = entry.path || "";
+              if (!path && entry.url) {
+                try {
+                  path = new URL(entry.url).pathname;
+                } catch {
+                  path = String(entry.url).slice(0, 120);
+                }
+              }
+              if (!path) path = "(unknown)";
+              byPath.set(path, (byPath.get(path) || 0) + 1);
+              const ipHash = entry.request?.ip_hash;
+              if (ipHash) visitors.add(ipHash);
+              recent.push({
+                time: String(entry.server_time_kst || "").replace("T", " ").slice(0, 19),
+                event: name,
+                product,
+                path
+              });
             } catch {}
           }
 
@@ -102,15 +140,39 @@ jobs:
             if (!rows.some(([rowName]) => rowName === name)) rows.push([name, count]);
           }
 
+          function printTable(title, headers, bodyRows) {
+            console.log("");
+            console.log(title);
+            console.log(`| ${headers.join(" | ")} |`);
+            console.log(`| ${headers.map(() => "---").join(" | ")} |`);
+            for (const row of bodyRows) console.log(`| ${row.join(" | ")} |`);
+
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `\n\n${title}\n\n`);
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `| ${headers.join(" | ")} |\n`);
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `| ${headers.map(() => "---").join(" | ")} |\n`);
+            for (const row of bodyRows) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `| ${row.join(" | ")} |\n`);
+          }
+
+          const sortCount = (map) => [...map.entries()].sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])));
+          const topPaths = sortCount(byPath).slice(0, 10);
+          const topProducts = sortCount(byProduct).slice(0, 10);
+          const latestRows = recent.slice(-10).reverse().map((row) => [row.time, row.event, row.product, row.path]);
+
           console.log(`Server tracking report date: ${process.env.REPORT_DATE}`);
+          console.log(`Since KST: ${process.env.SINCE_KST || "(none)"}`);
           console.log(`Parsed server log rows: ${parsed}`);
-          console.log("");
-          console.log("| Event | Count |");
-          console.log("|---|---:|");
-          for (const [name, count] of rows) console.log(`| ${name} | ${count} |`);
+          console.log(`Included rows: ${included}`);
+          console.log(`Unique visitor hashes: ${visitors.size}`);
 
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Server tracking report: ${process.env.REPORT_DATE}\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Since KST: ${process.env.SINCE_KST || "(none)"}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Parsed server log rows: ${parsed}\n\n`);
-          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, "| Event | Count |\n|---|---:|\n");
-          for (const [name, count] of rows) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `| ${name} | ${count} |\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Included rows: ${included}\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Unique visitor hashes: ${visitors.size}\n`);
+
+          printTable("### Event counts", ["Event", "Count"], rows.map(([name, count]) => [name, String(count)]));
+          printTable("### Hourly counts", ["Hour KST", "Count"], [...byHour.entries()].sort().map(([hour, count]) => [hour, String(count)]));
+          printTable("### Product counts", ["Product", "Count"], topProducts.map(([product, count]) => [product, String(count)]));
+          printTable("### Path counts", ["Path", "Count"], topPaths.map(([path, count]) => [path, String(count)]));
+          printTable("### Latest included events", ["Time KST", "Event", "Product", "Path"], latestRows);
           NODE
