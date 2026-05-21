@@ -2671,13 +2671,7 @@
           });
           trackPixelEvent("PaymentPageButtonClick", payload);
           trackPixelEvent("InitiateCheckout", payload);
-          navigate("payment", {
-            origin: {
-              page: "apply",
-              label: "주문서 작성",
-              hash: "#/apply",
-            },
-          });
+          window.location.assign(new URL("./payment/", window.location.href).toString());
         }
 
         function editSubmission(id) {
