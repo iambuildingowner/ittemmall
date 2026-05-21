@@ -35,6 +35,16 @@
         event: "MarcePaymentPageView",
         product_slug: "marce",
       });
+      (function () {
+        var fallback = new Image(1, 1);
+        fallback.style.display = "none";
+        fallback.alt = "";
+        fallback.src =
+          "https://www.facebook.com/tr?id=1288524852852406&ev=PageView&dl=" +
+          encodeURIComponent("https://ittemmall.com/marce/payment/") +
+          "&rl=&if=false&ts=" +
+          Date.now();
+      })();
     </script>
     <noscript>
       <img
