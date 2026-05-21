@@ -1121,12 +1121,6 @@
         text-align: right;
       }
 
-      .address-row {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 8px;
-      }
-
       .notice-card {
         margin-top: 20px;
         border-color: var(--brand);
@@ -1493,10 +1487,6 @@
 
         .product-title {
           font-size: 12px;
-        }
-
-        .address-row {
-          grid-template-columns: 1fr;
         }
 
         .summary-flex,
@@ -1971,6 +1961,32 @@
           return event;
         }
 
+        function buildCommercePayload(product, extra = {}) {
+          const quantity = Number(state.quantity || 1);
+          const amount = getOrderTotal(product, quantity);
+          return {
+            productId: product.id,
+            productSlug: productRouteId(product.id),
+            productName: product.name,
+            content_ids: [product.id],
+            content_name: product.name,
+            content_type: "product",
+            currency: "KRW",
+            value: amount,
+            price: product.price,
+            extraFee: Number(product.extraFee || 0),
+            quantity,
+            amount,
+            selectedOptions: { ...state.selectedOptions },
+            page: state.page,
+            ...extra,
+          };
+        }
+
+        function trackCommerceEvent(name, extra = {}, product = currentProduct()) {
+          return trackPixelEvent(name, buildCommercePayload(product, extra));
+        }
+
         function persistState() {
           localStorage.setItem(
             storageKeys.state,
@@ -2320,7 +2336,20 @@
             persistState();
             render();
           }
-          if (action === "select-product") selectProduct(id);
+          if (action === "select-product") {
+            const product = findProduct(id);
+            if (product) {
+              trackCommerceEvent(
+                "ProductDetailClick",
+                {
+                  source: target.dataset.pixelSource || "product_card",
+                  buttonLabel: target.textContent.trim(),
+                },
+                product,
+              );
+            }
+            selectProduct(id);
+          }
           if (action === "select-product-from-origin") {
             selectProduct(id, {
               page: "history",
@@ -2329,6 +2358,14 @@
             });
           }
           if (action === "apply") {
+            const checkoutSource = target.dataset.checkoutSource || "direct_buy";
+            const isNpay = checkoutSource === "npay";
+            trackCommerceEvent(isNpay ? "NpayPurchaseClick" : "PurchaseCtaClick", {
+              source: checkoutSource,
+              buttonLabel: target.textContent.trim(),
+              paymentMethod: isNpay ? "naver_pay" : "standard",
+              fakeDoorEvent: isNpay ? "NpayCheckoutIntent" : "PurchaseIntent",
+            });
             navigate("apply", {
               origin: {
                 page: "detail",
@@ -2345,13 +2382,6 @@
           if (action === "quantity-plus") {
             state.quantity = Number(state.quantity || 1) + 1;
             navigate(state.page);
-          }
-          if (action === "mock-fulfillment") {
-            state.form.fulfillmentPrimary = "서울특별시 강남구 테헤란로 123";
-            persistState();
-            const input = document.querySelector('[data-field="fulfillmentPrimary"]');
-            if (input) input.value = state.form.fulfillmentPrimary;
-            syncSubmitButton();
           }
           if (action === "submit-apply") submitApply();
           if (action === "view-submission") {
@@ -2586,14 +2616,10 @@
           if (!isFormReady()) return;
 
           const product = currentProduct();
-          trackPixelEvent("InitiateCheckout", {
-            productId: product.id,
-            productName: product.name,
-            price: product.price,
-            extraFee: Number(product.extraFee || 0),
-            quantity: Number(state.quantity || 1),
-            amount: getOrderTotal(product, state.quantity),
-            selectedOptions: { ...state.selectedOptions },
+          const payload = buildCommercePayload(product, {
+            source: "payment_page_button",
+            buttonLabel: "결제 페이지로 이동하기",
+            paymentMethod: "standard",
             customerFields: {
               hasName: Boolean(state.form.name.trim()),
               hasPhone: Boolean(state.form.phone.trim()),
@@ -2606,6 +2632,8 @@
             originLabel: state.origin?.label || "상품 탐색",
             fakeDoorEvent: "PaymentPageIntent",
           });
+          trackPixelEvent("PaymentPageButtonClick", payload);
+          trackPixelEvent("InitiateCheckout", payload);
         }
 
         function editSubmission(id) {
@@ -3111,10 +3139,10 @@
           return `
             <div class="bottom-bar">
               <div class="bottom-inner detail-bottom-actions">
-                <button class="btn primary" type="button" data-action="apply">
+                <button class="btn primary" type="button" data-action="apply" data-checkout-source="direct_buy">
                   바로 구매하기
                 </button>
-                <button class="npay-button" type="button" data-action="apply" aria-label="N pay 구매">
+                <button class="npay-button" type="button" data-action="apply" data-checkout-source="npay" aria-label="N pay 구매">
                   <span class="npay-mark">N</span>
                   <span>pay 구매</span>
                 </button>
@@ -3234,29 +3262,24 @@
 
         function renderApplyPage() {
           const product = currentProduct();
-          const editing = Boolean(state.editingSubmissionId);
           return `
             <main class="has-bottom">
               <section class="section">
-                ${renderOriginCard("작성 중인 주문서 입력값은 이 브라우저에 저장됩니다.", "back", "상품으로", "history", "주문 내역")}
                 ${renderProductSummary(product)}
 
                 <section class="form-grid" style="margin-top:22px">
                   ${renderTextField("name", "이름", "이름을 입력해주세요")}
                   ${renderTextField("phone", "휴대폰 번호", "- 없이 숫자만 입력해주세요")}
                   ${renderTextField("email", "이메일", "이메일 주소를 입력해주세요")}
-                  <div>
+                  <label>
                     <span class="field-label">${escapeHtml(siteConfig.fulfillmentPrimaryLabel)}</span>
-                    <div class="address-row">
-                      <input
-                        class="input"
-                        data-field="fulfillmentPrimary"
-                        value="${escapeHtml(state.form.fulfillmentPrimary)}"
-                        placeholder="${escapeHtml(siteConfig.fulfillmentPrimaryPlaceholder)}"
-                      />
-                      <button class="btn primary" type="button" data-action="mock-fulfillment">자동 입력</button>
-                    </div>
-                  </div>
+                    <input
+                      class="input"
+                      data-field="fulfillmentPrimary"
+                      value="${escapeHtml(state.form.fulfillmentPrimary)}"
+                      placeholder="${escapeHtml(siteConfig.fulfillmentPrimaryPlaceholder)}"
+                    />
+                  </label>
                   ${renderTextField("fulfillmentDetail", siteConfig.fulfillmentDetailLabel, siteConfig.fulfillmentDetailPlaceholder)}
                   <label>
                     <span class="field-label">${escapeHtml(siteConfig.requestLabel)}</span>
