@@ -38,6 +38,12 @@ $allowedEvents = [
     'PaymentPageView',
     'IttemmallHeadbandCheckout',
     'OptionSelect',
+    'ProductDetailClick',
+    'PurchaseCtaClick',
+    'NpayPurchaseClick',
+    'PaymentPageButtonClick',
+    'InitiateCheckout',
+    'MarcePaymentPageView',
 ];
 
 $eventName = preg_replace('/[^A-Za-z0-9_:-]/', '', (string)($data['event'] ?? ''));

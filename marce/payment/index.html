@@ -38,6 +38,35 @@
         product_slug: "marce",
       });
       (function () {
+        var payload = {
+          content_name: "MARCE Sweet Pickleball Paddle",
+          content_type: "product",
+          product_slug: "marce",
+          fakeDoorEvent: "PaymentPageView",
+        };
+        var body = JSON.stringify({
+          event: "PaymentPageView",
+          payload: payload,
+          meta_pixel_id: "1288524852852406",
+          brand: "MARCE",
+          product_focus: "marce",
+          path: window.location.pathname + window.location.search + window.location.hash,
+          url: window.location.href,
+          referrer: document.referrer,
+          attribution: {},
+        });
+        try {
+          var blob = new Blob([body], { type: "application/json" });
+          if (navigator.sendBeacon && navigator.sendBeacon("/track.php", blob)) return;
+        } catch {}
+        fetch("/track.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: body,
+          keepalive: true,
+        }).catch(function () {});
+      })();
+      (function () {
         var fallback = new Image(1, 1);
         fallback.style.display = "none";
         fallback.alt = "";

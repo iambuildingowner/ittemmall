@@ -1835,6 +1835,21 @@
           submissions: "fakeDoorPurchaseMvp.orders.v1",
           pixelEvents: "fakeDoorPurchaseMvp.pixelEvents.v1",
         };
+        const trackingConfig = {
+          metaPixelId: "1288524852852406",
+          serverEndpoint: "/track.php",
+          serverLoggedEvents: [
+            "ViewContent",
+            "ProductDetailClick",
+            "PurchaseCtaClick",
+            "NpayPurchaseClick",
+            "PaymentPageButtonClick",
+            "InitiateCheckout",
+            "CheckoutPageView",
+            "PaymentPageView",
+            "MarcePaymentPageView",
+          ],
+        };
 
         const pageTitles = {
           home: "메인페이지",
@@ -1851,6 +1866,7 @@
         let scrollTimer = 0;
         let gallerySwipe = null;
         let gallerySwipeCommitTimer = 0;
+        let lastTrackedViewKey = "";
 
         const savedState = readJson(storageKeys.state, {});
         const state = {
@@ -1987,7 +2003,59 @@
           }
 
           savePixelEvent(event);
+          sendServerTrackingEvent(event);
           return event;
+        }
+
+        function sendServerTrackingEvent(event) {
+          if (!trackingConfig.serverLoggedEvents.includes(event.name)) return;
+          const body = JSON.stringify({
+            event: event.name,
+            payload: event.payload || {},
+            meta_pixel_id: trackingConfig.metaPixelId,
+            brand: "MARCE",
+            product_focus: event.payload?.productSlug || event.payload?.productId || "marce",
+            path: `${location.pathname}${location.search}${location.hash || ""}`,
+            url: location.href,
+            referrer: document.referrer,
+            attribution: readAttribution(),
+          });
+
+          try {
+            const blob = new Blob([body], { type: "application/json" });
+            if (navigator.sendBeacon?.(trackingConfig.serverEndpoint, blob)) return;
+          } catch {}
+
+          fetch(trackingConfig.serverEndpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body,
+            keepalive: true,
+          }).catch(() => {
+            // Tracking should never block the purchase flow.
+          });
+        }
+
+        function readAttribution() {
+          const params = new URLSearchParams(location.search);
+          const fields = [
+            "utm_source",
+            "utm_medium",
+            "utm_campaign",
+            "utm_content",
+            "utm_term",
+            "utm_id",
+            "campaign_id",
+            "adset_id",
+            "ad_id",
+            "fbclid",
+            "product",
+          ];
+          return fields.reduce((acc, key) => {
+            const value = params.get(key);
+            if (value) acc[key] = value;
+            return acc;
+          }, {});
         }
 
         function buildCommercePayload(product, extra = {}) {
@@ -2008,6 +2076,8 @@
             amount,
             selectedOptions: { ...state.selectedOptions },
             page: state.page,
+            route: hashForState(),
+            attribution: readAttribution(),
             ...extra,
           };
         }
@@ -2710,6 +2780,27 @@
           `;
           updateProductVisibility();
           syncSubmitButton();
+          trackPageViewIfNeeded();
+        }
+
+        function trackPageViewIfNeeded() {
+          const product = currentProduct();
+          const viewKey = `${state.page}:${product.id}:${location.hash || hashForState()}`;
+          if (viewKey === lastTrackedViewKey) return;
+          lastTrackedViewKey = viewKey;
+
+          if (state.page === "detail") {
+            trackCommerceEvent("ViewContent", {
+              source: "product_detail_view",
+              fakeDoorEvent: "ProductDetailView",
+            });
+          }
+          if (state.page === "apply") {
+            trackCommerceEvent("CheckoutPageView", {
+              source: "order_form_view",
+              fakeDoorEvent: "OrderFormView",
+            });
+          }
         }
 
         function renderHeader() {
