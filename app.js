@@ -766,11 +766,11 @@
               <div class="checkout_checks">
                 <label>
                   <input type="checkbox" data-checkout-field="agreeNotice" ${form.agreeNotice ? "checked" : ""} required>
-                  <span>주문 접수 안내를 확인했습니다. <strong>필수</strong></span>
+                  <span>주문 상품, 배송 정보, 결제 진행 안내를 확인했습니다. <strong>필수</strong></span>
                 </label>
                 <label>
                   <input type="checkbox" data-checkout-field="agreeContact" ${form.agreeContact ? "checked" : ""}>
-                  <span>구매 가능 일정 및 결제 안내 연락에 동의합니다. 선택</span>
+                  <span>배송 및 혜택 안내 수신에 동의합니다. 선택</span>
                 </label>
               </div>
               <div class="cart_actions checkout_actions">
@@ -890,11 +890,11 @@
   function checkoutNotice() {
     return `
       <section class="checkout_notice">
-        <h3>주문 접수 안내</h3>
+        <h3>배송/결제 안내</h3>
         <ul>
-          <li>현재 주문 접수 단계이며 실제 결제는 진행되지 않습니다.</li>
-          <li>주문 접수 후 구매 가능 일정과 결제 안내를 입력하신 연락처로 안내드립니다.</li>
-          <li>N pay 구매 버튼은 추후 픽셀 연결 전까지 동작하지 않습니다.</li>
+          <li>주문 상품과 배송지를 확인한 뒤 결제 페이지로 이동합니다.</li>
+          <li>기본 배송비는 무료이며, 배송 전 주문 확인 안내가 발송될 수 있습니다.</li>
+          <li>결제 단계에서 최종 주문 금액과 선택 옵션을 다시 확인할 수 있습니다.</li>
         </ul>
       </section>
     `;
@@ -1050,11 +1050,11 @@
               <div class="checkout_checks">
                 <label>
                   <input type="checkbox" data-edit-buyer-field="agreeNotice" ${buyer.agreeNotice ? "checked" : ""} required>
-                  <span>주문 접수 안내를 확인했습니다. <strong>필수</strong></span>
+                  <span>주문 상품, 배송 정보, 결제 진행 안내를 확인했습니다. <strong>필수</strong></span>
                 </label>
                 <label>
                   <input type="checkbox" data-edit-buyer-field="agreeContact" ${buyer.agreeContact ? "checked" : ""}>
-                  <span>구매 가능 일정 및 결제 안내 연락에 동의합니다. 선택</span>
+                  <span>배송 및 혜택 안내 수신에 동의합니다. 선택</span>
                 </label>
               </div>
             </section>

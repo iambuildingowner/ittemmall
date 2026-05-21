@@ -2255,20 +2255,21 @@ body.search_open .search_wrap {
 .checkout_notice {
   margin-top: 18px;
   padding: 18px;
-  background: var(--black);
-  color: var(--cream);
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--black);
 }
 
 .checkout_notice h3 {
   margin: 0;
-  color: var(--cream);
+  color: var(--black);
   font-size: 15px;
 }
 
 .checkout_notice ul {
   margin: 12px 0 0;
   padding-left: 18px;
-  color: rgba(237, 237, 234, 0.78);
+  color: #4b4b4b;
   font-size: 13px;
   line-height: 1.65;
 }
