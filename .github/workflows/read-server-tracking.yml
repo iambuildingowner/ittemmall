@@ -82,6 +82,7 @@ jobs:
           const byPath = new Map();
           const visitors = new Set();
           const recent = [];
+          const intentRows = [];
           const since = process.env.SINCE_KST ? Date.parse(process.env.SINCE_KST) : null;
           let parsed = 0;
           let included = 0;
@@ -118,6 +119,16 @@ jobs:
                 product,
                 path
               });
+              if (["PurchaseCtaClick", "NpayPurchaseClick", "CheckoutPageView", "PaymentPageButtonClick", "InitiateCheckout", "PaymentPageView"].includes(name)) {
+                intentRows.push({
+                  time: String(entry.server_time_kst || "").replace("T", " ").slice(0, 19),
+                  event: name,
+                  visitor: String(ipHash || "").slice(0, 12) || "(none)",
+                  product,
+                  source: entry.payload?.source || "",
+                  path
+                });
+              }
             } catch {}
           }
 
@@ -157,6 +168,7 @@ jobs:
           const topPaths = sortCount(byPath).slice(0, 10);
           const topProducts = sortCount(byProduct).slice(0, 10);
           const latestRows = recent.slice(-10).reverse().map((row) => [row.time, row.event, row.product, row.path]);
+          const latestIntentRows = intentRows.slice(-20).reverse().map((row) => [row.time, row.event, row.visitor, row.product, row.source, row.path]);
 
           console.log(`Server tracking report date: ${process.env.REPORT_DATE}`);
           console.log(`Since KST: ${process.env.SINCE_KST || "(none)"}`);
@@ -174,5 +186,6 @@ jobs:
           printTable("### Hourly counts", ["Hour KST", "Count"], [...byHour.entries()].sort().map(([hour, count]) => [hour, String(count)]));
           printTable("### Product counts", ["Product", "Count"], topProducts.map(([product, count]) => [product, String(count)]));
           printTable("### Path counts", ["Path", "Count"], topPaths.map(([path, count]) => [path, String(count)]));
+          printTable("### Intent events by visitor", ["Time KST", "Event", "Visitor", "Product", "Source", "Path"], latestIntentRows);
           printTable("### Latest included events", ["Time KST", "Event", "Product", "Path"], latestRows);
           NODE
