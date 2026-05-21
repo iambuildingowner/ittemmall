@@ -1,0 +1,116 @@
+name: Read Server Tracking Counts
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: KST date to read, YYYY-MM-DD. Defaults to today.
+        required: false
+        type: string
+
+jobs:
+  read-counts:
+    name: Count Hostinger tracking events
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Validate FTP secrets
+        env:
+          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
+        run: |
+          missing=0
+          for name in HOSTINGER_FTP_SERVER HOSTINGER_FTP_USERNAME HOSTINGER_FTP_PASSWORD HOSTINGER_FTP_TARGET_DIR; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing GitHub secret: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Install FTP reader
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
+      - name: Download tracking log
+        env:
+          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
+          INPUT_DATE: ${{ inputs.date }}
+        run: |
+          set -euo pipefail
+          report_date="${INPUT_DATE:-$(TZ=Asia/Seoul date +%F)}"
+          target_dir="${HOSTINGER_FTP_TARGET_DIR%/}"
+          remote_path="${target_dir}/data/pixel-events/${report_date}.ndjson"
+
+          echo "REPORT_DATE=${report_date}" >> "$GITHUB_ENV"
+          echo "REMOTE_LOG=${remote_path}" >> "$GITHUB_ENV"
+
+          set +e
+          lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
+            -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; cat \"$remote_path\"; bye" \
+            > server-events.ndjson
+          status=$?
+          set -e
+
+          if [ "$status" -ne 0 ]; then
+            echo "::warning::Could not read remote tracking log. Treating it as empty for this report."
+            : > server-events.ndjson
+          fi
+
+      - name: Count events
+        run: |
+          node <<'NODE'
+          const fs = require("fs");
+          const raw = fs.existsSync("server-events.ndjson") ? fs.readFileSync("server-events.ndjson", "utf8") : "";
+          const lines = raw.split(/\r?\n/).filter(Boolean);
+          const counts = new Map();
+          let parsed = 0;
+
+          for (const line of lines) {
+            try {
+              const entry = JSON.parse(line);
+              const name = String(entry.event || "");
+              if (!name) continue;
+              parsed += 1;
+              counts.set(name, (counts.get(name) || 0) + 1);
+            } catch {}
+          }
+
+          const priority = [
+            "PaymentGatewayClick",
+            "IttemmallHeadbandCheckout",
+            "PaymentPageView",
+            "CheckoutFormStart",
+            "ViewContent",
+            "AddToCart",
+            "NpayClick",
+            "OptionSelect"
+          ];
+
+          const rows = priority
+            .filter((name) => counts.has(name) || name.includes("Payment") || name.includes("Checkout") || name === "IttemmallHeadbandCheckout")
+            .map((name) => [name, counts.get(name) || 0]);
+
+          for (const [name, count] of [...counts.entries()].sort()) {
+            if (!rows.some(([rowName]) => rowName === name)) rows.push([name, count]);
+          }
+
+          console.log(`Server tracking report date: ${process.env.REPORT_DATE}`);
+          console.log(`Parsed server log rows: ${parsed}`);
+          console.log("");
+          console.log("| Event | Count |");
+          console.log("|---|---:|");
+          for (const [name, count] of rows) console.log(`| ${name} | ${count} |`);
+
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Server tracking report: ${process.env.REPORT_DATE}\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Parsed server log rows: ${parsed}\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, "| Event | Count |\n|---|---:|\n");
+          for (const [name, count] of rows) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `| ${name} | ${count} |\n`);
+          NODE
