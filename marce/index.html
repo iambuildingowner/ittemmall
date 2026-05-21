@@ -33,7 +33,7 @@
     <!-- End Meta Pixel Code -->
     <style>
       :root {
-        --bg: #f4f4f5;
+        --bg: #ffffff;
         --paper: #ffffff;
         --ink: #111111;
         --brand: #1d4985;
@@ -88,7 +88,7 @@
         min-height: 100vh;
         margin: 0 auto;
         background: var(--paper);
-        box-shadow: var(--shadow);
+        box-shadow: 0 0 0 1px rgba(29, 73, 133, 0.06);
       }
 
       .app-header {
@@ -891,7 +891,7 @@
       .story-stack {
         display: grid;
         gap: 0;
-        background: #fffafa;
+        background: white;
       }
 
       .story-image {
@@ -908,15 +908,15 @@
 
       .story-feature-image {
         margin: 8px 0 22px;
-        border: 1px solid #f4d7df;
-        box-shadow: 0 18px 44px rgba(159, 18, 57, 0.08);
+        border: 1px solid var(--line);
+        box-shadow: 0 18px 44px rgba(29, 73, 133, 0.08);
       }
 
       .certification-card {
         display: grid;
         justify-items: center;
         gap: 14px;
-        border: 1px solid #f0ccd6;
+        border: 1px solid var(--line);
         border-radius: 8px;
         margin: 2px 0 24px;
         padding: 24px 18px;
@@ -943,7 +943,7 @@
 
       .story-block {
         padding: 24px 0;
-        border-top: 1px solid #f4d7df;
+        border-top: 1px solid var(--line);
       }
 
       .story-block:first-child {
@@ -980,7 +980,7 @@
 
       .highlight-list li,
       .plain-list li {
-        border-left: 3px solid #d4778e;
+        border-left: 3px solid var(--brand-light);
         padding-left: 12px;
         color: #27272a;
         font-size: 14px;
