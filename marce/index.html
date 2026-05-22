@@ -2472,6 +2472,7 @@
               paymentMethod: isNpay ? "naver_pay" : "standard",
               fakeDoorEvent: isNpay ? "NpayCheckoutIntent" : "PurchaseIntent",
             });
+            if (isNpay) return;
             navigate("apply", {
               origin: {
                 page: "detail",
