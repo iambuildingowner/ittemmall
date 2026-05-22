@@ -83,6 +83,7 @@ jobs:
           const visitors = new Set();
           const recent = [];
           const intentRows = [];
+          const intentByVisitor = new Map();
           const since = process.env.SINCE_KST ? Date.parse(process.env.SINCE_KST) : null;
           const excludedInternalEvents = [
             {
@@ -146,14 +147,39 @@ jobs:
                 path
               });
               if (["PurchaseCtaClick", "NpayPurchaseClick", "CheckoutPageView", "PaymentPageButtonClick", "InitiateCheckout", "PaymentPageView"].includes(name)) {
+                const visitorKey = String(ipHash || "").slice(0, 12) || "(none)";
                 intentRows.push({
                   time: String(entry.server_time_kst || "").replace("T", " ").slice(0, 19),
                   event: name,
-                  visitor: String(ipHash || "").slice(0, 12) || "(none)",
+                  visitor: visitorKey,
                   product,
                   source: entry.payload?.source || "",
                   path
                 });
+                const previous = intentByVisitor.get(visitorKey) || {
+                  first: "",
+                  last: "",
+                  product: product || "",
+                  npay: 0,
+                  direct: 0,
+                  orderForm: 0,
+                  paymentButton: 0,
+                  initiateCheckout: 0,
+                  paymentPage: 0,
+                  total: 0
+                };
+                const time = String(entry.server_time_kst || "").replace("T", " ").slice(0, 19);
+                if (!previous.first || time < previous.first) previous.first = time;
+                if (!previous.last || time > previous.last) previous.last = time;
+                if (product && !previous.product.includes(product)) previous.product = previous.product ? `${previous.product},${product}` : product;
+                if (name === "NpayPurchaseClick") previous.npay += 1;
+                if (name === "PurchaseCtaClick") previous.direct += 1;
+                if (name === "CheckoutPageView") previous.orderForm += 1;
+                if (name === "PaymentPageButtonClick") previous.paymentButton += 1;
+                if (name === "InitiateCheckout") previous.initiateCheckout += 1;
+                if (name === "PaymentPageView") previous.paymentPage += 1;
+                previous.total += 1;
+                intentByVisitor.set(visitorKey, previous);
               }
             } catch {}
           }
@@ -195,6 +221,20 @@ jobs:
           const topProducts = sortCount(byProduct).slice(0, 10);
           const latestRows = recent.slice(-10).reverse().map((row) => [row.time, row.event, row.product, row.path]);
           const latestIntentRows = intentRows.slice(-20).reverse().map((row) => [row.time, row.event, row.visitor, row.product, row.source, row.path]);
+          const intentByVisitorRows = [...intentByVisitor.entries()]
+            .sort((a, b) => b[1].total - a[1].total || String(a[1].first).localeCompare(String(b[1].first)))
+            .map(([visitor, row]) => [
+              visitor,
+              row.first,
+              row.last,
+              row.product,
+              String(row.npay),
+              String(row.direct),
+              String(row.orderForm),
+              String(row.paymentButton),
+              String(row.paymentPage),
+              String(row.total)
+            ]);
 
           console.log(`Server tracking report date: ${process.env.REPORT_DATE}`);
           console.log(`Since KST: ${process.env.SINCE_KST || "(none)"}`);
@@ -214,6 +254,7 @@ jobs:
           printTable("### Hourly counts", ["Hour KST", "Count"], [...byHour.entries()].sort().map(([hour, count]) => [hour, String(count)]));
           printTable("### Product counts", ["Product", "Count"], topProducts.map(([product, count]) => [product, String(count)]));
           printTable("### Path counts", ["Path", "Count"], topPaths.map(([path, count]) => [path, String(count)]));
+          printTable("### Intent counts by visitor", ["Visitor", "First KST", "Last KST", "Product", "Npay", "Direct buy", "Order form", "Payment button", "Payment page", "Total"], intentByVisitorRows);
           printTable("### Intent events by visitor", ["Time KST", "Event", "Visitor", "Product", "Source", "Path"], latestIntentRows);
           printTable("### Latest included events", ["Time KST", "Event", "Product", "Path"], latestRows);
           NODE
