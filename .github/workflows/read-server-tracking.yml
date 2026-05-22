@@ -84,8 +84,30 @@ jobs:
           const recent = [];
           const intentRows = [];
           const since = process.env.SINCE_KST ? Date.parse(process.env.SINCE_KST) : null;
+          const excludedInternalEvents = [
+            {
+              reason: "marce_custom_conversion_activation_check",
+              timeKst: "2026-05-22T16:46:55+09:00",
+              events: new Set(["MarcePaymentPageView", "PaymentPageView"]),
+              productFocus: "marce-pickleball-paddle-pink",
+              path: "/marce/payment/"
+            }
+          ];
           let parsed = 0;
           let included = 0;
+          let excluded = 0;
+
+          function isExcludedInternalEvent(entry, name) {
+            const entryTime = String(entry.server_time_kst || "");
+            const product = String(entry.product_focus || "");
+            const path = String(entry.path || "");
+            return excludedInternalEvents.some((rule) =>
+              entryTime === rule.timeKst &&
+              rule.events.has(name) &&
+              product === rule.productFocus &&
+              path === rule.path
+            );
+          }
 
           for (const line of lines) {
             try {
@@ -95,6 +117,10 @@ jobs:
               parsed += 1;
               const eventTime = Date.parse(entry.server_time_kst || entry.server_time_utc || "");
               if (since && (!Number.isFinite(eventTime) || eventTime < since)) continue;
+              if (isExcludedInternalEvent(entry, name)) {
+                excluded += 1;
+                continue;
+              }
               included += 1;
               counts.set(name, (counts.get(name) || 0) + 1);
               const hour = String(entry.server_time_kst || "").slice(0, 13).replace("T", " ");
@@ -173,12 +199,14 @@ jobs:
           console.log(`Server tracking report date: ${process.env.REPORT_DATE}`);
           console.log(`Since KST: ${process.env.SINCE_KST || "(none)"}`);
           console.log(`Parsed server log rows: ${parsed}`);
+          console.log(`Excluded internal rows: ${excluded}`);
           console.log(`Included rows: ${included}`);
           console.log(`Unique visitor hashes: ${visitors.size}`);
 
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Server tracking report: ${process.env.REPORT_DATE}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Since KST: ${process.env.SINCE_KST || "(none)"}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Parsed server log rows: ${parsed}\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Excluded internal rows: ${excluded}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Included rows: ${included}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Unique visitor hashes: ${visitors.size}\n`);
 
