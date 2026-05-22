@@ -13,24 +13,34 @@
     <meta name="robots" content="noindex, nofollow" />
     <!-- Meta Pixel Code -->
     <script>
-      !(function (f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = "2.0";
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
-      fbq("init", "1288524852852406");
-      fbq("track", "PageView");
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var isTrackingTest =
+          params.get("test") === "1" ||
+          params.get("codex_test") === "1" ||
+          params.get("pixel_test") === "1";
+        window.__ittemmallTrackingTestMode = isTrackingTest;
+        if (isTrackingTest) return;
+
+        !(function (f, b, e, v, n, t, s) {
+          if (f.fbq) return;
+          n = f.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+          };
+          if (!f._fbq) f._fbq = n;
+          n.push = n;
+          n.loaded = !0;
+          n.version = "2.0";
+          n.queue = [];
+          t = b.createElement(e);
+          t.async = !0;
+          t.src = v;
+          s = b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t, s);
+        })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+        fbq("init", "1288524852852406");
+        fbq("track", "PageView");
+      })();
     </script>
     <!-- End Meta Pixel Code -->
     <style>
@@ -1971,10 +1981,12 @@
         }
 
         function trackPixelEvent(name, payload) {
+          const isTest = isTrackingTestMode();
+          const trackedPayload = isTest ? { ...(payload || {}), __test: true } : payload;
           const event = {
             id: `PX-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
             name,
-            payload,
+            payload: trackedPayload,
             createdAt: new Date().toISOString(),
             path: location.hash || "#/home",
           };
@@ -1982,19 +1994,19 @@
           window.__ittemmallPixelEvents = window.__ittemmallPixelEvents || [];
           window.__ittemmallPixelEvents.push(event);
           window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push({ event: name, ...payload });
+          window.dataLayer.push({ event: name, ...trackedPayload });
 
-          if (typeof window.fbq === "function") {
+          if (!isTest && typeof window.fbq === "function") {
             if (name === "InitiateCheckout") {
-              window.fbq("track", "InitiateCheckout", payload);
+              window.fbq("track", "InitiateCheckout", trackedPayload);
             } else {
-              window.fbq("trackCustom", name, payload);
+              window.fbq("trackCustom", name, trackedPayload);
             }
           }
-          if (window.ttq && typeof window.ttq.track === "function") {
-            window.ttq.track(name, payload);
+          if (!isTest && window.ttq && typeof window.ttq.track === "function") {
+            window.ttq.track(name, trackedPayload);
           }
-          if (window.kakaoPixel && typeof window.kakaoPixel === "function") {
+          if (!isTest && window.kakaoPixel && typeof window.kakaoPixel === "function") {
             try {
               window.kakaoPixel().pageView();
             } catch {
@@ -2056,6 +2068,24 @@
             if (value) acc[key] = value;
             return acc;
           }, {});
+        }
+
+        function isTrackingTestMode() {
+          const params = new URLSearchParams(location.search);
+          return Boolean(
+            window.__ittemmallTrackingTestMode ||
+              params.get("test") === "1" ||
+              params.get("codex_test") === "1" ||
+              params.get("pixel_test") === "1",
+          );
+        }
+
+        function copyTrackingTestParams(url) {
+          const params = new URLSearchParams(location.search);
+          ["test", "codex_test", "pixel_test"].forEach((key) => {
+            if (params.get(key) === "1") url.searchParams.set(key, "1");
+          });
+          return url;
         }
 
         function buildCommercePayload(product, extra = {}) {
@@ -2744,7 +2774,7 @@
           });
           trackPixelEvent("PaymentPageButtonClick", payload);
           trackPixelEvent("InitiateCheckout", payload);
-          window.location.assign(new URL("./payment/", window.location.href).toString());
+          window.location.assign(copyTrackingTestParams(new URL("./payment/", window.location.href)).toString());
         }
 
         function editSubmission(id) {

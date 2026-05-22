@@ -7,85 +7,96 @@
     <meta name="darkreader-lock" />
     <meta name="robots" content="noindex,nofollow" />
     <title>MARCE Payment</title>
+    <link rel="canonical" href="https://ittemmall.com/marce/payment/" />
     <!-- Meta Pixel Code -->
     <script>
-      !(function (f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = "2.0";
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
-      fbq("init", "1288524852852406");
-      fbq("track", "PageView");
-      fbq("trackCustom", "MarcePaymentPageView", {
-        content_name: "MARCE Sweet Pickleball Paddle",
-        content_type: "product",
-        product_slug: "marce",
-      });
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "MarcePaymentPageView",
-        product_slug: "marce",
-      });
       (function () {
+        var pixelId = "1288524852852406";
+        var params = new URLSearchParams(window.location.search);
+        var isTest =
+          params.get("test") === "1" ||
+          params.get("codex_test") === "1" ||
+          params.get("pixel_test") === "1";
         var payload = {
-          content_name: "MARCE Sweet Pickleball Paddle",
+          content_ids: ["product-001"],
+          content_name: "MARCE Sweet Pickleball Paddle Pink",
           content_type: "product",
-          product_slug: "marce",
+          value: 79000,
+          currency: "KRW",
+          product_slug: "pink",
+          site_name: "ittemmall",
+          checkout_scope: "ittemmall_marce_pink",
+          source: "marce_payment_placeholder_url",
           fakeDoorEvent: "PaymentPageView",
         };
-        var body = JSON.stringify({
-          event: "PaymentPageView",
-          payload: payload,
-          meta_pixel_id: "1288524852852406",
-          brand: "MARCE",
-          product_focus: "marce",
-          path: window.location.pathname + window.location.search + window.location.hash,
-          url: window.location.href,
-          referrer: document.referrer,
-          attribution: {},
-        });
-        try {
-          var blob = new Blob([body], { type: "application/json" });
-          if (navigator.sendBeacon && navigator.sendBeacon("/track.php", blob)) return;
-        } catch {}
-        fetch("/track.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: body,
-          keepalive: true,
-        }).catch(function () {});
-      })();
-      (function () {
-        var fallback = new Image(1, 1);
-        fallback.style.display = "none";
-        fallback.alt = "";
-        fallback.src =
-          "https://www.facebook.com/tr?id=1288524852852406&ev=PageView&dl=" +
-          encodeURIComponent("https://ittemmall.com/marce/payment/") +
-          "&rl=&if=false&ts=" +
-          Date.now();
+
+        if (isTest) payload.__test = true;
+
+        window.dataLayer = window.dataLayer || [];
+        pushDataLayerEvent("MarcePaymentPageView");
+        pushDataLayerEvent("PaymentPageView");
+
+        if (!isTest) {
+          (function (f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function () {
+              n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = true;
+            n.version = "2.0";
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = true;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s);
+          })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+
+          window.fbq("init", pixelId);
+          window.fbq("track", "PageView");
+          window.fbq("trackCustom", "MarcePaymentPageView", payload);
+          window.fbq("trackCustom", "PaymentPageView", payload);
+        }
+
+        sendServerEvent("MarcePaymentPageView");
+        sendServerEvent("PaymentPageView");
+
+        function pushDataLayerEvent(eventName) {
+          window.dataLayer.push(Object.assign({ event: eventName }, payload));
+        }
+
+        function sendServerEvent(eventName) {
+          try {
+            var event = {
+              event: eventName,
+              payload: payload,
+              path: "/marce/payment/",
+              url: window.location.href,
+              referrer: document.referrer || "",
+              attribution: {},
+              timestamp: new Date().toISOString(),
+              meta_pixel_id: pixelId,
+              brand: "MARCE",
+              product_focus: "marce-pickleball-paddle-pink",
+            };
+            var body = JSON.stringify(event);
+            if (navigator.sendBeacon) {
+              var blob = new Blob([body], { type: "application/json" });
+              if (navigator.sendBeacon("/track.php", blob)) return;
+            }
+            fetch("/track.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: body,
+              credentials: "same-origin",
+              keepalive: true,
+            }).catch(function () {});
+          } catch (error) {}
+        }
       })();
     </script>
-    <noscript>
-      <img
-        height="1"
-        width="1"
-        style="display:none"
-        src="https://www.facebook.com/tr?id=1288524852852406&ev=PageView&noscript=1"
-        alt=""
-      />
-    </noscript>
     <!-- End Meta Pixel Code -->
     <style>
       html,
