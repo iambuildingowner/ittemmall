@@ -1,6 +1,6 @@
 # 잇츠몰 GitHub / 배포 준비
 
-Status: local Git baseline committed, GitHub remote connected, safe baseline branch prepared.
+Status: local Git baseline committed, GitHub remote connected, safe baseline branch pushed.
 
 ## Project
 
@@ -59,6 +59,7 @@ Done:
 - GitHub remote connected as `origin`.
 - Existing remote `main` fetched and preserved.
 - Safe baseline branch created: `codex/ittemmall-baseline`.
+- Safe baseline branch pushed to GitHub.
 
 Not done yet:
 
