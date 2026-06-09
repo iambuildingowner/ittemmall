@@ -1,6 +1,6 @@
 # 잇츠몰 GitHub / 배포 준비
 
-Status: local Git baseline committed, remote GitHub repo not connected yet.
+Status: local Git baseline committed, GitHub remote connected, safe baseline branch prepared.
 
 ## Project
 
@@ -31,9 +31,22 @@ For now, treat deployment as a static/PHP-capable hosting upload depending on th
 4. Upload only public files to the hosting web root.
 5. Verify the live `ittemmall.com` URL and key routes.
 
+## GitHub Remote
+
+- Remote URL: `https://github.com/iambuildingowner/ittemmall.git`
+- GitHub repo: `https://github.com/iambuildingowner/ittemmall`
+- Existing remote branch: `main`
+- Safe baseline branch: `codex/ittemmall-baseline`
+
+Important: remote `main` already had prior history before this local project was connected. Do not force-push or overwrite `main` unless the owner explicitly confirms that the existing remote history can be replaced.
+
 ## Next Owner Gate
 
-To connect GitHub remote, provide or create the GitHub repository URL.
+Decide how the safe baseline branch should become the production source:
+
+1. Review `codex/ittemmall-baseline`.
+2. Choose whether to merge it into `main`, replace `main`, or keep it as a separate baseline branch.
+3. Decide the actual hosting/deployment route for `ittemmall.com`.
 
 ## Current Completion State
 
@@ -43,11 +56,13 @@ Done:
 - `.gitignore` created.
 - Local Git repository initialized.
 - Initial baseline commit created: `ec23365 Initial project baseline`.
+- GitHub remote connected as `origin`.
+- Existing remote `main` fetched and preserved.
+- Safe baseline branch created: `codex/ittemmall-baseline`.
 
 Not done yet:
 
-- GitHub remote repo connection.
-- GitHub push.
+- Owner decision for remote `main` merge/replace strategy.
 - Production server deployment.
 
 ## How To Resume
@@ -58,11 +73,12 @@ When resuming this project, continue from this folder:
 
 Then:
 
-1. Create or receive the GitHub repository URL.
-2. Run `git remote add origin <GITHUB_REPO_URL>`.
-3. Run `git push -u origin main`.
-4. Decide the actual hosting/deployment route for `ittemmall.com`.
-5. Upload only public deployment files to the server.
-6. Verify the live URL, core routes, mobile rendering, SEO basics, and tracking.
+1. Confirm the current branch is `codex/ittemmall-baseline`.
+2. Push/update the safe baseline branch if needed.
+3. Review differences against `origin/main`.
+4. Decide whether to merge, replace, or keep branches separate.
+5. Decide the actual hosting/deployment route for `ittemmall.com`.
+6. Upload only public deployment files to the server.
+7. Verify the live URL, core routes, mobile rendering, SEO basics, and tracking.
 
 Do not say GitHub or production deployment is complete until those steps are actually done.
