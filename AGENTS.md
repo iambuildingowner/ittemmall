@@ -1,10 +1,10 @@
-# AGENTS.md - 잇츠몰
+# AGENTS.md - 잇템몰
 
 ## Scope
 
 PROJECT_SCOPE=Ittemmall
 
-이 폴더는 `ittemmall.com` 상위 쇼핑몰 프로젝트 범위다. `ittemmall.com/marce`와 `marcesports.com` 작업은 각각 `잇츠몰 마르세`, `마르세 스포츠` 폴더에서 진행한다.
+이 폴더는 `ittemmall.com` 상위 쇼핑몰 프로젝트 범위다. `ittemmall.com/marce`와 `marcesports.com` 작업은 각각 `잇템몰 마르세`, `마르세 스포츠` 폴더에서 진행한다.
 
 ## First Line Rule
 
@@ -15,7 +15,7 @@ PROJECT_SCOPE=Ittemmall
 
 프로젝트 범위가 불분명하면 딱 한 번만 묻는다:
 
-`어느 프로젝트 범위로 진행할까요? 잇츠몰 / 잇츠몰 마르세 / 마르세 스포츠`
+`어느 프로젝트 범위로 진행할까요? 잇템몰 / 잇템몰 마르세 / 마르세 스포츠`
 
 ## TRIGGER=ON Definition of Done
 
@@ -45,8 +45,8 @@ PROJECT_SCOPE=Ittemmall
 
 - 이 프로젝트는 상위 몰이다. 마르세 전용 페이지를 기본 포함으로 보지 않는다.
 - 공유 결제, 공유 추적, 공통 상품/회원/주문 구조를 바꿀 때 하위 브랜드 페이지 영향까지 점검한다.
-- 사용자가 단순히 "잇츠몰"이라고 말하면 `ittemmall.com/marce` 작업으로 넘겨짚지 않는다.
-- 현재 이 폴더에는 잇츠몰 상위몰 소스가 들어와 있다. 출처는 `러닝 용품 사이트(서머텍트 본)` 프로젝트이며, 이후 잇츠몰 작업은 이 폴더를 기준으로 진행한다.
+- 사용자가 단순히 "잇템몰"이라고 말하면 `ittemmall.com/marce` 작업으로 넘겨짚지 않는다.
+- 현재 이 폴더에는 잇템몰 상위몰 소스가 들어와 있다. 출처는 `러닝 용품 사이트(서머텍트 본)` 프로젝트이며, 이후 잇템몰 작업은 이 폴더를 기준으로 진행한다.
 
 ## Owner-Gated Delivery
 

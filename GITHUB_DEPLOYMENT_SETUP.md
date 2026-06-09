@@ -1,10 +1,10 @@
-# 잇츠몰 GitHub / 배포 준비
+# 잇템몰 GitHub / 배포 준비
 
 Status: local Git baseline committed, GitHub remote connected, safe baseline branch pushed.
 
 ## Project
 
-- Local folder: `/Users/oceanblue/Desktop/MONEY/개발/07_웹·서비스 제작/잇츠몰`
+- Local folder: `/Users/oceanblue/Desktop/MONEY/개발/07_웹·서비스 제작/잇템몰`
 - Site context: `ittemmall.com`
 - Source copied from: `러닝 용품 사이트(서머텍트 본)`
 
@@ -70,7 +70,7 @@ Not done yet:
 
 When resuming this project, continue from this folder:
 
-`/Users/oceanblue/Desktop/MONEY/개발/07_웹·서비스 제작/잇츠몰`
+`/Users/oceanblue/Desktop/MONEY/개발/07_웹·서비스 제작/잇템몰`
 
 Then:
 
