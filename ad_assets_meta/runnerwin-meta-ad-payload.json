@@ -1,0 +1,43 @@
+{
+  "domain": "ittemmall.com",
+  "facebook_page": {
+    "name": "잇템몰",
+    "korean_name": "잇템몰",
+    "category": "Shopping & retail",
+    "bio": "잇템몰은 삶에 활력을 더하는 아이템을 소개합니다. 일상과 운동의 흐름을 가볍게 바꾸는 실용적인 제품을 선별합니다.",
+    "profile_image": "ad_assets_meta/ittemmall-page-profile.png",
+    "cover_image": "ad_assets_meta/ittemmall-page-cover.png"
+  },
+  "landing_url": "http://ittemmall.com/index.html?route=%2Fproduct%2Fcoolfit-wide-headband%2F50%2Fcategory%2F25%2Fdisplay%2F1%2F#/product/coolfit-wide-headband/50/category/25/display/1/",
+  "daily_budget_krw": 50000,
+  "maximum_cost_krw": 7900,
+  "creative_image": "assets/images/runnerwin-wide-headband-main.png",
+  "use_ai_image_variants": false,
+  "product": {
+    "id": "coolfit-wide-headband",
+    "name": "러너윈 테크니컬 헤드밴드",
+    "price": 7900,
+    "currency": "KRW",
+    "colors": ["BLACK", "WHITE"],
+    "size": "FREE"
+  },
+  "ad": {
+    "primary_text": "러닝 중 눈가로 흐르는 땀이 신경 쓰인다면.\n\n러너윈 테크니컬 헤드밴드는 이마와 헤어라인을 넓게 감싸,\n땀이 바로 흘러내리는 불편을 줄여줍니다.\n\n부드러운 신축 원단으로 오래 착용해도 부담을 낮추고,\n앞머리와 잔머리까지 안정적으로 정리해줍니다.\n\nBLACK / WHITE\nFREE SIZE\n7,900원\n\n땀보다 페이스에 집중하세요.",
+    "headline": "[7,900원] 러너윈 테크니컬 헤드밴드",
+    "description": "12cm 와이드 커버로 땀 흐름을 줄여주는 러닝 헤드밴드",
+    "cta": "SHOP_NOW",
+    "cost_control": {
+      "type": "maximum_cost",
+      "amount_krw": 7900
+    }
+  },
+  "tracking_events": [
+    "ViewContent",
+    "OptionSelect",
+    "AddToCart",
+    "InitiateCheckout",
+    "CheckoutFormStart",
+    "PaymentGatewayClick",
+    "NpayClick"
+  ]
+}

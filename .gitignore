@@ -1,0 +1,56 @@
+# macOS / editor
+.DS_Store
+._*
+.vscode/
+.idea/
+
+# Dependencies / runtime
+node_modules/
+.playwright-cli/
+
+# Logs / temp
+*.log
+*.tmp
+*.temp
+.cache/
+
+# Build and QA outputs
+output/
+outputs/
+coverage/
+deploy/hostinger-upload/
+deploy/*upload*/
+deploy/ittemmall-public/
+deploy/demo*/
+
+# Deployment archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.sha256
+
+# Secrets / private runtime data
+.env
+.env.*
+!.env.example
+*secret*
+*token*
+*credentials*
+*credential*
+*private*
+*.key
+*.pem
+
+# Order/customer/runtime data
+*orders*.json
+*customers*.json
+*leads*.json
+*sessions*.json
+*events*.jsonl
+
+# Heavy binary source files are kept locally unless explicitly needed in GitHub
+*.mp4
+*.mov
+*.wav
+*.psd
