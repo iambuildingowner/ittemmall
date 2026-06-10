@@ -6,7 +6,7 @@ Status: local Git baseline committed, GitHub remote connected, safe baseline bra
 
 - Local folder: `/Users/oceanblue/Desktop/MONEY/개발/07_웹·서비스 제작/잇템몰`
 - Site context: `ittemmall.com`
-- Source copied from: `러닝 용품 사이트(서머텍트 본)`
+- Current source direction: `마르세 스포츠` 구조를 잇템몰 대표몰/PG 심사용으로 리브랜딩
 
 ## GitHub Rule
 

@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>ITTEMMALL 운영 점검</title>
+    <link rel="icon" href="../assets/ittemmall/favicon.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #111827;
+        --muted: #667085;
+        --line: #d0d5dd;
+        --soft: #f8fafc;
+        --blue: #1d4985;
+        --green: #067647;
+        --yellow: #b54708;
+        --red: #b42318;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #f3f6f9;
+        color: var(--ink);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .shell {
+        min-height: 100vh;
+      }
+
+      .topbar {
+        border-bottom: 1px solid rgba(29, 73, 133, 0.16);
+        background: #fff;
+      }
+
+      .topbar-inner,
+      .main {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar-inner {
+        display: flex;
+        min-height: 74px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .brand {
+        color: var(--blue);
+        font-size: 18px;
+        font-weight: 900;
+        letter-spacing: 0;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .eyebrow {
+        margin: 0 0 6px;
+        color: var(--blue);
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .main {
+        padding: 28px 0 42px;
+      }
+
+      .toolbar,
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      button,
+      .button {
+        display: inline-flex;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--blue);
+        border-radius: 8px;
+        background: var(--blue);
+        color: #fff;
+        padding: 0 14px;
+        font-size: 13px;
+        font-weight: 900;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      button.secondary,
+      .button.secondary {
+        background: #fff;
+        color: var(--blue);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 22px;
+        align-items: end;
+        margin-bottom: 20px;
+      }
+
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: clamp(30px, 5vw, 46px);
+        line-height: 1.08;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin-bottom: 4px;
+        font-size: 20px;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .tile,
+      .panel,
+      .state {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 16px 42px rgba(17, 24, 39, 0.06);
+      }
+
+      .tile {
+        min-height: 118px;
+        padding: 18px;
+      }
+
+      .tile strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 26px;
+        line-height: 1;
+      }
+
+      .panel {
+        margin-top: 14px;
+        overflow: hidden;
+      }
+
+      .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        border-bottom: 1px solid #eaecf0;
+        padding: 18px;
+      }
+
+      .checks {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .check {
+        display: grid;
+        grid-template-columns: 90px minmax(0, 1fr);
+        gap: 14px;
+        min-height: 92px;
+        border-top: 1px solid #eaecf0;
+        padding: 16px 18px;
+      }
+
+      .check:nth-child(1),
+      .check:nth-child(2) {
+        border-top: 0;
+      }
+
+      .check:nth-child(odd) {
+        border-right: 1px solid #eaecf0;
+      }
+
+      .status {
+        display: inline-flex;
+        width: 78px;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .pass {
+        background: #ecfdf3;
+        color: var(--green);
+      }
+
+      .warn {
+        background: #fffaeb;
+        color: var(--yellow);
+      }
+
+      .fail {
+        background: #fef3f2;
+        color: var(--red);
+      }
+
+      .check-title {
+        margin-bottom: 4px;
+        font-weight: 900;
+      }
+
+      .check-detail {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .state {
+        padding: 30px;
+      }
+
+      .raw {
+        overflow: auto;
+        max-height: 420px;
+        margin: 0;
+        background: #101828;
+        color: #f9fafb;
+        padding: 18px;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 860px) {
+        .topbar-inner,
+        .hero {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .hero {
+          display: flex;
+        }
+
+        .summary,
+        .checks {
+          grid-template-columns: 1fr;
+        }
+
+        .check,
+        .check:nth-child(odd) {
+          grid-template-columns: 76px minmax(0, 1fr);
+          border-right: 0;
+        }
+
+        .check:nth-child(2) {
+          border-top: 1px solid #eaecf0;
+        }
+
+        .toolbar,
+        .actions {
+          width: 100%;
+        }
+
+        button,
+        .button {
+          flex: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div>
+            <div class="brand">ITTEMMALL</div>
+            <p class="muted" style="margin: 4px 0 0">Operations Readiness</p>
+          </div>
+          <div class="toolbar">
+            <button class="secondary" type="button" data-action="resume">관리자로 돌아가기</button>
+            <button type="button" data-action="refresh">새로고침</button>
+          </div>
+        </div>
+      </header>
+      <main class="main" id="app"></main>
+    </div>
+    <script>
+      (function () {
+        var app = document.getElementById("app");
+        var storageKey = "ittemmall:ops:origin";
+        var adminTokenKey = "ittemmall:admin:token";
+        var originMap = {
+          admin: "./admin.html",
+          home: "../#/home",
+        };
+        var params = new URLSearchParams(window.location.search);
+        var origin = originMap[params.get("origin")] || document.referrer || localStorage.getItem(storageKey) || "./admin.html";
+        if (origin) localStorage.setItem(storageKey, origin);
+
+        var state = {
+          status: "loading",
+          data: null,
+          error: "",
+          loadedAt: "",
+          adminToken: sessionStorage.getItem(adminTokenKey) || "",
+          notifyStatus: "idle",
+          notifyMessage: "",
+          publicStatus: "loading",
+          publicChecks: [],
+          publicError: "",
+        };
+
+        function escapeHtml(value) {
+          return String(value || "").replace(/[&<>"']/g, function (char) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char];
+          });
+        }
+
+        function bool(value) {
+          return value === true;
+        }
+
+        function statusClass(passed, warning) {
+          if (passed) return "pass";
+          return warning ? "warn" : "fail";
+        }
+
+        function statusText(passed, warning) {
+          if (passed) return "OK";
+          return warning ? "OWNER" : "FAIL";
+        }
+
+        function check(title, detail, passed, warning) {
+          return [
+            '<article class="check">',
+            '<span class="status ' + statusClass(passed, warning) + '">' + statusText(passed, warning) + "</span>",
+            "<div>",
+            '<div class="check-title">' + escapeHtml(title) + "</div>",
+            '<p class="check-detail">' + escapeHtml(detail) + "</p>",
+            "</div>",
+            "</article>",
+          ].join("");
+        }
+
+        function launchCheck(title, detail, status) {
+          return check(title, detail, status === "pass", status === "owner");
+        }
+
+        function fetchText(path) {
+          return fetch(path, { credentials: "same-origin", cache: "no-store" }).then(function (response) {
+            return response.text().then(function (text) {
+              if (!response.ok) throw new Error(path + " HTTP " + response.status);
+              return text;
+            });
+          });
+        }
+
+        function configValue(text, key) {
+          var pattern = new RegExp("\\b" + key + "\\s*:\\s*([\\\"'])(.*?)\\1");
+          var match = text.match(pattern);
+          return match ? match[2].trim() : "";
+        }
+
+        function isPlaceholder(value) {
+          return /YOUR_|PUBLIC_|NAVER_PAY_|ISSUED_|TEST_/i.test(value || "");
+        }
+
+        function healthChecks(data) {
+          var php = data.php || {};
+          var orderStore = data.serverOrderStore || {};
+          var naver = data.naverPay || {};
+          var config = data.serverConfig || {};
+          var admin = data.admin || {};
+          var notify = data.notification || {};
+          var tracking = data.tracking || {};
+          var rateLimit = data.rateLimit || {};
+          var readiness = data.readiness || {};
+          var publicNaver = data.publicNaverPay || {};
+          return [
+            check("PHP cURL", "네이버페이 승인/취소 API 호출에 필요", bool(php.curl), false),
+            check("PHP JSON", "주문 저장과 헬스체크 응답에 필요", bool(php.json), false),
+            check("주문 저장소", "ITTEMMALL_ORDER_STORE_PATH와 쓰기 권한", bool(orderStore.configured) && bool(orderStore.directoryWritable), false),
+            check("주문 파일 JSON", orderStore.fileExists ? "저장 주문 " + (orderStore.orderCount || 0) + "건" : "첫 주문 전에는 파일이 없을 수 있습니다.", !orderStore.fileExists || orderStore.fileValidJson === true, false),
+            check("주문 백업", orderStore.backupExists ? "백업 주문 " + (orderStore.backupOrderCount || 0) + "건" : "첫 백업 전에는 파일이 없을 수 있습니다.", !orderStore.backupExists || orderStore.backupValidJson === true, true),
+            check("주문 락 파일", orderStore.lockFileExists ? "lock 파일 쓰기 가능 여부" : "첫 쓰기 전에는 lock 파일이 없을 수 있습니다.", bool(orderStore.lockWritable), false),
+            check("호출 제한", rateLimit.configured ? "private rate-limit 파일 쓰기 권한" : "주문/추적 private path 설정 후 자동 생성", !rateLimit.configured || (bool(rateLimit.directoryWritable) && bool(rateLimit.lockWritable)), false),
+            check("비공개 설정", "private config 파일 또는 서버 환경변수", bool(config.privateConfigFileLoaded), true),
+            check("네이버페이 공개키", "clientId와 chainId", bool(naver.clientIdConfigured) && bool(naver.chainIdConfigured), true),
+            check("네이버페이 비밀키", "서버 전용 clientSecret", bool(naver.clientSecretConfigured), true),
+            check("공개/서버 모드", "public JS mode와 private NAVER_PAY_MODE 일치", bool(publicNaver.modeMatchesServer), true),
+            check("공개/서버 키", "public JS clientId/chainId와 private 값 일치", bool(publicNaver.clientIdMatchesServer) && bool(publicNaver.chainIdMatchesServer), true),
+            check("공개 JS 보안", "payment/naverpay-config.js에 clientSecret 없음", !publicNaver.clientSecretExposed, false),
+            check("관리자 토큰", "ITTEMMALL_ADMIN_TOKEN", bool(admin.adminTokenConfigured), true),
+            check("추적 로그", "ITTEMMALL_TRACK_LOG_PATH와 ITTEMMALL_TRACK_SALT", bool(tracking.logPathConfigured) && bool(tracking.saltConfigured), true),
+            check("주문 알림", "메일 알림 사용 시 수신/발신 주소", !notify.enabled || (bool(notify.recipientLooksValid) && bool(notify.fromLooksValid) && bool(notify.mailFunctionAvailable)), true),
+            check("승인 전환 준비", "NAVER_PAY_APPROVE_ENABLED=1 전 필수 조건", bool(readiness.readyToEnableNaverPayApproval), true),
+            check("운영 처리 준비", "관리자와 취소 처리 조건", bool(readiness.readyForOrderOperations), true),
+            check("취소 URL", "오버라이드가 있으면 HTTPS", naver.cancelUrlLooksHttps !== false, false),
+          ];
+        }
+
+        function summaryCounts(items) {
+          return items.reduce(
+            function (counts, item) {
+              if (item.indexOf('class="status pass"') !== -1) counts.pass += 1;
+              else if (item.indexOf('class="status fail"') !== -1) counts.fail += 1;
+              else counts.owner += 1;
+              return counts;
+            },
+            { pass: 0, owner: 0, fail: 0 },
+          );
+        }
+
+        function tile(label, value, detail) {
+          return [
+            '<article class="tile">',
+            '<p class="eyebrow">' + escapeHtml(label) + "</p>",
+            "<strong>" + escapeHtml(value) + "</strong>",
+            '<p class="muted" style="margin: 10px 0 0; font-size: 13px">' + escapeHtml(detail) + "</p>",
+            "</article>",
+          ].join("");
+        }
+
+        function renderFrame(content) {
+          return [
+            '<section class="hero">',
+            "<div>",
+            '<p class="eyebrow">OPERATIONS</p>',
+            "<h1>운영 점검</h1>",
+            '<p class="muted">마지막 확인: ' + escapeHtml(state.loadedAt || "-") + "</p>",
+            "</div>",
+            '<div class="actions">',
+            '<button class="secondary" type="button" data-action="resume">관리자로 돌아가기</button>',
+            '<a class="button secondary" href="./healthcheck.php">JSON 열기</a>',
+            '<a class="button secondary" href="../#/home">사이트 보기</a>',
+            "</div>",
+            "</section>",
+            content,
+          ].join("");
+        }
+
+        function renderNotificationTest() {
+          var messageClass = state.notifyStatus === "error" ? "fail" : "pass";
+          return [
+            '<section class="panel">',
+            '<div class="panel-head"><div><p class="eyebrow">NOTIFICATION</p><h2>메일 알림 테스트</h2></div><button class="secondary" type="button" data-action="refresh">상태 새로고침</button></div>',
+            '<div class="state" style="border:0;box-shadow:none">',
+            '<p class="muted">운영 서버에서 ITTEMMALL_NOTIFY_ENABLED=1, ITTEMMALL_NOTIFY_EMAIL, ITTEMMALL_ADMIN_TOKEN을 설정한 뒤 실제 주문 알림 메일 발송을 확인합니다.</p>',
+            '<div class="actions" style="margin-bottom:12px">',
+            '<input data-field="adminToken" type="password" autocomplete="current-password" placeholder="관리자 토큰" value="' + escapeHtml(state.adminToken) + '" style="min-height:42px;min-width:min(100%,280px);border:1px solid var(--line);border-radius:8px;padding:0 12px" />',
+            '<button type="button" data-action="send-notification-test">테스트 메일 보내기</button>',
+            '<a class="button secondary" href="./admin.html">주문 관리자</a>',
+            "</div>",
+            state.notifyMessage ? '<p class="check-detail"><span class="status ' + messageClass + '">' + (state.notifyStatus === "error" ? "FAIL" : "OK") + "</span> " + escapeHtml(state.notifyMessage) + "</p>" : "",
+            "</div>",
+            "</section>",
+          ].join("");
+        }
+
+        function renderPublicLaunchChecks() {
+          if (state.publicStatus === "loading") {
+            return [
+              '<section class="panel">',
+              '<div class="panel-head"><div><p class="eyebrow">PUBLIC LAUNCH</p><h2>공개 런칭 점검</h2></div><button class="secondary" type="button" data-action="refresh-public">다시 확인</button></div>',
+              '<div class="state" style="border:0;box-shadow:none"><h2>확인 중</h2><p class="muted">공개 설정과 정책 페이지를 확인하고 있습니다.</p></div>',
+              "</section>",
+            ].join("");
+          }
+
+          if (state.publicStatus === "error") {
+            return [
+              '<section class="panel">',
+              '<div class="panel-head"><div><p class="eyebrow">PUBLIC LAUNCH</p><h2>공개 런칭 점검</h2></div><button class="secondary" type="button" data-action="refresh-public">다시 확인</button></div>',
+              '<div class="state" style="border:0;box-shadow:none"><h2>점검 실패</h2><p class="muted">' + escapeHtml(state.publicError || "공개 설정을 확인하지 못했습니다.") + '</p><div class="actions"><button type="button" data-action="refresh-public">다시 확인</button><a class="button secondary" href="../#/home">사이트 보기</a></div></div>',
+              "</section>",
+            ].join("");
+          }
+
+          var checks = state.publicChecks || [];
+          var counts = summaryCounts(checks);
+          return [
+            '<section class="panel">',
+            '<div class="panel-head"><div><p class="eyebrow">PUBLIC LAUNCH</p><h2>공개 런칭 점검</h2><p class="muted" style="margin:4px 0 0;font-size:13px">OK ' + counts.pass + " · OWNER " + counts.owner + " · FAIL " + counts.fail + '</p></div><button class="secondary" type="button" data-action="refresh-public">다시 확인</button></div>',
+            '<div class="checks">' + checks.join("") + "</div>",
+            "</section>",
+          ].join("");
+        }
+
+        function render() {
+          if (state.status === "loading") {
+            app.innerHTML = renderFrame(
+              '<section class="state"><h2>확인 중</h2><p class="muted">운영 서버 상태를 불러오고 있습니다.</p><div class="actions"><button type="button" data-action="refresh">다시 확인</button><button class="secondary" type="button" data-action="resume">관리자로 돌아가기</button></div></section>' +
+                renderPublicLaunchChecks(),
+            );
+            return;
+          }
+
+          if (state.status === "error") {
+            app.innerHTML = renderFrame(
+              '<section class="state"><h2>점검 실패</h2><p class="muted">' +
+                escapeHtml(state.error || "healthcheck.php 응답을 읽지 못했습니다.") +
+                '</p><div class="actions"><button type="button" data-action="refresh">다시 확인</button><a class="button secondary" href="./healthcheck.php">JSON 열기</a><button class="secondary" type="button" data-action="resume">관리자로 돌아가기</button></div></section>' +
+                renderPublicLaunchChecks() +
+                renderNotificationTest(),
+            );
+            return;
+          }
+
+          var items = healthChecks(state.data || {});
+          if (!items.length) {
+            app.innerHTML = renderFrame(
+              '<section class="state"><h2>표시할 항목 없음</h2><p class="muted">헬스체크 응답에 점검 항목이 없습니다.</p><div class="actions"><button type="button" data-action="refresh">다시 확인</button><a class="button secondary" href="./healthcheck.php">JSON 열기</a></div></section>' +
+                renderPublicLaunchChecks() +
+                renderNotificationTest(),
+            );
+            return;
+          }
+
+          var counts = summaryCounts(items);
+          app.innerHTML = renderFrame(
+            [
+              '<section class="summary">',
+              tile("OK", counts.pass, "코드/서버 조건 통과"),
+              tile("OWNER", counts.owner, "운영자가 넣을 값 또는 선택 설정"),
+              tile("FAIL", counts.fail, "배포 전 수정 필요"),
+              tile("MODE", (state.data.naverPay && state.data.naverPay.mode) || "-", "네이버페이 모드"),
+              "</section>",
+              '<section class="panel">',
+              '<div class="panel-head"><div><p class="eyebrow">CHECKS</p><h2>상태 항목</h2></div><button class="secondary" type="button" data-action="refresh">새로고침</button></div>',
+              '<div class="checks">' + items.join("") + "</div>",
+              "</section>",
+              renderPublicLaunchChecks(),
+              renderNotificationTest(),
+              '<section class="panel">',
+              '<div class="panel-head"><div><p class="eyebrow">RAW</p><h2>Healthcheck JSON</h2></div><a class="button secondary" href="./healthcheck.php">전체 보기</a></div>',
+              '<pre class="raw">' + escapeHtml(JSON.stringify(state.data, null, 2)) + "</pre>",
+              "</section>",
+            ].join(""),
+          );
+        }
+
+        function loadHealth() {
+          state.status = "loading";
+          state.error = "";
+          render();
+          fetch("./healthcheck.php", { credentials: "same-origin", cache: "no-store" })
+            .then(function (response) {
+              return response.text().then(function (text) {
+                return { ok: response.ok, text: text };
+              });
+            })
+            .then(function (result) {
+              if (!result.ok) throw new Error("HTTP 응답 오류");
+              var data = JSON.parse(result.text);
+              if (!data || data.ok !== true) throw new Error("헬스체크 응답 오류");
+              state.data = data;
+              state.status = "ready";
+              state.loadedAt = new Date().toLocaleString("ko-KR");
+              render();
+            })
+            .catch(function (error) {
+              state.status = "error";
+              state.error = error.message || "헬스체크 응답을 읽지 못했습니다.";
+              state.loadedAt = new Date().toLocaleString("ko-KR");
+              render();
+            });
+        }
+
+        function loadPublicLaunchChecks() {
+          var legalPaths = ["../legal/business.html", "../legal/terms.html", "../legal/privacy.html", "../legal/refund.html"];
+          state.publicStatus = "loading";
+          state.publicError = "";
+          render();
+          Promise.allSettled([
+            fetchText("./naverpay-config.js"),
+            fetchText("../robots.txt"),
+            fetchText("../sitemap.xml"),
+          ].concat(legalPaths.map(fetchText)))
+            .then(function (results) {
+              var config = results[0];
+              var robots = results[1];
+              var sitemap = results[2];
+              var legalResults = results.slice(3);
+              var checks = [];
+
+              if (config.status === "fulfilled" && config.value.indexOf("ITTEMMALL_NAVER_PAY_CONFIG") !== -1) {
+                checks.push(launchCheck("네이버페이 공개 JS", "payment/naverpay-config.js 로딩", "pass"));
+                var clientId = configValue(config.value, "clientId");
+                var chainId = configValue(config.value, "chainId");
+                var mode = configValue(config.value, "mode");
+                checks.push(
+                  launchCheck(
+                    "네이버페이 공개키",
+                    clientId && chainId && !isPlaceholder(clientId) && !isPlaceholder(chainId)
+                      ? "clientId/chainId 입력 완료"
+                      : "가맹점 발급 clientId/chainId 입력 필요",
+                    clientId && chainId && !isPlaceholder(clientId) && !isPlaceholder(chainId) ? "pass" : "owner",
+                  ),
+                );
+                checks.push(
+                  launchCheck(
+                    "네이버페이 운영 모드",
+                    mode === "production" ? "production" : "실운영 전 production 전환 필요",
+                    mode === "production" ? "pass" : "owner",
+                  ),
+                );
+                checks.push(
+                  launchCheck(
+                    "공개 JS 비밀키 노출",
+                    /clientSecret|CLIENT_SECRET/.test(config.value) ? "비밀키처럼 보이는 문자열이 있습니다." : "clientSecret 없음",
+                    /clientSecret|CLIENT_SECRET/.test(config.value) ? "fail" : "pass",
+                  ),
+                );
+              } else {
+                checks.push(launchCheck("네이버페이 공개 JS", "payment/naverpay-config.js 확인 실패", "fail"));
+              }
+
+              var loadedLegal = legalResults.filter(function (result) {
+                return result.status === "fulfilled";
+              });
+              var legalCombined = loadedLegal.map(function (result) {
+                return result.value;
+              }).join("\n");
+              checks.push(
+                launchCheck(
+                  "정책 페이지 로딩",
+                  loadedLegal.length === legalPaths.length ? "사업자/약관/개인정보/환불 페이지 로딩 완료" : "정책 페이지 중 일부를 읽지 못했습니다.",
+                  loadedLegal.length === legalPaths.length ? "pass" : "fail",
+                ),
+              );
+              checks.push(
+                launchCheck(
+                  "정책 OWNER 값",
+                  legalCombined.indexOf("ITTEMMALL_OWNER_TODO") === -1 ? "사업자/배송/개인정보 실제값 입력 완료" : "ITTEMMALL_OWNER_TODO 실제값 교체 필요",
+                  legalCombined.indexOf("ITTEMMALL_OWNER_TODO") === -1 ? "pass" : "owner",
+                ),
+              );
+
+              if (robots.status === "fulfilled") {
+                var robotsRequired = [
+                  "/payment/admin.html",
+                  "/payment/admin-orders.php",
+                  "/payment/healthcheck.php",
+                  "/payment/notification-test.php",
+                  "/payment/ops.html",
+                  "/payment/order-store.php",
+                ];
+                var robotsOk = robotsRequired.every(function (path) {
+                  return robots.value.indexOf(path) !== -1;
+                }) && robots.value.indexOf("Sitemap: https://ittemmall.com/sitemap.xml") !== -1;
+                checks.push(launchCheck("robots.txt", robotsOk ? "운영/관리 경로 noindex 차단 포함" : "robots 차단 항목 확인 필요", robotsOk ? "pass" : "fail"));
+              } else {
+                checks.push(launchCheck("robots.txt", "robots.txt 확인 실패", "fail"));
+              }
+
+              if (sitemap.status === "fulfilled") {
+                var sitemapRequired = [
+                  "https://ittemmall.com/",
+                  "https://ittemmall.com/legal/business.html",
+                  "https://ittemmall.com/legal/terms.html",
+                  "https://ittemmall.com/legal/privacy.html",
+                  "https://ittemmall.com/legal/refund.html",
+                ];
+                var sitemapOk = sitemapRequired.every(function (url) {
+                  return sitemap.value.indexOf(url) !== -1;
+                });
+                checks.push(launchCheck("sitemap.xml", sitemapOk ? "홈/정책 URL 포함" : "필수 URL 누락 확인 필요", sitemapOk ? "pass" : "fail"));
+              } else {
+                checks.push(launchCheck("sitemap.xml", "sitemap.xml 확인 실패", "fail"));
+              }
+
+              state.publicChecks = checks;
+              state.publicStatus = "ready";
+              render();
+            })
+            .catch(function (error) {
+              state.publicStatus = "error";
+              state.publicError = error.message || "공개 런칭 점검 실패";
+              render();
+            });
+        }
+
+        function sendNotificationTest() {
+          if (!state.adminToken.trim()) {
+            state.notifyStatus = "error";
+            state.notifyMessage = "관리자 토큰을 입력해주세요.";
+            render();
+            return;
+          }
+          sessionStorage.setItem(adminTokenKey, state.adminToken.trim());
+          state.notifyStatus = "loading";
+          state.notifyMessage = "테스트 메일 발송 중입니다.";
+          render();
+          fetch("./notification-test.php", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Ittemmall-Admin-Token": state.adminToken.trim(),
+            },
+            body: JSON.stringify({ message: "운영점검 화면에서 발송한 테스트 메일" }),
+          })
+            .then(function (response) {
+              return response.json().then(function (data) {
+                return { ok: response.ok, status: response.status, data: data };
+              });
+            })
+            .then(function (result) {
+              if (!result.ok || !result.data.ok) {
+                throw new Error(result.data.message || result.data.error || "테스트 메일 발송 실패");
+              }
+              state.notifyStatus = "success";
+              state.notifyMessage = "테스트 메일 발송 완료: " + (result.data.recipient || "수신자 확인");
+              render();
+            })
+            .catch(function (error) {
+              state.notifyStatus = "error";
+              state.notifyMessage = error.message || "테스트 메일 발송 실패";
+              render();
+            });
+        }
+
+        document.body.addEventListener("input", function (event) {
+          if (event.target.dataset.field === "adminToken") {
+            state.adminToken = event.target.value;
+          }
+        });
+
+        document.body.addEventListener("click", function (event) {
+          var button = event.target.closest("[data-action]");
+          if (!button) return;
+          var action = button.dataset.action;
+          if (action === "refresh") {
+            loadHealth();
+            loadPublicLaunchChecks();
+          }
+          if (action === "refresh-public") loadPublicLaunchChecks();
+          if (action === "send-notification-test") sendNotificationTest();
+          if (action === "resume") window.location.href = localStorage.getItem(storageKey) || origin || "./admin.html";
+        });
+
+        loadHealth();
+        loadPublicLaunchChecks();
+      })();
+    </script>
+  </body>
+</html>

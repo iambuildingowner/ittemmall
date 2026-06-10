@@ -1,29 +1,30 @@
 # ittemmall.com Deploy Notes
 
-Static site root files:
+잇템몰은 기존 사업자 `공간`의 대표 쇼핑몰이자 통신판매업/PG 심사용 허브로 운영한다. 공개 웹루트에는 `build/ittemmall-public/` 안의 파일만 업로드한다.
 
-- `index.html`
-- `app.js`
-- `styles.css`
-- `.htaccess`
-- `robots.txt`
-- `sitemap.xml`
-- `assets/images/*`
+## Current Upload Package
 
-Primary QA path after deployment:
+- Public folder: `build/ittemmall-public/`
+- Upload ZIP: `build/ittemmall-public.zip`
+- Product: MARCE 스위트 피클볼 패들 2종
+- Business info: 공간 / 안뜰에해듬 / 221-31-17043
+- Domain: `https://ittemmall.com`
 
-1. Open `https://ittemmall.com/product/coolfit-wide-headband/50/category/25/display/1/`
-2. Confirm product detail loads directly.
-3. Select `WHITE`, then `BLACK`.
-4. Click `N pay 구매`; confirm no visible navigation.
-5. Click `비회원으로 구매하기`.
-6. Confirm order summary appears above shipping form.
-7. Fill name, phone, email, address, detail address.
-8. Check required notice.
-9. Click `결제 페이지로 이동하기`.
-10. Confirm there is no page movement and no order completion.
-11. Confirm `PaymentGatewayClick` is recorded in browser storage/dataLayer.
+## Primary QA Path After Deployment
 
-Hostinger note:
+1. Open `https://ittemmall.com/`.
+2. Confirm the header and footer show `ITTEMMALL`.
+3. Confirm the MARCE pink and black products are visible.
+4. Open product detail and confirm product images load.
+5. Open the order form and confirm address, contact, agreement, and payment method fields render.
+6. Open `https://ittemmall.com/legal/business.html`.
+7. Confirm business info shows `공간`, `안뜰에해듬`, `221-31-17043`, and the business address.
+8. Open `https://ittemmall.com/legal/refund.html`.
+9. Confirm shipping/refund policy no longer has `ITTEMMALL_OWNER_TODO`.
+10. Confirm mobile layout, images, and console are clean.
 
-`ittemmall.com` currently resolves to Hostinger parking. The SSH account already configured on this Mac does not list an `ittemmall.com` domain folder, so deployment needs the Hostinger account/server credentials for this specific domain or hPanel file upload.
+## Deployment Gate
+
+The SSH account previously configured on this Mac does not list an `ittemmall.com` domain folder. Live deployment needs the Hostinger account/server credentials for this specific domain, or hPanel file upload access.
+
+Do not mark production deployment complete until the live URL is verified after upload.

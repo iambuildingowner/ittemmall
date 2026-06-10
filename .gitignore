@@ -15,6 +15,7 @@ node_modules/
 .cache/
 
 # Build and QA outputs
+build/
 output/
 outputs/
 coverage/
@@ -41,6 +42,12 @@ deploy/demo*/
 *private*
 *.key
 *.pem
+
+# Safe templates and tooling that contain placeholders only
+!private/
+!private/*.example.php
+!private/*.example.json
+!scripts/generate_private_config.py
 
 # Order/customer/runtime data
 *orders*.json

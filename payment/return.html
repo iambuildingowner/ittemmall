@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light only" />
+    <meta name="darkreader-lock" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>ITTEMMALL | Naver Pay Return</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/ittemmall/favicon.svg" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #f5f7f4;
+        color: #111;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .panel {
+        width: min(100%, 560px);
+        border: 1px solid #e4e4e7;
+        border-radius: 8px;
+        background: #fff;
+        padding: 28px;
+        box-shadow: 0 18px 54px rgba(17, 24, 39, 0.08);
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: #03c75a;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.18em;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 27px;
+        line-height: 1.25;
+      }
+
+      p {
+        margin: 12px 0 0;
+        color: #52525b;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .notice {
+        margin-top: 16px;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+        background: #f0fdf4;
+        padding: 14px;
+        color: #166534;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.6;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      a {
+        display: inline-flex;
+        min-height: 48px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #1d4985;
+        border-radius: 8px;
+        color: #1d4985;
+        font-size: 14px;
+        font-weight: 900;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      a.primary {
+        background: #1d4985;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="panel">
+        <p class="eyebrow">NAVER PAY RETURN</p>
+        <h1>네이버페이 승인 확인이 필요합니다.</h1>
+        <p>
+          결제창에서 돌아온 뒤에는 서버가 네이버페이 승인 API를 호출해야 최종 결제 완료로 처리됩니다.
+          현재 페이지는 승인 서버 연결 전 고객이 길을 잃지 않도록 주문 화면으로 돌려보내는 안전 장치입니다.
+        </p>
+        <div class="notice" id="returnNotice">주문 정보를 확인하고 있습니다.</div>
+        <div class="actions">
+          <a class="primary" id="detailLink" href="../#/history">주문 상세</a>
+          <a href="../#/home">상품 보기</a>
+        </div>
+      </section>
+    </main>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var orderId = params.get("orderId") || params.get("merchantPayKey") || "";
+        var paymentId = params.get("paymentId") || params.get("payment_id") || "";
+        var resultCode = params.get("resultCode") || "";
+        var resultMessage = params.get("resultMessage") || "";
+        var detailLink = document.getElementById("detailLink");
+        var notice = document.getElementById("returnNotice");
+        if (orderId) {
+          detailLink.href = "../#/submission/" + encodeURIComponent(orderId);
+          notice.textContent = "주문번호 " + orderId + " 기준으로 주문 상세를 다시 확인할 수 있습니다.";
+          if (resultCode && resultCode !== "Success") {
+            updateLocalOrder(orderId, {
+              status: "payment_failed",
+              paymentStatus: "authorization_failed",
+              paymentError: resultMessage || resultCode,
+            });
+            notice.textContent =
+              "네이버페이 결제가 완료되지 않았습니다. " +
+              (resultMessage || resultCode) +
+              " 주문 상세에서 다시 진행할 수 있습니다.";
+            return;
+          }
+          if (paymentId) {
+            approvePayment(orderId, paymentId);
+          } else if (resultCode === "Success") {
+            notice.textContent =
+              "네이버페이 결제번호가 전달되지 않았습니다. 주문 상세에서 결제 상태를 다시 확인해주세요.";
+          }
+          return;
+        }
+        notice.textContent = "주문번호가 전달되지 않아 주문 내역으로 이동합니다.";
+
+        function updateLocalOrder(orderId, patch) {
+          try {
+            var key = "fakeDoorPurchaseMvp.orders.v1";
+            var raw = localStorage.getItem(key);
+            var orders = raw ? JSON.parse(raw) : [];
+            if (!Array.isArray(orders)) return;
+            var nextOrders = orders.map(function (order) {
+              if (!order || order.id !== orderId) return order;
+              return Object.assign({}, order, patch, { updatedAt: new Date().toISOString() });
+            });
+            localStorage.setItem(key, JSON.stringify(nextOrders));
+          } catch (error) {}
+        }
+
+        function approvePayment(orderId, paymentId) {
+          fetch("./naverpay-approve.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId: orderId,
+              merchantPayKey: orderId,
+              paymentId: paymentId,
+            }),
+            credentials: "same-origin",
+          })
+            .then(function (response) {
+              return response.json().then(function (data) {
+                return { ok: response.ok, data: data };
+              });
+            })
+            .then(function (result) {
+              if (result.ok && result.data && result.data.ok) {
+                updateLocalOrder(orderId, {
+                  status: "payment_approved",
+                  paymentStatus: "approved",
+                  paymentId: paymentId,
+                  approvedAt: new Date().toISOString(),
+                });
+                notice.textContent = "네이버페이 승인 확인이 완료되었습니다. 주문 상세에서 상태를 확인해주세요.";
+                return;
+              }
+              notice.textContent =
+                "네이버페이 승인 서버 연결이 아직 완료되지 않았습니다. 주문 상세에서 주문번호를 확인해주세요.";
+            })
+            .catch(function () {
+              notice.textContent =
+                "네이버페이 승인 확인 중 오류가 발생했습니다. 주문 상세에서 주문번호를 확인해주세요.";
+            });
+        }
+      })();
+    </script>
+  </body>
+</html>

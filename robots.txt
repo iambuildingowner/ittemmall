@@ -1,4 +1,14 @@
 User-agent: *
 Allow: /
+Disallow: /payment/admin.html
+Disallow: /payment/admin-orders.php
+Disallow: /payment/healthcheck.php
+Disallow: /payment/naverpay-approve.php
+Disallow: /payment/naverpay-cancel.php
+Disallow: /payment/notification-test.php
+Disallow: /payment/ops.html
+Disallow: /payment/order-lookup.html
+Disallow: /payment/order-lookup.php
+Disallow: /payment/order-store.php
 
 Sitemap: https://ittemmall.com/sitemap.xml

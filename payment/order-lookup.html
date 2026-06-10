@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="color-scheme" content="light only" />
+    <meta name="darkreader-lock" />
+    <title>ITTEMMALL | 주문 조회</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/ittemmall/favicon.svg" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #f7f6f2;
+        color: #111;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .shell {
+        min-height: 100vh;
+        padding: 28px;
+      }
+
+      .topbar,
+      .grid,
+      .footer {
+        width: min(1120px, 100%);
+        margin: 0 auto;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 0 28px;
+      }
+
+      .brand {
+        color: #1d4985;
+        font-size: 18px;
+        font-weight: 950;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+      }
+
+      .top-actions,
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .button,
+      button {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #1d4985;
+        border-radius: 8px;
+        background: #1d4985;
+        color: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 900;
+        padding: 0 16px;
+        text-decoration: none;
+      }
+
+      .button.secondary,
+      button.secondary {
+        background: #fff;
+        color: #1d4985;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+        gap: 22px;
+      }
+
+      .panel {
+        border: 1px solid #e2ded7;
+        border-radius: 8px;
+        background: #fff;
+        padding: 26px;
+        box-shadow: 0 20px 60px rgba(17, 24, 39, 0.07);
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: #1d4985;
+        font-size: 12px;
+        font-weight: 950;
+        letter-spacing: 0.16em;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        line-height: 1.2;
+      }
+
+      h1 {
+        font-size: clamp(34px, 6vw, 64px);
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+
+      p {
+        color: #52525b;
+        line-height: 1.7;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      label {
+        display: grid;
+        gap: 8px;
+        color: #3f3f46;
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      input {
+        width: 100%;
+        min-height: 50px;
+        border: 1px solid #d4d4d8;
+        border-radius: 8px;
+        font-size: 16px;
+        padding: 0 14px;
+      }
+
+      input:focus {
+        border-color: #1d4985;
+        outline: 3px solid rgba(29, 73, 133, 0.14);
+      }
+
+      .state {
+        display: grid;
+        gap: 14px;
+        min-height: 280px;
+        place-content: center;
+        text-align: center;
+      }
+
+      .status {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        border-radius: 999px;
+        background: #eef4ff;
+        color: #1d4985;
+        font-size: 13px;
+        font-weight: 950;
+        padding: 8px 12px;
+      }
+
+      .status.warn {
+        background: #fff7ed;
+        color: #9a3412;
+      }
+
+      .status.done {
+        background: #f0fdf4;
+        color: #166534;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: 130px 1fr;
+        gap: 12px;
+        margin: 22px 0;
+      }
+
+      dt {
+        color: #71717a;
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      dd {
+        margin: 0;
+        color: #111;
+        font-weight: 800;
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .error {
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        background: #fef2f2;
+        color: #991b1b;
+        font-weight: 800;
+        padding: 12px;
+      }
+
+      .notice {
+        border: 1px solid #bfdbfe;
+        border-radius: 8px;
+        background: #eff6ff;
+        color: #1e3a8a;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.6;
+        padding: 12px;
+      }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 24px;
+        color: #71717a;
+        font-size: 13px;
+      }
+
+      .footer a {
+        color: inherit;
+      }
+
+      @media (max-width: 760px) {
+        .shell {
+          padding: 18px;
+        }
+
+        .topbar,
+        .footer {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .panel {
+          padding: 20px;
+        }
+
+        .summary {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="../#/home">ITTEMMALL</a>
+        <nav class="top-actions" aria-label="주요 링크">
+          <a class="button secondary" href="../#/history">브라우저 주문 내역</a>
+          <a class="button secondary" href="../#/home">상품 보기</a>
+        </nav>
+      </header>
+
+      <main class="grid">
+        <section class="panel">
+          <p class="eyebrow">ORDER LOOKUP</p>
+          <h1>주문 조회</h1>
+          <p>
+            주문번호와 주문서에 입력한 이메일 또는 휴대폰 번호를 입력하면 결제/발송 상태를 확인할 수 있습니다.
+          </p>
+          <form class="form-grid" id="lookupForm">
+            <label>
+              주문번호
+              <input id="orderId" name="orderId" autocomplete="off" placeholder="예: IT-..." />
+            </label>
+            <label>
+              이메일 또는 휴대폰 번호
+              <input id="contact" name="contact" autocomplete="email tel" placeholder="주문서에 입력한 연락처" />
+            </label>
+            <button type="submit">조회하기</button>
+          </form>
+          <p class="notice">개인정보 보호를 위해 이름, 전화번호, 이메일, 주소는 조회 결과에 표시하지 않습니다.</p>
+        </section>
+
+        <section class="panel" id="resultPanel" aria-live="polite"></section>
+      </main>
+
+      <footer class="footer">
+        <span>© 2026 ITTEMMALL</span>
+        <span><a href="../legal/refund.html">배송·교환·환불 안내</a></span>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        var storageKey = "ittemmall:orderLookup:v1";
+        var form = document.getElementById("lookupForm");
+        var orderIdField = document.getElementById("orderId");
+        var contactField = document.getElementById("contact");
+        var resultPanel = document.getElementById("resultPanel");
+        var state = { status: "idle", order: null, error: "" };
+
+        restoreForm();
+        render();
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          lookupOrder();
+        });
+        form.addEventListener("input", persistForm);
+
+        function restoreForm() {
+          try {
+            var saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+            orderIdField.value = saved.orderId || "";
+            contactField.value = saved.contact || "";
+          } catch (error) {}
+        }
+
+        function persistForm() {
+          localStorage.setItem(storageKey, JSON.stringify({
+            orderId: orderIdField.value.trim(),
+            contact: contactField.value.trim(),
+          }));
+        }
+
+        function escapeHtml(value) {
+          return String(value || "").replace(/[&<>"']/g, function (char) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char];
+          });
+        }
+
+        function formatPrice(value) {
+          return Number(value || 0).toLocaleString("ko-KR");
+        }
+
+        function formatDate(value) {
+          if (!value) return "-";
+          var date = new Date(value);
+          if (Number.isNaN(date.getTime())) return value;
+          return date.toLocaleString("ko-KR");
+        }
+
+        function statusClass(order) {
+          if (!order) return "";
+          if (order.paymentStatus === "approved" || order.fulfillmentStatus === "shipped" || order.fulfillmentStatus === "completed") {
+            return "done";
+          }
+          if (order.paymentStatus === "canceled" || order.paymentStatus === "cancel_pending") {
+            return "warn";
+          }
+          return "";
+        }
+
+        function render() {
+          if (state.status === "idle") {
+            resultPanel.innerHTML =
+              '<div class="state"><span class="status">대기</span><h2>주문번호를 입력해주세요.</h2><p>조회 결과에는 주문 상태와 발송 정보만 표시됩니다.</p><div class="actions"><a class="button secondary" href="../#/home">상품 보기</a><a class="button secondary" href="../#/history">브라우저 주문 내역</a></div></div>';
+            return;
+          }
+          if (state.status === "loading") {
+            resultPanel.innerHTML =
+              '<div class="state"><span class="status">조회 중</span><h2>주문을 확인하고 있습니다.</h2><p>잠시만 기다려주세요.</p></div>';
+            return;
+          }
+          if (state.status === "error") {
+            resultPanel.innerHTML =
+              '<div class="state"><div class="error">' +
+              escapeHtml(state.error) +
+              '</div><div class="actions"><button type="button" class="secondary" id="retryButton">다시 조회</button><a class="button secondary" href="../#/home">상품 보기</a></div></div>';
+            var retry = document.getElementById("retryButton");
+            if (retry) retry.addEventListener("click", lookupOrder);
+            return;
+          }
+          renderOrder(state.order);
+        }
+
+        function renderOrder(order) {
+          var shipment = order.shipment || {};
+          resultPanel.innerHTML = [
+            '<span class="status ' + statusClass(order) + '">' + escapeHtml(order.paymentLabel) + " · " + escapeHtml(order.fulfillmentLabel) + "</span>",
+            '<h2 style="margin-top:16px">' + escapeHtml(order.productName) + "</h2>",
+            '<dl class="summary">',
+            row("주문번호", order.id),
+            row("수량", (order.quantity || 1) + "개"),
+            row("금액", "₩ " + formatPrice(order.amount)),
+            row("결제상태", order.paymentLabel),
+            row("운영상태", order.fulfillmentLabel),
+            row("택배사", shipment.carrier),
+            row("송장번호", shipment.trackingNumber),
+            row("발송일", formatDate(shipment.shippedAt)),
+            row("최근 업데이트", formatDate(order.updatedAt)),
+            "</dl>",
+            shipment.trackingUrl
+              ? '<div class="actions"><a class="button" href="' + escapeHtml(shipment.trackingUrl) + '" target="_blank" rel="noopener">배송조회 열기</a><a class="button secondary" href="../#/home">상품 보기</a></div>'
+              : '<div class="actions"><a class="button secondary" href="../#/home">상품 보기</a><a class="button secondary" href="../legal/refund.html">배송 안내</a></div>',
+          ].join("");
+        }
+
+        function row(label, value) {
+          return "<dt>" + escapeHtml(label) + "</dt><dd>" + escapeHtml(value || "-") + "</dd>";
+        }
+
+        function lookupOrder() {
+          var orderId = orderIdField.value.trim();
+          var contact = contactField.value.trim();
+          persistForm();
+          if (!orderId || !contact) {
+            state = { status: "error", order: null, error: "주문번호와 이메일 또는 휴대폰 번호를 모두 입력해주세요." };
+            render();
+            return;
+          }
+          state = { status: "loading", order: null, error: "" };
+          render();
+          fetch("./order-lookup.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            body: JSON.stringify({ orderId: orderId, contact: contact }),
+          })
+            .then(function (response) {
+              return response.json().then(function (data) {
+                return { ok: response.ok, status: response.status, data: data };
+              });
+            })
+            .then(function (result) {
+              if (!result.ok || !result.data.ok) {
+                throw new Error(result.data.message || result.data.error || "주문을 조회하지 못했습니다.");
+              }
+              state = { status: "success", order: result.data.order, error: "" };
+              render();
+            })
+            .catch(function (error) {
+              state = { status: "error", order: null, error: error.message || "주문을 조회하지 못했습니다." };
+              render();
+            });
+        }
+      })();
+    </script>
+  </body>
+</html>

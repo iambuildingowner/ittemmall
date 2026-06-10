@@ -1,0 +1,52 @@
+{
+  "site": {
+    "origin": "https://ittemmall.com",
+    "base_url": "https://ittemmall.com"
+  },
+  "legal": {
+    "representative": "대표자명",
+    "business_registration_number": "000-00-00000",
+    "ecommerce_license": "제0000-지역-0000호",
+    "business_address": "사업장 주소",
+    "privacy_officer": "개인정보 책임자명",
+    "shipping_carrier": "택배사명",
+    "shipping_fee": "3,000원",
+    "shipping_days": "2",
+    "return_address": "반품 주소"
+  },
+  "server": {
+    "order_store_path": "/absolute/private/path/ittemmall-orders.json",
+    "track_log_path": "/absolute/private/path/ittemmall-track-events.jsonl",
+    "rate_limit_path": "",
+    "track_salt": "",
+    "admin_token": ""
+  },
+  "notification": {
+    "enable": false,
+    "email": "orders@ittemmall.com",
+    "from": "no-reply@ittemmall.com"
+  },
+  "toss_payments": {
+    "mid": "ISSUED_TOSS_MID",
+    "client_key": "ISSUED_TOSS_CLIENT_KEY",
+    "secret_key": "ISSUED_TOSS_SECRET_KEY",
+    "payment_widget_variant_key": "DEFAULT",
+    "enable_approval": false
+  },
+  "naver_pay": {
+    "client_id": "ISSUED_CLIENT_ID",
+    "chain_id": "ISSUED_CHAIN_ID",
+    "client_secret": "ISSUED_CLIENT_SECRET",
+    "mode": "production",
+    "open_type": "page",
+    "return_url": "",
+    "order_endpoint": "",
+    "approve_url": "",
+    "cancel_url": "",
+    "enable_approval": false,
+    "enable_cancel": false
+  },
+  "private": {
+    "output": "build/ittemmall-private/ittemmall-server-config.php"
+  }
+}

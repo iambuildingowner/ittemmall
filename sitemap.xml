@@ -2,22 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ittemmall.com/</loc>
-    <lastmod>2026-05-18</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ittemmall.com/headband/</loc>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://ittemmall.com/all/</loc>
-    <lastmod>2026-05-19</lastmod>
-    <priority>0.6</priority>
+    <loc>https://ittemmall.com/legal/business.html</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://ittemmall.com/acc/</loc>
-    <lastmod>2026-05-19</lastmod>
-    <priority>0.6</priority>
+    <loc>https://ittemmall.com/legal/terms.html</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://ittemmall.com/legal/privacy.html</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://ittemmall.com/legal/refund.html</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>
