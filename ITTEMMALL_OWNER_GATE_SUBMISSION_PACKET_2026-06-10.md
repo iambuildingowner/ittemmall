@@ -35,6 +35,12 @@
 - 내부 문서, 예시 설정, private/scripts/output 경로 403 차단 확인
 - 서버 private config와 주문 저장소는 아직 미설정
 
+라이브 캡처 확인 자료:
+
+- 폴더: `output/live-confirmation-2026-06-10`
+- 캡처: 메인 모바일/데스크톱, 사업자정보, 이용약관, 개인정보처리방침, 배송·교환·환불
+- 검사 결과: 모든 캡처 대상 200, 브라우저 콘솔 오류 0개
+
 ## 공통 사업자 입력값
 
 아래 값은 구매안전서비스, 정부24, 토스 PG, 네이버페이에서 반복 입력한다.
@@ -71,6 +77,38 @@
 | 대표자 본인 인증 수단 | 정부24/토스/네이버페이 인증 | 대표님 진행 |
 | 담당자명/휴대폰/이메일 | PG/네이버페이 심사 안내 수신 | 대표님 확인 필요 |
 | 실제 택배사/반품 수령지 | 정책과 실제 운영 일치 | 현재 기본값 사용 중 |
+
+## Hostinger hPanel 확인 방법
+
+정부24 통신판매업 신고 화면에서 `호스트서버 소재지`를 요구하면 Hostinger hPanel의 실제 플랜 정보를 기준으로 입력한다.
+
+확인 순서:
+
+1. Hostinger hPanel 로그인
+2. `Websites` 메뉴 이동
+3. `ittemmall.com` 또는 연결된 PHP/HTML 웹사이트의 `Dashboard` 클릭
+4. 왼쪽 메뉴에서 `Hosting Plan` → `Plan details` 진입
+5. `Website details` 또는 플랜 상세 카드에서 아래 항목 확인
+   - 서버 IP
+   - 서버 위치 또는 데이터센터 위치
+   - 홈 디렉터리/public web root 경로가 보이면 함께 기록
+
+입력 원칙:
+
+- 정부24에는 hPanel에 표시된 최종 서버 위치를 그대로 입력한다.
+- Hostinger 공식 안내 기준으로 웹/클라우드 호스팅의 데이터센터는 플랜에 따라 다르고, 최종 위치는 hPanel에 표시되는 값이 기준이다.
+- IP만 보이고 위치가 안 보이면 Hostinger 고객센터에 `ittemmall.com hosting server location for ecommerce registration` 기준으로 문의해 확인한다.
+- 추정 IP 위치만으로 정부24에 입력하지 않는다.
+
+Hostinger 확인값 기록란:
+
+| 항목 | 값 |
+|---|---|
+| hPanel 플랜명 |  |
+| 서버 IP |  |
+| 서버/데이터센터 위치 |  |
+| public web root |  |
+| public web root 밖 private 폴더 생성 가능 여부 |  |
 
 ## 1단계: 구매안전서비스 이용확인증
 
