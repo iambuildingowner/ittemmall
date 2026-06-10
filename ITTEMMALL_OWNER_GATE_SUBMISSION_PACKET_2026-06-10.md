@@ -176,6 +176,28 @@ Hostinger 확인값 기록란:
 3. 신고번호를 Codex에 전달
 4. Codex가 잇템몰 하단/사업자정보/약관/정책에 반영
 
+Codex 반영 명령:
+
+```bash
+python3 scripts/update_ecommerce_license.py --license "발급된-통신판매업-신고번호"
+python3 scripts/build_deployment_package.py
+python3 scripts/deployment_readiness_report.py --allow-owner-tasks
+```
+
+반영 위치:
+
+- 메인 하단 사업자정보
+- 사업자정보 페이지
+- 이용약관 사업자정보
+- 내부 오너 체크리스트/제출 패킷
+
+반영 후 처리:
+
+1. 변경분 커밋
+2. GitHub Actions 또는 Hostinger 업로드로 운영 반영
+3. `https://ittemmall.com/legal/business.html`에서 신고번호 표시 확인
+4. 토스 PG 심사 신청 전 하단 신고번호 재확인
+
 ## 3단계: 토스 PG 신청
 
 토스 PG는 잇템몰 기준으로 신청한다. 목표는 잇템몰을 기존 사업자의 대표 PG 심사몰로 만들고, 승인 후 같은 사업자 기준의 추가 사이트/MID 적용 가능성을 검토하는 것이다.
