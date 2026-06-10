@@ -14,6 +14,8 @@ Options -Indexes
   RewriteCond %{HTTP_HOST} ^www\.ittemmall\.com$ [NC]
   RewriteRule ^ https://ittemmall.com%{REQUEST_URI} [L,R=301]
 
+  RewriteRule ^(acc|account|all|cart|category|checkout|headband|myshop|order|orders|product|search)(/.*)?$ / [L,R=302]
+
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
