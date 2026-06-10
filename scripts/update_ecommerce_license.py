@@ -72,14 +72,20 @@ def replacements(license_number: str) -> list[Replacement]:
         Replacement(
             ROOT / "ITTEMMALL_LAUNCH_OWNER_CHECKLIST.md",
             "owner checklist status",
-            re.compile(r"통신판매업 신고번호: 잇템몰 기준 신고/변경 후 반영"),
-            f"통신판매업 신고번호: {markdown_text}",
+            re.compile(r"잇템몰 표시용 통신판매업 신고정보: 정부24 변경신고 완료 후 반영"),
+            f"잇템몰 표시용 통신판매업 신고번호: {markdown_text}",
         ),
         Replacement(
             ROOT / "ITTEMMALL_OWNER_GATE_SUBMISSION_PACKET_2026-06-10.md",
             "submission packet common value",
-            re.compile(r"(\| 통신판매업 신고번호 \| )신고 또는 변경신고 후 반영( \|)"),
-            rf"\g<1>{markdown_text}\g<2>",
+            re.compile(r"(\| 통신판매업 신고정보 \| )기존 신고 변경 완료 후 잇템몰 기준으로 반영( \|)"),
+            rf"| 통신판매업 신고번호 | {markdown_text} |",
+        ),
+        Replacement(
+            ROOT / "ITTEMMALL_OWNER_GATE_ACTION_BOARD_2026-06-10.md",
+            "action board toss prerequisite",
+            re.compile(r"(\| \[ \] \| )통신판매업 신고정보( \| )정부24 변경 완료 후 반영( \|)"),
+            rf"\g<1>통신판매업 신고번호\g<2>{markdown_text}\g<3>",
         ),
     ]
 
