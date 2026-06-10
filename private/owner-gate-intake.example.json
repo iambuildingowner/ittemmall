@@ -1,0 +1,27 @@
+{
+  "purchase_safety_certificate": {
+    "status": "pending",
+    "file_path": "",
+    "issuer": "",
+    "issued_at": "",
+    "shop_name": "",
+    "shop_url": "",
+    "business_registration_number": ""
+  },
+  "ecommerce_change_report": {
+    "status": "pending",
+    "file_path": "",
+    "license_number": "",
+    "registered_domain": "",
+    "processed_at": "",
+    "agency": ""
+  },
+  "hostinger": {
+    "status": "pending",
+    "server_location": "",
+    "server_ip": "",
+    "public_web_root": "",
+    "private_storage_available": false
+  },
+  "notes": ""
+}

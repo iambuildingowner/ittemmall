@@ -58,6 +58,15 @@
 | [ ] | 발급일 확인 |
 | [ ] | PDF 또는 이미지 저장 |
 
+Codex 검토용:
+
+```bash
+cp private/owner-gate-intake.example.json private/owner-gate-intake.local.json
+python3 scripts/validate_owner_gate_intake.py --intake private/owner-gate-intake.local.json --require-files
+```
+
+실제 확인증/신고증 파일은 GitHub에 올리지 않고 로컬 private 경로만 기록한다.
+
 ## 정부24 변경신고로 넘어가는 조건
 
 - 확인증 PDF 또는 이미지가 있다.
