@@ -10,10 +10,87 @@
       name="description"
       content="USAPA 공식 승인 인증을 받은 MARCE 스위트 피클볼 패들을 확인하고 배송지 입력, 결제수단 선택, 주문 접수까지 진행할 수 있는 ITTEMMALL 페이지입니다."
     />
+    <link rel="canonical" href="https://ittemmall.com/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="index, follow" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://ittemmall.com/#organization",
+            "name": "ITTEMMALL",
+            "url": "https://ittemmall.com/",
+            "email": "info@marcesports.com",
+            "telephone": "+82-10-2400-3414",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "전북특별자치도 익산시 황등면 황금로 73",
+              "addressCountry": "KR"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://ittemmall.com/#website",
+            "name": "ITTEMMALL",
+            "url": "https://ittemmall.com/",
+            "publisher": {
+              "@id": "https://ittemmall.com/#organization"
+            }
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://ittemmall.com/#marce-products",
+            "name": "ITTEMMALL MARCE 상품",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@type": "Product",
+                  "name": "MARCE 스위트 피클볼 패들 (USAPA인증) - 핑크",
+                  "brand": {
+                    "@type": "Brand",
+                    "name": "MARCE"
+                  },
+                  "image": "https://ittemmall.com/assets/ittemmall/ittemmall-c-pink-thumb-main.png",
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "59000",
+                    "priceCurrency": "KRW",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://ittemmall.com/"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@type": "Product",
+                  "name": "MARCE 스위트 피클볼 패들 (USAPA인증) - 블랙",
+                  "brand": {
+                    "@type": "Brand",
+                    "name": "MARCE"
+                  },
+                  "image": "https://ittemmall.com/assets/ittemmall/ittemmall-c-black-thumb-main.png",
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "59000",
+                    "priceCurrency": "KRW",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://ittemmall.com/"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
     <!-- Meta Pixel Code -->
     <script>
       (function () {

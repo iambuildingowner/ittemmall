@@ -1,5 +1,12 @@
 Options -Indexes
 
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(NAVERPAY_SETUP|TOSS_SETUP)\.md$ - [F,L,NC]
+  RewriteRule ^.*\.example\.(js|php)$ - [F,L,NC]
+  RewriteRule ^.*-lib\.php$ - [F,L,NC]
+</IfModule>
+
 <FilesMatch "^(NAVERPAY_SETUP\.md|.*-lib\.php|.*\.example\.php|.*\.example\.js)$">
   Require all denied
 </FilesMatch>
