@@ -22,6 +22,7 @@ Options -Indexes
   RewriteRule ^payment/.*\.example\.(js|php)$ - [F,L,NC]
   RewriteRule ^payment/.*-lib\.php$ - [F,L,NC]
   RewriteRule \.(md|markdown|xlsx?|csv|tsv|pdf|log|json|jsonl|bak|zip|py|sh|ya?ml|sql|sqlite|env|ini|conf)$ - [F,L,NC]
+  RewriteRule ^제주도/?$ /제주도/index.html [L]
 
   RewriteRule ^(acc|account|all|cart|category|checkout|headband|myshop|order|orders|product|search)(/.*)?$ / [L,R=302]
 

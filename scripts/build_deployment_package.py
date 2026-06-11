@@ -17,6 +17,7 @@ FILES = [
     ".htaccess",
     "404.html",
     "index.html",
+    "제주도/index.html",
     "robots.txt",
     "sitemap.xml",
     "track.php",

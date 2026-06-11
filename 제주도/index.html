@@ -1,0 +1,779 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>제주 3박 4일 꽉 채운 버전 - 선택표 포함</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <link rel="canonical" href="https://ittemmall.com/제주도">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+      color:#1f2937;
+      background:#f7f7f7;
+    }
+    header {
+      padding:22px 24px;
+      background:#111827;
+      color:white;
+    }
+    header h1 { margin:0 0 8px; font-size:24px; }
+    header p { margin:4px 0; color:#d1d5db; line-height:1.5; }
+    .page-actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:16px;
+    }
+    .page-actions a,
+    .page-actions button {
+      appearance:none;
+      border:1px solid rgba(255,255,255,.24);
+      border-radius:999px;
+      background:rgba(255,255,255,.1);
+      color:white;
+      cursor:pointer;
+      font:inherit;
+      font-size:13px;
+      font-weight:700;
+      line-height:1;
+      padding:10px 13px;
+      text-decoration:none;
+    }
+    .page-actions a:hover,
+    .page-actions button:hover,
+    .page-actions a:focus-visible,
+    .page-actions button:focus-visible {
+      background:white;
+      color:#111827;
+      outline:2px solid white;
+      outline-offset:2px;
+    }
+    .layout {
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      min-height:calc(100vh - 132px);
+    }
+    #map {
+      height:calc(100vh - 132px);
+      width:100%;
+      position:sticky;
+      top:0;
+    }
+    .side {
+      padding:18px;
+      overflow:auto;
+      max-height:calc(100vh - 132px);
+      background:#f7f7f7;
+    }
+    .notice {
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      border-radius:12px;
+      padding:12px 14px;
+      margin-bottom:14px;
+      line-height:1.55;
+      font-size:14px;
+    }
+    .day-card {
+      background:white;
+      border-radius:14px;
+      padding:16px;
+      margin-bottom:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.08);
+      border-left:7px solid #333;
+    }
+    .day-card h2 { margin:0 0 6px; font-size:18px; }
+    .lodging { margin:0 0 12px; color:#4b5563; font-weight:600; }
+    table { width:100%; border-collapse:collapse; font-size:12.5px; }
+    th,td {
+      border-bottom:1px solid #e5e7eb;
+      padding:8px 6px;
+      text-align:left;
+      vertical-align:top;
+    }
+    th { background:#f9fafb; color:#374151; font-weight:700; position:sticky; top:0; }
+    tr.ok { background:#ffffff; }
+    tr.fixed { background:#eef2ff; }
+    tr.optional { background:#f8fafc; }
+    tr.tight { background:#fff7ed; }
+    tr.verytight { background:#ffedd5; }
+    tr.verify { background:#fef9c3; }
+    tr.hard { background:#fee2e2; }
+    tr.danger { background:#fecaca; }
+    .badge {
+      display:inline-block;
+      padding:3px 7px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:11px;
+      white-space:nowrap;
+      border:1px solid rgba(0,0,0,.12);
+    }
+    .badge.ok { background:#dcfce7; color:#166534; }
+    .badge.fixed { background:#e0e7ff; color:#3730a3; }
+    .badge.optional { background:#f1f5f9; color:#334155; }
+    .badge.tight { background:#fed7aa; color:#9a3412; }
+    .badge.verytight { background:#fdba74; color:#7c2d12; }
+    .badge.verify { background:#fde68a; color:#78350f; }
+    .badge.hard { background:#fecaca; color:#991b1b; }
+    .badge.danger { background:#fca5a5; color:#7f1d1d; }
+    .num-icon {
+      background:white;
+      border:2px solid #222;
+      border-radius:50%;
+      width:31px;
+      height:31px;
+      text-align:center;
+      line-height:31px;
+      font-weight:700;
+      box-shadow:0 1px 4px rgba(0,0,0,.25);
+      font-size:13px;
+    }
+    .time-label {
+      background:rgba(255,255,255,.94);
+      border:2px solid #333;
+      border-radius:13px;
+      padding:2px 8px;
+      font-weight:700;
+      font-size:12px;
+      white-space:nowrap;
+      box-shadow:0 1px 4px rgba(0,0,0,.25);
+    }
+    .legend {
+      position:absolute;
+      bottom:18px;
+      left:18px;
+      z-index:999;
+      background:white;
+      padding:12px 14px;
+      border-radius:12px;
+      box-shadow:0 2px 10px rgba(0,0,0,.22);
+      font-size:13px;
+      line-height:1.5;
+    }
+    .legend b { display:block; margin-bottom:5px; }
+    .dot {
+      display:inline-block;
+      width:11px;
+      height:11px;
+      border-radius:50%;
+      margin-right:6px;
+      vertical-align:middle;
+    }
+    @media (max-width:900px) {
+      header { padding:18px 16px; }
+      header h1 { font-size:20px; line-height:1.35; }
+      .layout { grid-template-columns:1fr; }
+      #map { height:70vh; min-height:420px; position:relative; }
+      .side { max-height:none; overflow-x:hidden; padding:14px; }
+      .day-card { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+      table { min-width:720px; }
+      .legend { bottom:12px; left:12px; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>제주 3박 4일 꽉 채운 버전 - 선택표 포함</h1>
+  <p>네가 빼라고 한 이호테우/무지개해안도로만 제외하고, 영상 코스와 추가 요청 코스를 최대한 모두 넣은 버전</p>
+  <p>빡센 부분은 표의 판정 칸에 따로 표시했습니다.</p>
+  <nav class="page-actions" aria-label="제주 일정 빠른 작업">
+    <button type="button" data-page-action="back">이전으로</button>
+    <a href="/">잇템몰 홈</a>
+    <button type="button" data-page-action="share">주소 공유</button>
+    <button type="button" data-page-action="print">인쇄</button>
+  </nav>
+</header>
+
+<div class="layout">
+  <div style="position:relative;">
+    <div id="map"></div>
+    <div class="legend">
+      <b>날짜별 이동선</b>
+      <div><span class="dot" style="background:#1f77b4"></span>1일차</div>
+      <div><span class="dot" style="background:#2ca02c"></span>2일차</div>
+      <div><span class="dot" style="background:#ff7f0e"></span>3일차</div>
+      <div><span class="dot" style="background:#9467bd"></span>4일차</div>
+    </div>
+  </div>
+  <aside class="side">
+    <div class="notice">
+      <b>읽는 법</b><br/>
+      <b>정상</b>은 무난, <b>빡셈/매우 빡셈</b>은 체류시간이 짧거나 이동이 빡빡한 구간,
+      <b>선택</b>은 나중에 빼도 되는 후보,
+      <b>현실적으로 어려움/시간 위험</b>은 실제 예약·렌트카 반납 기준으로 조정이 필요한 구간입니다.
+      <br/><br/>
+      <b>주의:</b> 포항횟집 or 구락은 정확 위치 확인 전이라 협재/한림권 저녁 후보로 임시 표시했습니다.
+    </div>
+    
+    <section class="day-card" style="border-left-color:#1f77b4">
+      <h2>1일차 · 제주시 도착 / 야시장</h2>
+      <p class="lodging">숙소: 제주시</p>
+      <table>
+        <thead>
+          <tr>
+            <th>시간</th>
+            <th>코스</th>
+            <th>유형</th>
+            <th>다음 행선지까지</th>
+            <th>판정</th>
+            <th>메모</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ok">
+            <td>17:00</td>
+            <td>제주공항</td>
+            <td>도착</td>
+            <td>운행 20분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>제주 도착</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>17:40~18:20</td>
+            <td>렌트카 수령</td>
+            <td>이동 준비</td>
+            <td>운행 20분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>렌트카 수령</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>18:40</td>
+            <td>제주시 숙소권</td>
+            <td>숙소</td>
+            <td>운행 15분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>연동·노형·용담·도두 권장</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>19:10~20:10</td>
+            <td>제주미담</td>
+            <td>식사</td>
+            <td>운행 15분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>영상 1일차 첫 식사를 도착일로 당김</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>20:30~21:40</td>
+            <td>수목원길 야시장</td>
+            <td>야시장</td>
+            <td>운행 15분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>제주시 은수길 65 / 저녁 코스</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>22:00</td>
+            <td>제주시 숙소권</td>
+            <td>숙소</td>
+            <td>일정 종료</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>1일차 종료</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+
+    <section class="day-card" style="border-left-color:#2ca02c">
+      <h2>2일차 · 제주시 → 성산</h2>
+      <p class="lodging">숙소: 성산</p>
+      <table>
+        <thead>
+          <tr>
+            <th>시간</th>
+            <th>코스</th>
+            <th>유형</th>
+            <th>다음 행선지까지</th>
+            <th>판정</th>
+            <th>메모</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ok">
+            <td>09:00</td>
+            <td>제주시 숙소권</td>
+            <td>출발</td>
+            <td>운행 40분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>2일차 출발</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>09:40~10:40</td>
+            <td>서우봉 / 함덕해수욕장</td>
+            <td>관광</td>
+            <td>운행 40분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>함덕 바다 + 서우봉</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>11:20~12:20</td>
+            <td>비자림</td>
+            <td>관광</td>
+            <td>운행 20분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>숲길</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>12:40~13:40</td>
+            <td>우정원 베이커리</td>
+            <td>카페</td>
+            <td>운행 10분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>송당권 카페</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>13:50~14:20</td>
+            <td>송당 무끈모루</td>
+            <td>포토스팟</td>
+            <td>운행 40분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>사진 코스</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>15:00~16:30</td>
+            <td>성산권 이동 / 휴식</td>
+            <td>휴식</td>
+            <td>운행 10분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>성산 숙소권 도착 후 휴식</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>17:30~18:40</td>
+            <td>부촌</td>
+            <td>식사</td>
+            <td>운행 10분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>갈치조림 / 성산권 표시</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>19:00</td>
+            <td>성산 숙소권</td>
+            <td>숙소</td>
+            <td>일정 종료</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>2일차 종료</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+
+    <section class="day-card" style="border-left-color:#ff7f0e">
+      <h2>3일차 · 성산 → 중문 / 더클리프 노을</h2>
+      <p class="lodging">숙소: 중문</p>
+      <table>
+        <thead>
+          <tr>
+            <th>시간</th>
+            <th>코스</th>
+            <th>유형</th>
+            <th>다음 행선지까지</th>
+            <th>판정</th>
+            <th>메모</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ok">
+            <td>08:00~08:50</td>
+            <td>성산 시골밥상</td>
+            <td>식사</td>
+            <td>운행 5분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>아침 / 성산권 표시</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>09:10~10:40</td>
+            <td>성산일출봉</td>
+            <td>관광</td>
+            <td>운행 5분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>영상 원본 2일차 핵심</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>11:00~11:50</td>
+            <td>프리츠 성산</td>
+            <td>카페</td>
+            <td>운행 40분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>성산권 카페</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>12:30~13:30</td>
+            <td>한라산 아래 첫마을 표선점</td>
+            <td>식사</td>
+            <td>운행 40분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>점심 / 표선권</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>14:20~15:20</td>
+            <td>쇠소깍</td>
+            <td>관광</td>
+            <td>운행 30분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>계곡 산책</td>
+          </tr>
+        
+          <tr class="tight">
+            <td>16:00~16:45</td>
+            <td>대한목장</td>
+            <td>카페/목장</td>
+            <td>운행 35분</td>
+            <td><span class="badge tight">빡셈</span></td>
+            <td>영상 원본 2일차. 체류시간 짧게 조정</td>
+          </tr>
+        
+          <tr class="fixed">
+            <td>17:30~20:10</td>
+            <td>더클리프 제주</td>
+            <td>노을 카페</td>
+            <td>운행 10분</td>
+            <td><span class="badge fixed">고정</span></td>
+            <td>3일차 저녁 노을 고정. 이 일정 때문에 서귀포 올레시장 저녁은 어려움</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>20:20</td>
+            <td>중문 숙소권</td>
+            <td>숙소</td>
+            <td>일정 종료</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>3일차 종료. 중문 숙박</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+
+    <section class="day-card" style="border-left-color:#9467bd">
+      <h2>4일차 · 중문 → 안덕 → 금악/협재 → 제주시/공항</h2>
+      <p class="lodging">숙소: 없음 / 21:20 출발</p>
+      <table>
+        <thead>
+          <tr>
+            <th>시간</th>
+            <th>코스</th>
+            <th>유형</th>
+            <th>다음 행선지까지</th>
+            <th>판정</th>
+            <th>메모</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tight">
+            <td>08:10</td>
+            <td>중문 숙소권</td>
+            <td>출발</td>
+            <td>운행 10분</td>
+            <td><span class="badge tight">빡셈</span></td>
+            <td>4일차 출발. 꽉 채운 일정이라 일찍 출발 필요</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>08:30~09:10</td>
+            <td>주상절리</td>
+            <td>관광</td>
+            <td>운행 10분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>영상 원본 3일차</td>
+          </tr>
+        
+          <tr class="optional">
+            <td>09:20~09:50</td>
+            <td>천제연폭포</td>
+            <td>선택</td>
+            <td>운행 10분</td>
+            <td><span class="badge optional">선택</span></td>
+            <td>영상 선택 코스. 시간이 밀리면 1순위 생략 후보</td>
+          </tr>
+        
+          <tr class="tight">
+            <td>10:10~10:50</td>
+            <td>중문 수두리 보말칼국수</td>
+            <td>식사</td>
+            <td>운행 30분</td>
+            <td><span class="badge tight">빡셈</span></td>
+            <td>영상 원본. 이른 점심 처리</td>
+          </tr>
+        
+          <tr class="tight">
+            <td>11:20~12:30</td>
+            <td>헬로키티 아일랜드</td>
+            <td>추가</td>
+            <td>운행 20분</td>
+            <td><span class="badge tight">빡셈</span></td>
+            <td>영상 원본에 새로 추가. 체류시간 짧게 잡음</td>
+          </tr>
+        
+          <tr class="verytight">
+            <td>12:50~13:20</td>
+            <td>카페 루시아</td>
+            <td>카페</td>
+            <td>운행 30분</td>
+            <td><span class="badge verytight">매우 빡셈</span></td>
+            <td>영상 원본 3일차. 체류시간 매우 짧음</td>
+          </tr>
+        
+          <tr class="tight">
+            <td>13:50~14:20</td>
+            <td>오설록</td>
+            <td>원본 포함</td>
+            <td>운행 20분</td>
+            <td><span class="badge tight">빡셈</span></td>
+            <td>영상 원본 4일차. 체류시간 짧게 조정</td>
+          </tr>
+        
+          <tr class="verytight">
+            <td>14:40~15:10</td>
+            <td>김창열미술관</td>
+            <td>관광</td>
+            <td>운행 15분</td>
+            <td><span class="badge verytight">매우 빡셈</span></td>
+            <td>영상 원본 4일차. 미술관 체류시간이 너무 짧음</td>
+          </tr>
+        
+          <tr class="tight">
+            <td>15:25~16:00</td>
+            <td>성이시돌목장 / 우유부단</td>
+            <td>관광/카페</td>
+            <td>운행 20분</td>
+            <td><span class="badge tight">빡셈</span></td>
+            <td>영상 원본 3일차. 다시 포함</td>
+          </tr>
+        
+          <tr class="tight">
+            <td>16:20~17:00</td>
+            <td>금오름</td>
+            <td>오름</td>
+            <td>운행 30분</td>
+            <td><span class="badge tight">빡셈</span></td>
+            <td>영상 원본 3일차. 다시 포함. 오름 체류시간 짧음</td>
+          </tr>
+        
+          <tr class="ok">
+            <td>17:30~18:15</td>
+            <td>협재해수욕장</td>
+            <td>교체 반영</td>
+            <td>운행 20분</td>
+            <td><span class="badge ok">정상</span></td>
+            <td>이호테우/무지개해안도로 대신 추가</td>
+          </tr>
+        
+          <tr class="verify">
+            <td>18:35~19:05</td>
+            <td>포항횟집 or 구락</td>
+            <td>저녁 후보</td>
+            <td>운행 40분</td>
+            <td><span class="badge verify">위치확인 필요</span></td>
+            <td>영상 원본 3일차 저녁 후보. 정확 위치 확인 필요. 협재/한림권 후보로 임시 표시</td>
+          </tr>
+        
+          <tr class="verytight">
+            <td>19:45~20:05</td>
+            <td>이끼숲소길</td>
+            <td>카페</td>
+            <td>운행 40분</td>
+            <td><span class="badge verytight">매우 빡셈</span></td>
+            <td>영상 원본 4일차. 시간상 사실상 생략 가능성 높음</td>
+          </tr>
+        
+          <tr class="hard">
+            <td>20:45~21:00</td>
+            <td>동문시장 or 공항 근처</td>
+            <td>마무리</td>
+            <td>운행 15분</td>
+            <td><span class="badge hard">현실적으로 어려움</span></td>
+            <td>21:20 출발이면 동문시장은 사실상 어려움. 공항 근처 대체 권장</td>
+          </tr>
+        
+          <tr class="danger">
+            <td>21:00~21:20</td>
+            <td>제주공항</td>
+            <td>종료</td>
+            <td>일정 종료</td>
+            <td><span class="badge danger">시간 위험</span></td>
+            <td>21:20 출발 기준으로 너무 늦음. 렌트카 반납 시간 재조정 필요</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+  </aside>
+</div>
+
+<script>
+const days = [{"date": "1일차", "title": "제주시 도착 / 야시장", "color": "#1f77b4", "lodging": "제주시", "route": [{"time": "17:00", "name": "제주공항", "lat": 33.5071, "lng": 126.4928, "type": "도착", "note": "제주 도착", "drive_next": "운행 20분", "status": "정상"}, {"time": "17:40~18:20", "name": "렌트카 수령", "lat": 33.5071, "lng": 126.4928, "type": "이동 준비", "note": "렌트카 수령", "drive_next": "운행 20분", "status": "정상"}, {"time": "18:40", "name": "제주시 숙소권", "lat": 33.489, "lng": 126.492, "type": "숙소", "note": "연동·노형·용담·도두 권장", "drive_next": "운행 15분", "status": "정상"}, {"time": "19:10~20:10", "name": "제주미담", "lat": 33.492, "lng": 126.499, "type": "식사", "note": "영상 1일차 첫 식사를 도착일로 당김", "drive_next": "운행 15분", "status": "정상"}, {"time": "20:30~21:40", "name": "수목원길 야시장", "lat": 33.4694, "lng": 126.4886, "type": "야시장", "note": "제주시 은수길 65 / 저녁 코스", "drive_next": "운행 15분", "status": "정상"}, {"time": "22:00", "name": "제주시 숙소권", "lat": 33.489, "lng": 126.492, "type": "숙소", "note": "1일차 종료", "drive_next": "일정 종료", "status": "정상"}]}, {"date": "2일차", "title": "제주시 → 성산", "color": "#2ca02c", "lodging": "성산", "route": [{"time": "09:00", "name": "제주시 숙소권", "lat": 33.489, "lng": 126.492, "type": "출발", "note": "2일차 출발", "drive_next": "운행 40분", "status": "정상"}, {"time": "09:40~10:40", "name": "서우봉 / 함덕해수욕장", "lat": 33.5433, "lng": 126.6686, "type": "관광", "note": "함덕 바다 + 서우봉", "drive_next": "운행 40분", "status": "정상"}, {"time": "11:20~12:20", "name": "비자림", "lat": 33.4887, "lng": 126.8098, "type": "관광", "note": "숲길", "drive_next": "운행 20분", "status": "정상"}, {"time": "12:40~13:40", "name": "우정원 베이커리", "lat": 33.462, "lng": 126.778, "type": "카페", "note": "송당권 카페", "drive_next": "운행 10분", "status": "정상"}, {"time": "13:50~14:20", "name": "송당 무끈모루", "lat": 33.471, "lng": 126.79, "type": "포토스팟", "note": "사진 코스", "drive_next": "운행 40분", "status": "정상"}, {"time": "15:00~16:30", "name": "성산권 이동 / 휴식", "lat": 33.458, "lng": 126.933, "type": "휴식", "note": "성산 숙소권 도착 후 휴식", "drive_next": "운행 10분", "status": "정상"}, {"time": "17:30~18:40", "name": "부촌", "lat": 33.4585, "lng": 126.931, "type": "식사", "note": "갈치조림 / 성산권 표시", "drive_next": "운행 10분", "status": "정상"}, {"time": "19:00", "name": "성산 숙소권", "lat": 33.458, "lng": 126.933, "type": "숙소", "note": "2일차 종료", "drive_next": "일정 종료", "status": "정상"}]}, {"date": "3일차", "title": "성산 → 중문 / 더클리프 노을", "color": "#ff7f0e", "lodging": "중문", "route": [{"time": "08:00~08:50", "name": "성산 시골밥상", "lat": 33.458, "lng": 126.933, "type": "식사", "note": "아침 / 성산권 표시", "drive_next": "운행 5분", "status": "정상"}, {"time": "09:10~10:40", "name": "성산일출봉", "lat": 33.4589, "lng": 126.9414, "type": "관광", "note": "영상 원본 2일차 핵심", "drive_next": "운행 5분", "status": "정상"}, {"time": "11:00~11:50", "name": "프리츠 성산", "lat": 33.463, "lng": 126.93, "type": "카페", "note": "성산권 카페", "drive_next": "운행 40분", "status": "정상"}, {"time": "12:30~13:30", "name": "한라산 아래 첫마을 표선점", "lat": 33.3265, "lng": 126.8365, "type": "식사", "note": "점심 / 표선권", "drive_next": "운행 40분", "status": "정상"}, {"time": "14:20~15:20", "name": "쇠소깍", "lat": 33.2522, "lng": 126.6237, "type": "관광", "note": "계곡 산책", "drive_next": "운행 30분", "status": "정상"}, {"time": "16:00~16:45", "name": "대한목장", "lat": 33.289, "lng": 126.586, "type": "카페/목장", "note": "영상 원본 2일차. 체류시간 짧게 조정", "drive_next": "운행 35분", "status": "빡셈"}, {"time": "17:30~20:10", "name": "더클리프 제주", "lat": 33.2443, "lng": 126.4153, "type": "노을 카페", "note": "3일차 저녁 노을 고정. 이 일정 때문에 서귀포 올레시장 저녁은 어려움", "drive_next": "운행 10분", "status": "고정"}, {"time": "20:20", "name": "중문 숙소권", "lat": 33.251, "lng": 126.414, "type": "숙소", "note": "3일차 종료. 중문 숙박", "drive_next": "일정 종료", "status": "정상"}]}, {"date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "color": "#9467bd", "lodging": "없음 / 21:20 출발", "route": [{"time": "08:10", "name": "중문 숙소권", "lat": 33.251, "lng": 126.414, "type": "출발", "note": "4일차 출발. 꽉 채운 일정이라 일찍 출발 필요", "drive_next": "운행 10분", "status": "빡셈"}, {"time": "08:30~09:10", "name": "주상절리", "lat": 33.2385, "lng": 126.426, "type": "관광", "note": "영상 원본 3일차", "drive_next": "운행 10분", "status": "정상"}, {"time": "09:20~09:50", "name": "천제연폭포", "lat": 33.2478, "lng": 126.4177, "type": "선택", "note": "영상 선택 코스. 시간이 밀리면 1순위 생략 후보", "drive_next": "운행 10분", "status": "선택"}, {"time": "10:10~10:50", "name": "중문 수두리 보말칼국수", "lat": 33.251, "lng": 126.419, "type": "식사", "note": "영상 원본. 이른 점심 처리", "drive_next": "운행 30분", "status": "빡셈"}, {"time": "11:20~12:30", "name": "헬로키티 아일랜드", "lat": 33.2904, "lng": 126.3526, "type": "추가", "note": "영상 원본에 새로 추가. 체류시간 짧게 잡음", "drive_next": "운행 20분", "status": "빡셈"}, {"time": "12:50~13:20", "name": "카페 루시아", "lat": 33.236, "lng": 126.364, "type": "카페", "note": "영상 원본 3일차. 체류시간 매우 짧음", "drive_next": "운행 30분", "status": "매우 빡셈"}, {"time": "13:50~14:20", "name": "오설록", "lat": 33.3059, "lng": 126.2895, "type": "원본 포함", "note": "영상 원본 4일차. 체류시간 짧게 조정", "drive_next": "운행 20분", "status": "빡셈"}, {"time": "14:40~15:10", "name": "김창열미술관", "lat": 33.3546, "lng": 126.2628, "type": "관광", "note": "영상 원본 4일차. 미술관 체류시간이 너무 짧음", "drive_next": "운행 15분", "status": "매우 빡셈"}, {"time": "15:25~16:00", "name": "성이시돌목장 / 우유부단", "lat": 33.3472, "lng": 126.2515, "type": "관광/카페", "note": "영상 원본 3일차. 다시 포함", "drive_next": "운행 20분", "status": "빡셈"}, {"time": "16:20~17:00", "name": "금오름", "lat": 33.3547, "lng": 126.3051, "type": "오름", "note": "영상 원본 3일차. 다시 포함. 오름 체류시간 짧음", "drive_next": "운행 30분", "status": "빡셈"}, {"time": "17:30~18:15", "name": "협재해수욕장", "lat": 33.394, "lng": 126.2395, "type": "교체 반영", "note": "이호테우/무지개해안도로 대신 추가", "drive_next": "운행 20분", "status": "정상"}, {"time": "18:35~19:05", "name": "포항횟집 or 구락", "lat": 33.39, "lng": 126.25, "type": "저녁 후보", "note": "영상 원본 3일차 저녁 후보. 정확 위치 확인 필요. 협재/한림권 후보로 임시 표시", "drive_next": "운행 40분", "status": "위치확인 필요"}, {"time": "19:45~20:05", "name": "이끼숲소길", "lat": 33.434, "lng": 126.375, "type": "카페", "note": "영상 원본 4일차. 시간상 사실상 생략 가능성 높음", "drive_next": "운행 40분", "status": "매우 빡셈"}, {"time": "20:45~21:00", "name": "동문시장 or 공항 근처", "lat": 33.5127, "lng": 126.5262, "type": "마무리", "note": "21:20 출발이면 동문시장은 사실상 어려움. 공항 근처 대체 권장", "drive_next": "운행 15분", "status": "현실적으로 어려움"}, {"time": "21:00~21:20", "name": "제주공항", "lat": 33.5071, "lng": 126.4928, "type": "종료", "note": "21:20 출발 기준으로 너무 늦음. 렌트카 반납 시간 재조정 필요", "drive_next": "일정 종료", "status": "시간 위험"}]}];
+const markers = [{"time": "17:00", "name": "제주공항", "lat": 33.5071, "lng": 126.4928, "type": "도착", "note": "제주 도착", "drive_next": "운행 20분", "status": "정상", "date": "1일차", "title": "제주시 도착 / 야시장", "idx": 1, "color": "#1f77b4", "lodging": "제주시", "next_name": "렌트카 수령"}, {"time": "17:40~18:20", "name": "렌트카 수령", "lat": 33.5071, "lng": 126.4928, "type": "이동 준비", "note": "렌트카 수령", "drive_next": "운행 20분", "status": "정상", "date": "1일차", "title": "제주시 도착 / 야시장", "idx": 2, "color": "#1f77b4", "lodging": "제주시", "next_name": "제주시 숙소권"}, {"time": "18:40", "name": "제주시 숙소권", "lat": 33.489, "lng": 126.492, "type": "숙소", "note": "연동·노형·용담·도두 권장", "drive_next": "운행 15분", "status": "정상", "date": "1일차", "title": "제주시 도착 / 야시장", "idx": 3, "color": "#1f77b4", "lodging": "제주시", "next_name": "제주미담"}, {"time": "19:10~20:10", "name": "제주미담", "lat": 33.492, "lng": 126.499, "type": "식사", "note": "영상 1일차 첫 식사를 도착일로 당김", "drive_next": "운행 15분", "status": "정상", "date": "1일차", "title": "제주시 도착 / 야시장", "idx": 4, "color": "#1f77b4", "lodging": "제주시", "next_name": "수목원길 야시장"}, {"time": "20:30~21:40", "name": "수목원길 야시장", "lat": 33.4694, "lng": 126.4886, "type": "야시장", "note": "제주시 은수길 65 / 저녁 코스", "drive_next": "운행 15분", "status": "정상", "date": "1일차", "title": "제주시 도착 / 야시장", "idx": 5, "color": "#1f77b4", "lodging": "제주시", "next_name": "제주시 숙소권"}, {"time": "22:00", "name": "제주시 숙소권", "lat": 33.489, "lng": 126.492, "type": "숙소", "note": "1일차 종료", "drive_next": "일정 종료", "status": "정상", "date": "1일차", "title": "제주시 도착 / 야시장", "idx": 6, "color": "#1f77b4", "lodging": "제주시", "next_name": "없음"}, {"time": "09:00", "name": "제주시 숙소권", "lat": 33.489, "lng": 126.492, "type": "출발", "note": "2일차 출발", "drive_next": "운행 40분", "status": "정상", "date": "2일차", "title": "제주시 → 성산", "idx": 1, "color": "#2ca02c", "lodging": "성산", "next_name": "서우봉 / 함덕해수욕장"}, {"time": "09:40~10:40", "name": "서우봉 / 함덕해수욕장", "lat": 33.5433, "lng": 126.6686, "type": "관광", "note": "함덕 바다 + 서우봉", "drive_next": "운행 40분", "status": "정상", "date": "2일차", "title": "제주시 → 성산", "idx": 2, "color": "#2ca02c", "lodging": "성산", "next_name": "비자림"}, {"time": "11:20~12:20", "name": "비자림", "lat": 33.4887, "lng": 126.8098, "type": "관광", "note": "숲길", "drive_next": "운행 20분", "status": "정상", "date": "2일차", "title": "제주시 → 성산", "idx": 3, "color": "#2ca02c", "lodging": "성산", "next_name": "우정원 베이커리"}, {"time": "12:40~13:40", "name": "우정원 베이커리", "lat": 33.462, "lng": 126.778, "type": "카페", "note": "송당권 카페", "drive_next": "운행 10분", "status": "정상", "date": "2일차", "title": "제주시 → 성산", "idx": 4, "color": "#2ca02c", "lodging": "성산", "next_name": "송당 무끈모루"}, {"time": "13:50~14:20", "name": "송당 무끈모루", "lat": 33.471, "lng": 126.79, "type": "포토스팟", "note": "사진 코스", "drive_next": "운행 40분", "status": "정상", "date": "2일차", "title": "제주시 → 성산", "idx": 5, "color": "#2ca02c", "lodging": "성산", "next_name": "성산권 이동 / 휴식"}, {"time": "15:00~16:30", "name": "성산권 이동 / 휴식", "lat": 33.458, "lng": 126.933, "type": "휴식", "note": "성산 숙소권 도착 후 휴식", "drive_next": "운행 10분", "status": "정상", "date": "2일차", "title": "제주시 → 성산", "idx": 6, "color": "#2ca02c", "lodging": "성산", "next_name": "부촌"}, {"time": "17:30~18:40", "name": "부촌", "lat": 33.4585, "lng": 126.931, "type": "식사", "note": "갈치조림 / 성산권 표시", "drive_next": "운행 10분", "status": "정상", "date": "2일차", "title": "제주시 → 성산", "idx": 7, "color": "#2ca02c", "lodging": "성산", "next_name": "성산 숙소권"}, {"time": "19:00", "name": "성산 숙소권", "lat": 33.458, "lng": 126.933, "type": "숙소", "note": "2일차 종료", "drive_next": "일정 종료", "status": "정상", "date": "2일차", "title": "제주시 → 성산", "idx": 8, "color": "#2ca02c", "lodging": "성산", "next_name": "없음"}, {"time": "08:00~08:50", "name": "성산 시골밥상", "lat": 33.458, "lng": 126.933, "type": "식사", "note": "아침 / 성산권 표시", "drive_next": "운행 5분", "status": "정상", "date": "3일차", "title": "성산 → 중문 / 더클리프 노을", "idx": 1, "color": "#ff7f0e", "lodging": "중문", "next_name": "성산일출봉"}, {"time": "09:10~10:40", "name": "성산일출봉", "lat": 33.4589, "lng": 126.9414, "type": "관광", "note": "영상 원본 2일차 핵심", "drive_next": "운행 5분", "status": "정상", "date": "3일차", "title": "성산 → 중문 / 더클리프 노을", "idx": 2, "color": "#ff7f0e", "lodging": "중문", "next_name": "프리츠 성산"}, {"time": "11:00~11:50", "name": "프리츠 성산", "lat": 33.463, "lng": 126.93, "type": "카페", "note": "성산권 카페", "drive_next": "운행 40분", "status": "정상", "date": "3일차", "title": "성산 → 중문 / 더클리프 노을", "idx": 3, "color": "#ff7f0e", "lodging": "중문", "next_name": "한라산 아래 첫마을 표선점"}, {"time": "12:30~13:30", "name": "한라산 아래 첫마을 표선점", "lat": 33.3265, "lng": 126.8365, "type": "식사", "note": "점심 / 표선권", "drive_next": "운행 40분", "status": "정상", "date": "3일차", "title": "성산 → 중문 / 더클리프 노을", "idx": 4, "color": "#ff7f0e", "lodging": "중문", "next_name": "쇠소깍"}, {"time": "14:20~15:20", "name": "쇠소깍", "lat": 33.2522, "lng": 126.6237, "type": "관광", "note": "계곡 산책", "drive_next": "운행 30분", "status": "정상", "date": "3일차", "title": "성산 → 중문 / 더클리프 노을", "idx": 5, "color": "#ff7f0e", "lodging": "중문", "next_name": "대한목장"}, {"time": "16:00~16:45", "name": "대한목장", "lat": 33.289, "lng": 126.586, "type": "카페/목장", "note": "영상 원본 2일차. 체류시간 짧게 조정", "drive_next": "운행 35분", "status": "빡셈", "date": "3일차", "title": "성산 → 중문 / 더클리프 노을", "idx": 6, "color": "#ff7f0e", "lodging": "중문", "next_name": "더클리프 제주"}, {"time": "17:30~20:10", "name": "더클리프 제주", "lat": 33.2443, "lng": 126.4153, "type": "노을 카페", "note": "3일차 저녁 노을 고정. 이 일정 때문에 서귀포 올레시장 저녁은 어려움", "drive_next": "운행 10분", "status": "고정", "date": "3일차", "title": "성산 → 중문 / 더클리프 노을", "idx": 7, "color": "#ff7f0e", "lodging": "중문", "next_name": "중문 숙소권"}, {"time": "20:20", "name": "중문 숙소권", "lat": 33.251, "lng": 126.414, "type": "숙소", "note": "3일차 종료. 중문 숙박", "drive_next": "일정 종료", "status": "정상", "date": "3일차", "title": "성산 → 중문 / 더클리프 노을", "idx": 8, "color": "#ff7f0e", "lodging": "중문", "next_name": "없음"}, {"time": "08:10", "name": "중문 숙소권", "lat": 33.251, "lng": 126.414, "type": "출발", "note": "4일차 출발. 꽉 채운 일정이라 일찍 출발 필요", "drive_next": "운행 10분", "status": "빡셈", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 1, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "주상절리"}, {"time": "08:30~09:10", "name": "주상절리", "lat": 33.2385, "lng": 126.426, "type": "관광", "note": "영상 원본 3일차", "drive_next": "운행 10분", "status": "정상", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 2, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "천제연폭포"}, {"time": "09:20~09:50", "name": "천제연폭포", "lat": 33.2478, "lng": 126.4177, "type": "선택", "note": "영상 선택 코스. 시간이 밀리면 1순위 생략 후보", "drive_next": "운행 10분", "status": "선택", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 3, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "중문 수두리 보말칼국수"}, {"time": "10:10~10:50", "name": "중문 수두리 보말칼국수", "lat": 33.251, "lng": 126.419, "type": "식사", "note": "영상 원본. 이른 점심 처리", "drive_next": "운행 30분", "status": "빡셈", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 4, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "헬로키티 아일랜드"}, {"time": "11:20~12:30", "name": "헬로키티 아일랜드", "lat": 33.2904, "lng": 126.3526, "type": "추가", "note": "영상 원본에 새로 추가. 체류시간 짧게 잡음", "drive_next": "운행 20분", "status": "빡셈", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 5, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "카페 루시아"}, {"time": "12:50~13:20", "name": "카페 루시아", "lat": 33.236, "lng": 126.364, "type": "카페", "note": "영상 원본 3일차. 체류시간 매우 짧음", "drive_next": "운행 30분", "status": "매우 빡셈", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 6, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "오설록"}, {"time": "13:50~14:20", "name": "오설록", "lat": 33.3059, "lng": 126.2895, "type": "원본 포함", "note": "영상 원본 4일차. 체류시간 짧게 조정", "drive_next": "운행 20분", "status": "빡셈", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 7, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "김창열미술관"}, {"time": "14:40~15:10", "name": "김창열미술관", "lat": 33.3546, "lng": 126.2628, "type": "관광", "note": "영상 원본 4일차. 미술관 체류시간이 너무 짧음", "drive_next": "운행 15분", "status": "매우 빡셈", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 8, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "성이시돌목장 / 우유부단"}, {"time": "15:25~16:00", "name": "성이시돌목장 / 우유부단", "lat": 33.3472, "lng": 126.2515, "type": "관광/카페", "note": "영상 원본 3일차. 다시 포함", "drive_next": "운행 20분", "status": "빡셈", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 9, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "금오름"}, {"time": "16:20~17:00", "name": "금오름", "lat": 33.3547, "lng": 126.3051, "type": "오름", "note": "영상 원본 3일차. 다시 포함. 오름 체류시간 짧음", "drive_next": "운행 30분", "status": "빡셈", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 10, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "협재해수욕장"}, {"time": "17:30~18:15", "name": "협재해수욕장", "lat": 33.394, "lng": 126.2395, "type": "교체 반영", "note": "이호테우/무지개해안도로 대신 추가", "drive_next": "운행 20분", "status": "정상", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 11, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "포항횟집 or 구락"}, {"time": "18:35~19:05", "name": "포항횟집 or 구락", "lat": 33.39, "lng": 126.25, "type": "저녁 후보", "note": "영상 원본 3일차 저녁 후보. 정확 위치 확인 필요. 협재/한림권 후보로 임시 표시", "drive_next": "운행 40분", "status": "위치확인 필요", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 12, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "이끼숲소길"}, {"time": "19:45~20:05", "name": "이끼숲소길", "lat": 33.434, "lng": 126.375, "type": "카페", "note": "영상 원본 4일차. 시간상 사실상 생략 가능성 높음", "drive_next": "운행 40분", "status": "매우 빡셈", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 13, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "동문시장 or 공항 근처"}, {"time": "20:45~21:00", "name": "동문시장 or 공항 근처", "lat": 33.5127, "lng": 126.5262, "type": "마무리", "note": "21:20 출발이면 동문시장은 사실상 어려움. 공항 근처 대체 권장", "drive_next": "운행 15분", "status": "현실적으로 어려움", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 14, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "제주공항"}, {"time": "21:00~21:20", "name": "제주공항", "lat": 33.5071, "lng": 126.4928, "type": "종료", "note": "21:20 출발 기준으로 너무 늦음. 렌트카 반납 시간 재조정 필요", "drive_next": "일정 종료", "status": "시간 위험", "date": "4일차", "title": "중문 → 안덕 → 금악/협재 → 제주시/공항", "idx": 15, "color": "#9467bd", "lodging": "없음 / 21:20 출발", "next_name": "없음"}];
+const segments = [{"date": "1일차", "from": "제주공항", "to": "렌트카 수령", "time": "운행 20분", "lat": 33.5071, "lng": 126.4928, "coords": [[33.5071, 126.4928], [33.5071, 126.4928]], "color": "#1f77b4"}, {"date": "1일차", "from": "렌트카 수령", "to": "제주시 숙소권", "time": "운행 20분", "lat": 33.49805, "lng": 126.4924, "coords": [[33.5071, 126.4928], [33.489, 126.492]], "color": "#1f77b4"}, {"date": "1일차", "from": "제주시 숙소권", "to": "제주미담", "time": "운행 15분", "lat": 33.4905, "lng": 126.49549999999999, "coords": [[33.489, 126.492], [33.492, 126.499]], "color": "#1f77b4"}, {"date": "1일차", "from": "제주미담", "to": "수목원길 야시장", "time": "운행 15분", "lat": 33.4807, "lng": 126.4938, "coords": [[33.492, 126.499], [33.4694, 126.4886]], "color": "#1f77b4"}, {"date": "1일차", "from": "수목원길 야시장", "to": "제주시 숙소권", "time": "운행 15분", "lat": 33.4792, "lng": 126.4903, "coords": [[33.4694, 126.4886], [33.489, 126.492]], "color": "#1f77b4"}, {"date": "2일차", "from": "제주시 숙소권", "to": "서우봉 / 함덕해수욕장", "time": "운행 40분", "lat": 33.516149999999996, "lng": 126.5803, "coords": [[33.489, 126.492], [33.5433, 126.6686]], "color": "#2ca02c"}, {"date": "2일차", "from": "서우봉 / 함덕해수욕장", "to": "비자림", "time": "운행 40분", "lat": 33.516000000000005, "lng": 126.7392, "coords": [[33.5433, 126.6686], [33.4887, 126.8098]], "color": "#2ca02c"}, {"date": "2일차", "from": "비자림", "to": "우정원 베이커리", "time": "운행 20분", "lat": 33.475350000000006, "lng": 126.79390000000001, "coords": [[33.4887, 126.8098], [33.462, 126.778]], "color": "#2ca02c"}, {"date": "2일차", "from": "우정원 베이커리", "to": "송당 무끈모루", "time": "운행 10분", "lat": 33.466499999999996, "lng": 126.784, "coords": [[33.462, 126.778], [33.471, 126.79]], "color": "#2ca02c"}, {"date": "2일차", "from": "송당 무끈모루", "to": "성산권 이동 / 휴식", "time": "운행 40분", "lat": 33.4645, "lng": 126.8615, "coords": [[33.471, 126.79], [33.458, 126.933]], "color": "#2ca02c"}, {"date": "2일차", "from": "성산권 이동 / 휴식", "to": "부촌", "time": "운행 10분", "lat": 33.45825, "lng": 126.932, "coords": [[33.458, 126.933], [33.4585, 126.931]], "color": "#2ca02c"}, {"date": "2일차", "from": "부촌", "to": "성산 숙소권", "time": "운행 10분", "lat": 33.45825, "lng": 126.932, "coords": [[33.4585, 126.931], [33.458, 126.933]], "color": "#2ca02c"}, {"date": "3일차", "from": "성산 시골밥상", "to": "성산일출봉", "time": "운행 5분", "lat": 33.45845, "lng": 126.9372, "coords": [[33.458, 126.933], [33.4589, 126.9414]], "color": "#ff7f0e"}, {"date": "3일차", "from": "성산일출봉", "to": "프리츠 성산", "time": "운행 5분", "lat": 33.46095, "lng": 126.9357, "coords": [[33.4589, 126.9414], [33.463, 126.93]], "color": "#ff7f0e"}, {"date": "3일차", "from": "프리츠 성산", "to": "한라산 아래 첫마을 표선점", "time": "운행 40분", "lat": 33.39475, "lng": 126.88325, "coords": [[33.463, 126.93], [33.3265, 126.8365]], "color": "#ff7f0e"}, {"date": "3일차", "from": "한라산 아래 첫마을 표선점", "to": "쇠소깍", "time": "운행 40분", "lat": 33.28935, "lng": 126.7301, "coords": [[33.3265, 126.8365], [33.2522, 126.6237]], "color": "#ff7f0e"}, {"date": "3일차", "from": "쇠소깍", "to": "대한목장", "time": "운행 30분", "lat": 33.2706, "lng": 126.60485, "coords": [[33.2522, 126.6237], [33.289, 126.586]], "color": "#ff7f0e"}, {"date": "3일차", "from": "대한목장", "to": "더클리프 제주", "time": "운행 35분", "lat": 33.26665, "lng": 126.50065000000001, "coords": [[33.289, 126.586], [33.2443, 126.4153]], "color": "#ff7f0e"}, {"date": "3일차", "from": "더클리프 제주", "to": "중문 숙소권", "time": "운행 10분", "lat": 33.24765, "lng": 126.41465, "coords": [[33.2443, 126.4153], [33.251, 126.414]], "color": "#ff7f0e"}, {"date": "4일차", "from": "중문 숙소권", "to": "주상절리", "time": "운행 10분", "lat": 33.244749999999996, "lng": 126.42, "coords": [[33.251, 126.414], [33.2385, 126.426]], "color": "#9467bd"}, {"date": "4일차", "from": "주상절리", "to": "천제연폭포", "time": "운행 10분", "lat": 33.24315, "lng": 126.42185, "coords": [[33.2385, 126.426], [33.2478, 126.4177]], "color": "#9467bd"}, {"date": "4일차", "from": "천제연폭포", "to": "중문 수두리 보말칼국수", "time": "운행 10분", "lat": 33.249399999999994, "lng": 126.41835, "coords": [[33.2478, 126.4177], [33.251, 126.419]], "color": "#9467bd"}, {"date": "4일차", "from": "중문 수두리 보말칼국수", "to": "헬로키티 아일랜드", "time": "운행 30분", "lat": 33.2707, "lng": 126.38579999999999, "coords": [[33.251, 126.419], [33.2904, 126.3526]], "color": "#9467bd"}, {"date": "4일차", "from": "헬로키티 아일랜드", "to": "카페 루시아", "time": "운행 20분", "lat": 33.2632, "lng": 126.3583, "coords": [[33.2904, 126.3526], [33.236, 126.364]], "color": "#9467bd"}, {"date": "4일차", "from": "카페 루시아", "to": "오설록", "time": "운행 30분", "lat": 33.27095, "lng": 126.32675, "coords": [[33.236, 126.364], [33.3059, 126.2895]], "color": "#9467bd"}, {"date": "4일차", "from": "오설록", "to": "김창열미술관", "time": "운행 20분", "lat": 33.33025, "lng": 126.27615, "coords": [[33.3059, 126.2895], [33.3546, 126.2628]], "color": "#9467bd"}, {"date": "4일차", "from": "김창열미술관", "to": "성이시돌목장 / 우유부단", "time": "운행 15분", "lat": 33.350899999999996, "lng": 126.25715, "coords": [[33.3546, 126.2628], [33.3472, 126.2515]], "color": "#9467bd"}, {"date": "4일차", "from": "성이시돌목장 / 우유부단", "to": "금오름", "time": "운행 20분", "lat": 33.35095, "lng": 126.2783, "coords": [[33.3472, 126.2515], [33.3547, 126.3051]], "color": "#9467bd"}, {"date": "4일차", "from": "금오름", "to": "협재해수욕장", "time": "운행 30분", "lat": 33.37435, "lng": 126.2723, "coords": [[33.3547, 126.3051], [33.394, 126.2395]], "color": "#9467bd"}, {"date": "4일차", "from": "협재해수욕장", "to": "포항횟집 or 구락", "time": "운행 20분", "lat": 33.391999999999996, "lng": 126.24475000000001, "coords": [[33.394, 126.2395], [33.39, 126.25]], "color": "#9467bd"}, {"date": "4일차", "from": "포항횟집 or 구락", "to": "이끼숲소길", "time": "운행 40분", "lat": 33.412, "lng": 126.3125, "coords": [[33.39, 126.25], [33.434, 126.375]], "color": "#9467bd"}, {"date": "4일차", "from": "이끼숲소길", "to": "동문시장 or 공항 근처", "time": "운행 40분", "lat": 33.473349999999996, "lng": 126.45060000000001, "coords": [[33.434, 126.375], [33.5127, 126.5262]], "color": "#9467bd"}, {"date": "4일차", "from": "동문시장 or 공항 근처", "to": "제주공항", "time": "운행 15분", "lat": 33.5099, "lng": 126.5095, "coords": [[33.5127, 126.5262], [33.5071, 126.4928]], "color": "#9467bd"}];
+
+const stateKey = 'ittemmall-jeju-state-v1';
+const readSavedState = () => {
+  try {
+    return JSON.parse(localStorage.getItem(stateKey) || '{}');
+  } catch (error) {
+    return {};
+  }
+};
+const savedState = readSavedState();
+const writeSavedState = partial => {
+  try {
+    const nextState = {...readSavedState(), ...partial};
+    localStorage.setItem(stateKey, JSON.stringify(nextState));
+  } catch (error) {}
+};
+const throttle = (callback, wait = 250) => {
+  let pending = false;
+  return () => {
+    if (pending) return;
+    pending = true;
+    window.setTimeout(() => {
+      pending = false;
+      callback();
+    }, wait);
+  };
+};
+
+const map = L.map('map').setView([33.37,126.55],10);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom:18,
+  attribution:'&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+let allLatLngs=[];
+
+days.forEach(day => {
+  const coords = day.route.map(p => [p.lat,p.lng]);
+  coords.forEach(c => allLatLngs.push(c));
+  L.polyline(coords, {
+    color:day.color,
+    weight:5,
+    opacity:.86
+  }).addTo(map).bindPopup(`<b>${day.date}</b><br/>${day.title}`);
+});
+
+segments.forEach(s => {
+  const icon = L.divIcon({
+    className:'',
+    html:`<div class="time-label" style="border-color:${s.color}">${s.time}</div>`,
+    iconSize:[80,24],
+    iconAnchor:[40,12]
+  });
+  L.marker([s.lat,s.lng], {icon})
+    .addTo(map)
+    .bindPopup(`<b>${s.date}</b><br/>${s.from} → ${s.to}<br/>${s.time}`);
+});
+
+markers.forEach(p => {
+  const icon = L.divIcon({
+    className:'',
+    html:`<div class="num-icon" style="border-color:${p.color}">${p.idx}</div>`,
+    iconSize:[31,31],
+    iconAnchor:[15,15]
+  });
+  const popup = `
+    <b>${p.date} - ${p.idx}. ${p.name}</b><br/>
+    ${p.title}<br/>
+    유형: ${p.type}<br/>
+    판정: ${p.status}<br/><br/>
+    ${p.note}<br/><br/>
+    <b>다음 행선지:</b> ${p.next_name}<br/>
+    <b>다음 행선지까지:</b> ${p.drive_next}
+  `;
+  L.marker([p.lat,p.lng], {icon}).addTo(map).bindPopup(popup);
+});
+
+if (
+  savedState.map &&
+  Number.isFinite(savedState.map.lat) &&
+  Number.isFinite(savedState.map.lng) &&
+  Number.isFinite(savedState.map.zoom)
+) {
+  map.setView([savedState.map.lat, savedState.map.lng], savedState.map.zoom);
+} else {
+  map.fitBounds(allLatLngs, {padding:[42,42]});
+}
+
+map.on('moveend zoomend', () => {
+  const center = map.getCenter();
+  writeSavedState({
+    map: {
+      lat: center.lat,
+      lng: center.lng,
+      zoom: map.getZoom()
+    }
+  });
+});
+
+const sidePane = document.querySelector('.side');
+const saveWindowScroll = throttle(() => writeSavedState({windowScrollY: window.scrollY}));
+const saveSideScroll = throttle(() => {
+  if (sidePane) writeSavedState({sideScrollTop: sidePane.scrollTop});
+});
+
+window.addEventListener('scroll', saveWindowScroll, {passive:true});
+if (sidePane) sidePane.addEventListener('scroll', saveSideScroll, {passive:true});
+
+window.addEventListener('load', () => {
+  window.setTimeout(() => {
+    if (Number.isFinite(savedState.windowScrollY)) window.scrollTo(0, savedState.windowScrollY);
+    if (sidePane && Number.isFinite(savedState.sideScrollTop)) sidePane.scrollTop = savedState.sideScrollTop;
+    map.invalidateSize();
+  }, 0);
+});
+
+document.querySelectorAll('[data-page-action]').forEach(action => {
+  action.addEventListener('click', async () => {
+    const type = action.dataset.pageAction;
+    if (type === 'back') {
+      if (document.referrer) {
+        history.back();
+      } else {
+        window.location.href = '/';
+      }
+    }
+    if (type === 'share') {
+      const url = window.location.href;
+      try {
+        if (navigator.share) {
+          await navigator.share({title: document.title, url});
+        } else if (navigator.clipboard) {
+          await navigator.clipboard.writeText(url);
+          action.textContent = '주소 복사됨';
+          window.setTimeout(() => {
+            action.textContent = '주소 공유';
+          }, 1800);
+        }
+      } catch (error) {
+        action.textContent = '주소 공유';
+      }
+    }
+    if (type === 'print') {
+      window.print();
+    }
+  });
+});
+</script>
+</body>
+</html>
