@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light only" />
+    <meta name="darkreader-lock" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>토스페이먼츠 결제 | ITTEMMALL</title>
+    <link rel="canonical" href="https://ittemmall.com/payment/toss-checkout.html" />
+    <link rel="icon" type="image/svg+xml" href="../assets/ittemmall/favicon.svg" />
+    <script src="./toss-config.js"></script>
+    <script src="https://js.tosspayments.com/v2/standard"></script>
+    <style>
+      :root {
+        --brand: #1d4985;
+        --ink: #111;
+        --muted: #666;
+        --line: #e4e4e7;
+        --soft: #f7f7f8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #f7f7f2;
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .wrap {
+        width: min(920px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      header {
+        border-bottom: 1px solid rgba(29, 73, 133, 0.16);
+        background: #fff;
+      }
+
+      .head {
+        display: flex;
+        min-height: 68px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .logo {
+        color: var(--brand);
+        font-size: 21px;
+        font-weight: 950;
+        letter-spacing: 0.12em;
+        text-decoration: none;
+      }
+
+      main {
+        padding: 30px 0 56px;
+      }
+
+      .checkout-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 18px;
+        align-items: start;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 22px;
+        box-shadow: 0 18px 48px rgba(17, 24, 39, 0.07);
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--brand);
+        font-size: 12px;
+        font-weight: 950;
+        letter-spacing: 0.16em;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(28px, 5vw, 42px);
+        line-height: 1.14;
+      }
+
+      h2 {
+        margin: 0 0 14px;
+        font-size: 18px;
+      }
+
+      p {
+        color: #3f3f46;
+        line-height: 1.7;
+      }
+
+      dl {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 10px 12px;
+        margin: 18px 0 0;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      dt {
+        color: var(--muted);
+        font-weight: 850;
+      }
+
+      dd {
+        margin: 0;
+        font-weight: 850;
+        word-break: break-word;
+      }
+
+      .status {
+        margin-top: 14px;
+        border-radius: 8px;
+        background: var(--soft);
+        padding: 14px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .status strong {
+        color: var(--ink);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .btn {
+        display: inline-flex;
+        min-height: 46px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--brand);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--brand);
+        padding: 0 16px;
+        font-weight: 950;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .btn.primary {
+        background: var(--brand);
+        color: #fff;
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      #payment-method,
+      #agreement {
+        min-height: 84px;
+      }
+
+      @media (max-width: 780px) {
+        .head {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 16px 0;
+        }
+
+        .checkout-grid {
+          grid-template-columns: 1fr;
+        }
+
+        dl {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap head">
+        <a class="logo" href="../">ITTEMMALL</a>
+        <a class="btn" href="../#/history">주문 내역</a>
+      </div>
+    </header>
+    <main class="wrap">
+      <div class="checkout-grid">
+        <section class="panel">
+          <p class="eyebrow">TOSS PAYMENTS</p>
+          <h1>토스페이먼츠 결제</h1>
+          <p>
+            토스페이먼츠 테스트 결제창으로 결제수단 선택과 인증 흐름을 확인합니다.
+            테스트 키 사용 중에는 실제 결제 금액이 출금되지 않습니다.
+          </p>
+          <div id="payment-method" aria-live="polite"></div>
+          <div id="agreement" aria-live="polite"></div>
+          <div class="actions">
+            <button class="btn primary" id="payButton" type="button" disabled>토스 결제하기</button>
+            <a class="btn" id="editLink" href="../#/history">주문 수정</a>
+          </div>
+          <div class="status" id="statusBox">결제창을 준비하고 있습니다.</div>
+        </section>
+
+        <aside class="panel" aria-label="주문 요약">
+          <h2>주문 요약</h2>
+          <dl>
+            <dt>주문번호</dt>
+            <dd id="summaryOrderId">-</dd>
+            <dt>상품명</dt>
+            <dd id="summaryOrderName">-</dd>
+            <dt>결제금액</dt>
+            <dd id="summaryAmount">-</dd>
+            <dt>구매자</dt>
+            <dd id="summaryCustomer">-</dd>
+          </dl>
+          <div class="status">
+            결제 인증 성공 후에는 성공 페이지로 이동합니다. 최종 승인과 정산 처리는 토스 시크릿 키를 서버에 설정한 뒤 연결합니다.
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <script>
+      (function () {
+        var config = window.ITTEMMALL_TOSS_PAYMENTS_CONFIG || {};
+        var params = new URLSearchParams(window.location.search);
+        var amount = parseAmount(params.get("amount"));
+        var orderId = normalizeOrderId(params.get("orderId"));
+        var orderName = cleanText(params.get("orderName") || "MARCE 스위트 피클볼 패들", 100);
+        var customerName = cleanText(params.get("customerName") || "", 100);
+        var customerEmail = cleanText(params.get("customerEmail") || "", 100);
+        var customerMobilePhone = String(params.get("customerMobilePhone") || "").replace(/\D/g, "").slice(0, 11);
+        var statusBox = document.getElementById("statusBox");
+        var payButton = document.getElementById("payButton");
+        var editLink = document.getElementById("editLink");
+        var widgets = null;
+
+        document.getElementById("summaryOrderId").textContent = orderId;
+        document.getElementById("summaryOrderName").textContent = orderName;
+        document.getElementById("summaryAmount").textContent = new Intl.NumberFormat("ko-KR").format(amount) + "원";
+        document.getElementById("summaryCustomer").textContent = customerName || "비회원";
+        editLink.href = "../#/submission/" + encodeURIComponent(orderId);
+
+        init();
+
+        async function init() {
+          if (!config.enabled || !config.clientKey) {
+            setStatus("토스 결제창 설정이 아직 비활성화되어 있습니다. clientKey 설정을 확인해주세요.", true);
+            return;
+          }
+
+          if (typeof window.TossPayments !== "function") {
+            setStatus("토스페이먼츠 SDK를 불러오지 못했습니다. 네트워크 연결 후 다시 시도해주세요.", true);
+            return;
+          }
+
+          try {
+            var tossPayments = window.TossPayments(config.clientKey);
+            widgets = tossPayments.widgets({
+              customerKey: window.TossPayments.ANONYMOUS || "ANONYMOUS",
+            });
+            await widgets.setAmount({ currency: "KRW", value: amount });
+            await widgets.renderPaymentMethods({
+              selector: "#payment-method",
+              variantKey: config.paymentWidgetVariantKey || "DEFAULT",
+            });
+            try {
+              await widgets.renderAgreement({
+                selector: "#agreement",
+                variantKey: config.agreementWidgetVariantKey || "DEFAULT",
+              });
+            } catch (agreementError) {
+              document.getElementById("agreement").innerHTML = "";
+            }
+            payButton.disabled = false;
+            setStatus("<strong>결제창 준비 완료.</strong> 결제수단을 선택한 뒤 토스 결제하기를 누르세요.");
+          } catch (error) {
+            setStatus("토스 결제창을 준비하지 못했습니다: " + (error.message || error), true);
+          }
+        }
+
+        payButton.addEventListener("click", async function () {
+          if (!widgets) return;
+          payButton.disabled = true;
+          setStatus("토스 결제창을 여는 중입니다.");
+          try {
+            var successUrl = withReturnParams(config.successUrl || location.origin + "/payment/toss-success.html");
+            var failUrl = withReturnParams(config.failUrl || location.origin + "/payment/toss-fail.html");
+            await widgets.requestPayment({
+              orderId: orderId,
+              orderName: orderName,
+              successUrl: successUrl,
+              failUrl: failUrl,
+              customerEmail: customerEmail || undefined,
+              customerName: customerName || undefined,
+              customerMobilePhone: customerMobilePhone || undefined,
+            });
+          } catch (error) {
+            payButton.disabled = false;
+            setStatus("결제 요청을 완료하지 못했습니다: " + (error.message || error), true);
+          }
+        });
+
+        function parseAmount(value) {
+          var parsed = Number(String(value || "").replace(/[^\d]/g, ""));
+          return parsed > 0 ? parsed : 59000;
+        }
+
+        function normalizeOrderId(value) {
+          var cleaned = String(value || "").replace(/[^A-Za-z0-9=_-]/g, "").slice(0, 64);
+          if (cleaned.length >= 6) return cleaned;
+          return "IT-" + Date.now().toString(36).toUpperCase();
+        }
+
+        function cleanText(value, maxLength) {
+          return String(value || "").replace(/[\u0000-\u001F<>]/g, "").trim().slice(0, maxLength);
+        }
+
+        function withReturnParams(url) {
+          var target = new URL(url, window.location.origin);
+          target.searchParams.set("localOrderId", orderId);
+          target.searchParams.set("requestedAmount", String(amount));
+          return target.toString();
+        }
+
+        function setStatus(message, isError) {
+          statusBox.innerHTML = message;
+          statusBox.style.background = isError ? "#fff1f2" : "#f7f7f8";
+          statusBox.style.color = isError ? "#991b1b" : "#666";
+        }
+      })();
+    </script>
+  </body>
+</html>

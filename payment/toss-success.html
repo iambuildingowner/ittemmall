@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>토스 결제 인증 결과 | ITTEMMALL</title>
+    <link rel="canonical" href="https://ittemmall.com/payment/toss-success.html" />
+    <link rel="icon" type="image/svg+xml" href="../assets/ittemmall/favicon.svg" />
+    <style>
+      body {
+        margin: 0;
+        background: #f7f7f2;
+        color: #111;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .panel {
+        width: min(100%, 560px);
+        border: 1px solid #e4e4e7;
+        border-radius: 8px;
+        background: #fff;
+        padding: 28px;
+        box-shadow: 0 18px 54px rgba(17, 24, 39, 0.08);
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        color: #1d4985;
+        font-size: 12px;
+        font-weight: 950;
+        letter-spacing: 0.18em;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(28px, 5vw, 42px);
+        line-height: 1.15;
+      }
+
+      p,
+      li {
+        color: #3f3f46;
+        line-height: 1.75;
+      }
+
+      dl {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 10px 12px;
+        margin: 20px 0 0;
+        border-top: 1px solid #e4e4e7;
+        padding-top: 16px;
+      }
+
+      dt {
+        color: #71717a;
+        font-weight: 850;
+      }
+
+      dd {
+        margin: 0;
+        font-weight: 850;
+        word-break: break-word;
+      }
+
+      .notice {
+        margin-top: 18px;
+        border-radius: 8px;
+        background: #f7f7f8;
+        padding: 14px;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      .btn {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #1d4985;
+        border-radius: 8px;
+        background: #fff;
+        color: #1d4985;
+        padding: 0 16px;
+        font-weight: 950;
+        text-decoration: none;
+      }
+
+      .btn.primary {
+        background: #1d4985;
+        color: #fff;
+      }
+
+      @media (max-width: 560px) {
+        dl {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="panel">
+        <p class="eyebrow">TOSS PAYMENT RESULT</p>
+        <h1>결제 인증이 완료되었습니다.</h1>
+        <p>
+          토스페이먼츠에서 결제 인증 정보를 반환했습니다. 최종 결제 승인과 정산 처리는 토스 시크릿 키를 서버에 설정한 뒤 승인 API로 연결합니다.
+        </p>
+        <dl>
+          <dt>주문번호</dt>
+          <dd id="orderId">-</dd>
+          <dt>결제금액</dt>
+          <dd id="amount">-</dd>
+          <dt>결제키</dt>
+          <dd id="paymentKey">-</dd>
+        </dl>
+        <div class="notice" id="notice">반환 금액을 확인하고 있습니다.</div>
+        <div class="actions">
+          <a class="btn primary" href="../#/history">주문 내역</a>
+          <a class="btn" href="../">상품 보기</a>
+        </div>
+      </section>
+    </main>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var amount = params.get("amount") || "";
+        var requestedAmount = params.get("requestedAmount") || "";
+        document.getElementById("orderId").textContent = params.get("orderId") || params.get("localOrderId") || "-";
+        document.getElementById("paymentKey").textContent = params.get("paymentKey") || "-";
+        document.getElementById("amount").textContent = amount ? new Intl.NumberFormat("ko-KR").format(Number(amount)) + "원" : "-";
+        document.getElementById("notice").textContent =
+          amount && requestedAmount && amount !== requestedAmount
+            ? "요청 금액과 반환 금액이 달라 최종 승인을 진행하면 안 됩니다."
+            : "요청 금액과 반환 금액 확인 후 서버 승인 API를 연결하세요.";
+      })();
+    </script>
+  </body>
+</html>

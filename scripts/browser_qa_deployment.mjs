@@ -18,10 +18,10 @@ const executablePath = args.get("--chrome-path") || undefined;
 const staticLocal = args.get("--static-local") === "true";
 
 const requiredTexts = {
-  desktopHome: ["ITTEMMALL", "SHOP", "네이버페이"],
-  productDetail: ["잇템몰 스위트 피클볼 패들", "바로 구매하기", "pay 구매"],
-  cart: ["장바구니", "주문서 작성", "pay 준비"],
-  order: ["주문 정보 입력", "N pay 결제 준비하기"],
+  desktopHome: ["ITTEMMALL", "MARCE", "대표 상품 보기"],
+  productDetail: ["MARCE 스위트 피클볼 패들", "바로 구매하기", "USAPA"],
+  paymentFlow: ["토스페이먼츠 안내 요청", "토스 결제창 열기", "주문 수정"],
+  tossCheckout: ["토스페이먼츠 결제", "토스 결제하기", "주문 요약"],
   admin: ["Orders Admin", "주문 관리"],
   ops: ["운영 점검", "JSON 열기", "공개 런칭 점검", "메일 알림 테스트"],
   orderLookup: ["ITTEMMALL", "주문 조회", "조회하기"],
@@ -44,25 +44,32 @@ const visits = [
     texts: requiredTexts.productDetail,
   },
   {
-    label: "desktop cart",
+    label: "desktop payment flow",
     url: `${baseUrl}/#/product/pink`,
     viewport: { width: 1440, height: 1100 },
-    texts: requiredTexts.cart,
+    texts: requiredTexts.paymentFlow,
     setup: async (page) => {
-      await page.click('button[data-action="add-to-cart"][data-cart-source="product_detail"]');
-      await page.waitForFunction(() => location.hash === "#/cart", null, { timeout: 10000 });
-      await page.reload({ waitUntil: "networkidle" });
-      await page.waitForFunction(() => location.hash === "#/cart", null, { timeout: 10000 });
+      await page.click('button[data-action="apply"]');
+      await page.waitForFunction(() => location.hash === "#/apply", null, { timeout: 10000 });
+      await page.fill('[data-field="name"]', "안뜰에해듬");
+      await page.fill('[data-field="phone"]', "01077008087");
+      await page.fill('[data-field="email"]', "staysiaofficial@gmail.com");
+      await page.fill('[data-field="postcode"]', "54533");
+      await page.fill('[data-field="roadAddress"]', "전북특별자치도 익산시 황등면 황금로 73");
+      await page.fill('[data-field="detailAddress"]', "브라우저 QA");
+      await page.check('[data-field="agreeTermsPrivacy"]');
+      await page.click('button[data-action="submit-apply"]');
+      await page.waitForFunction(() => location.hash.startsWith("#/payment"), null, { timeout: 10000 });
     },
   },
   {
-    label: "desktop order",
-    url: `${baseUrl}/#/product/pink`,
-    viewport: { width: 1440, height: 1100 },
-    texts: requiredTexts.order,
+    label: "toss checkout",
+    url: `${baseUrl}/payment/toss-checkout.html?orderId=IT-BROWSER-QA&amount=59000&orderName=MARCE%20%EC%8A%A4%EC%9C%84%ED%8A%B8%20%ED%94%BC%ED%81%B4%EB%B3%BC%20%ED%8C%A8%EB%93%A4&customerName=%EC%95%88%EB%9C%B0%EC%97%90%ED%95%B4%EB%93%AC&customerEmail=staysiaofficial%40gmail.com&customerMobilePhone=01077008087`,
+    viewport: { width: 390, height: 900 },
+    texts: requiredTexts.tossCheckout,
     setup: async (page) => {
-      await page.click('button[data-action="apply"][data-checkout-source="npay"]');
-      await page.waitForFunction(() => location.hash === "#/apply", null, { timeout: 10000 });
+      await page.waitForSelector("iframe", { timeout: 20000 });
+      await page.waitForSelector("#payButton:not([disabled])", { timeout: 20000 });
     },
   },
   {
@@ -194,21 +201,10 @@ try {
         noteFailure(`${visit.label} horizontal overflow ${overflow}px`);
       }
 
-      if (visit.label === "desktop order") {
-        await page.fill('[data-field="name"]', "테스트 주문자");
-        await page.fill('[data-field="phone"]', "01000000000");
-        await page.fill('[data-field="email"]', "qa@example.com");
-        await page.fill('[data-field="fulfillmentPrimary"]', "서울 테스트 주소");
-        await page.check('[data-field="agreeNotice"]');
-        await page.check('[data-field="agreeTermsPrivacy"]');
-        await page.click('button[data-action="submit-apply"]');
-        await page.waitForFunction(() => location.hash.startsWith("#/payment/"), null, { timeout: 10000 });
-        const updatedText = await page.locator("body").innerText({ timeout: 10000 });
-        if (updatedText.includes("서버 주문 저장소 연결 필요") || updatedText.includes("서버 주문 저장 완료")) {
-          noteOk("desktop order Naver Pay guard/status rendered");
-        } else {
-          noteFailure("desktop order did not show server-sync payment status");
-        }
+      if (visit.label === "toss checkout") {
+        const disabled = await page.locator("#payButton").evaluate((button) => button.disabled);
+        if (!disabled) noteOk("toss checkout pay button enabled");
+        else noteFailure("toss checkout pay button disabled");
       }
     } catch (error) {
       noteFailure(`${visit.label} threw ${error.message}`);

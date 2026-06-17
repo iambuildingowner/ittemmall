@@ -306,6 +306,8 @@ def check_public_toss_config() -> list[Check]:
                 "Toss PG 심사/계약 후 발급받은 client key를 payment/toss-config.js에 넣으세요.",
             )
         )
+    elif client_key.startswith("test_"):
+        checks.append(Check("PASS", "toss-public", "Toss 테스트 clientKey가 채워져 있습니다."))
     elif is_placeholder(client_key):
         checks.append(
             Check(

@@ -45,6 +45,7 @@ deploy/demo*/
 
 # Safe templates and tooling that contain placeholders only
 !private/
+private/**
 !private/*.example.php
 !private/*.example.json
 !scripts/generate_private_config.py
