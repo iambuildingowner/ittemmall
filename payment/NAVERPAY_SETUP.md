@@ -1,8 +1,8 @@
 # ITTEMMALL Naver Pay Setup
 
-Use `ITTEMMALL_LAUNCH_OWNER_CHECKLIST.md` first when collecting the owner-provided Naver Pay, business, shipping, privacy, and private server values. This setup file explains the technical pieces after those values are available.
+Use `NAVERPAY_DIRECT_APPLICATION_2026-06-20.md` first when preparing the direct Naver Pay merchant application. Use `ITTEMMALL_LAUNCH_OWNER_CHECKLIST.md` when collecting owner-provided business, shipping, privacy, and private server values.
 
-Toss PG is the first payment review target for Ittemmall. Use `payment/TOSS_SETUP.md` for the Toss owner gate and keep this document as the Naver Pay follow-up setup guide.
+The current application recommendation is Naver Pay **order type** (`주문형`) for the Ittemmall main mall because the site sells physical shipped goods and needs a direct Naver Pay merchant application, not PG-provided Naver Pay.
 
 ## What is already prepared
 
@@ -30,6 +30,8 @@ Toss PG is the first payment review target for Ittemmall. Use `payment/TOSS_SETU
 - Server order notifications can be sent by PHP mail when `ITTEMMALL_NOTIFY_ENABLED=1` and `ITTEMMALL_NOTIFY_EMAIL` are configured.
 - Public business, terms, privacy, and refund policy pages are prepared under `legal/`.
 - `index.html` loads `payment/naverpay-config.js` before the app starts.
+- Product detail has an N pay purchase button placement for the order-type review path.
+- The order form stores submissions in LocalStorage and now attempts to POST normalized orders to `payment/order-store.php` so later payment approval can validate `merchantPayKey`/order number and amount server-side.
 - Root `.htaccess` blocks internal research folders, output artifacts, Markdown, spreadsheets, PDFs, and example files from public access.
 - If public keys are missing, the page shows a safe pending/error state instead of pretending payment is complete.
 - The approval endpoint contains the official one-time payment approval URL shape:
@@ -43,8 +45,15 @@ Toss PG is the first payment review target for Ittemmall. Use `payment/TOSS_SETU
 
 ## What the owner must do
 
+1. Apply in Naver Pay Center as **주문형** first.
+2. After approval, collect the order-type account ID, merchant authentication key, button authentication key, common authentication key, and any technical guide sent by Naver Pay.
+3. If Naver Pay also issues payment-type `clientId`, `chainId`, and `clientSecret`, keep using the existing payment-type placeholder files below for the fallback/combined path.
+4. Keep all secret/authentication values in server environment variables or a private config file outside the public web root unless Naver Pay explicitly labels a value as public frontend-only.
+
+For the existing payment-type fallback path:
+
 1. Complete Naver Pay merchant onboarding.
-2. Get `clientId`, `chainId`, and `clientSecret`.
+2. Get `clientId`, `chainId`, and `clientSecret` if payment-type or combined-type credentials are issued.
 3. Put `clientId` and `chainId` into `payment/naverpay-config.js` with `scripts/generate_public_naverpay_config.py`.
 4. Put `clientSecret` only in server environment variables or a private config file outside the public web root.
 5. Set `ITTEMMALL_ORDER_STORE_PATH` to a JSON file path outside the public web folder.
@@ -69,6 +78,11 @@ ITTEMMALL_NOTIFY_FROM=no-reply@ittemmall.com
 NAVER_PAY_CLIENT_ID=...
 NAVER_PAY_CHAIN_ID=...
 NAVER_PAY_CLIENT_SECRET=...
+NAVER_PAY_APPLICATION_TYPE=order
+NAVER_PAY_ORDER_ACCOUNT_ID=
+NAVER_PAY_ORDER_MERCHANT_AUTH_KEY=
+NAVER_PAY_ORDER_BUTTON_AUTH_KEY=
+NAVER_PAY_ORDER_COMMON_AUTH_KEY=
 NAVER_PAY_MODE=development
 NAVER_PAY_APPROVE_URL=
 NAVER_PAY_APPROVE_ENABLED=0
@@ -76,7 +90,7 @@ NAVER_PAY_CANCEL_URL=
 NAVER_PAY_CANCEL_ENABLED=0
 ```
 
-Never commit the real `NAVER_PAY_CLIENT_SECRET`.
+Never commit the real `NAVER_PAY_CLIENT_SECRET` or order-type merchant/common authentication keys.
 Never put `ITTEMMALL_ORDER_STORE_PATH` inside `public_html`, `www`, `htdocs`, or this public site folder.
 The order store uses a `.lock` file to avoid concurrent write loss and writes a `.bak` copy before replacing the JSON file. Keep those files in the same private directory and out of the public web root.
 Order creation, Naver Pay approval, and tracking POST requests use a private JSON rate-limit file. Leave `ITTEMMALL_RATE_LIMIT_PATH` empty to derive it from `ITTEMMALL_ORDER_STORE_PATH`, or set it to a private absolute path outside `public_html`, `www`, or `htdocs`.

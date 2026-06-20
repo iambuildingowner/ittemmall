@@ -105,6 +105,21 @@ def check_order_store_safety() -> list[Check]:
     return [Check("PASS", "order-store", "주문 저장소는 lock 기반 read/write와 .bak 백업 안전장치를 포함합니다.")]
 
 
+def check_frontend_order_sync() -> list[Check]:
+    index = read_text(ROOT / "index.html")
+    required = [
+        "syncSubmissionToServer",
+        "payment/order-store.php",
+        "buildServerOrderPayload",
+        "serverSyncStatus",
+        "serverSyncMessage",
+    ]
+    missing = [snippet for snippet in required if snippet not in index]
+    if missing:
+        return [Check("FAIL", "order-store", "프런트 주문서의 서버 저장 연결이 빠져 있습니다: " + ", ".join(missing))]
+    return [Check("PASS", "order-store", "주문서 제출 시 서버 주문 저장 API 연결과 화면 저장 상태 표시가 준비되어 있습니다.")]
+
+
 def check_payment_safeguards() -> list[Check]:
     approve = read_text(ROOT / "payment" / "naverpay-approve.php")
     cancel = read_text(ROOT / "payment" / "naverpay-cancel.php")
@@ -455,7 +470,10 @@ def check_docs() -> list[Check]:
     manifest = read_text(ROOT / "DEPLOYMENT_MANIFEST.md")
     setup = read_text(ROOT / "payment" / "NAVERPAY_SETUP.md")
     owner_checklist = read_text(ROOT / "ITTEMMALL_LAUNCH_OWNER_CHECKLIST.md")
+    direct_application = read_text(ROOT / "NAVERPAY_DIRECT_APPLICATION_2026-06-20.md")
     required_snippets = [
+        "NAVERPAY_DIRECT_APPLICATION_2026-06-20.md",
+        "주문형",
         "ITTEMMALL_LAUNCH_OWNER_CHECKLIST.md",
         "private/ittemmall-production-release.production.json",
         "check_catalog_consistency.py",
@@ -477,7 +495,7 @@ def check_docs() -> list[Check]:
         "NAVER_PAY_APPROVE_ENABLED=1",
         "NAVER_PAY_CANCEL_ENABLED=1",
     ]
-    missing = [snippet for snippet in required_snippets if snippet not in manifest + setup + owner_checklist]
+    missing = [snippet for snippet in required_snippets if snippet not in manifest + setup + owner_checklist + direct_application]
     if missing:
         checks.append(Check("FAIL", "docs", "운영 문서에 빠진 절차가 있습니다: " + ", ".join(missing)))
     else:
@@ -490,6 +508,7 @@ def build_report() -> list[Check]:
     checks.extend(check_source_files())
     checks.extend(check_catalog())
     checks.extend(check_order_store_safety())
+    checks.extend(check_frontend_order_sync())
     checks.extend(check_payment_safeguards())
     checks.extend(check_admin_operations())
     checks.extend(check_customer_order_lookup())

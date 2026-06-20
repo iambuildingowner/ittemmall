@@ -39,6 +39,11 @@ def build_config(args: argparse.Namespace) -> str:
         "NAVER_PAY_CLIENT_ID": args.naver_client_id,
         "NAVER_PAY_CHAIN_ID": args.naver_chain_id,
         "NAVER_PAY_CLIENT_SECRET": args.naver_client_secret,
+        "NAVER_PAY_APPLICATION_TYPE": args.naver_application_type,
+        "NAVER_PAY_ORDER_ACCOUNT_ID": args.naver_order_account_id,
+        "NAVER_PAY_ORDER_MERCHANT_AUTH_KEY": args.naver_order_merchant_auth_key,
+        "NAVER_PAY_ORDER_BUTTON_AUTH_KEY": args.naver_order_button_auth_key,
+        "NAVER_PAY_ORDER_COMMON_AUTH_KEY": args.naver_order_common_auth_key,
         "NAVER_PAY_MODE": args.naver_mode,
         "NAVER_PAY_APPROVE_URL": args.naver_approve_url,
         "NAVER_PAY_APPROVE_ENABLED": "1" if args.enable_approval else "0",
@@ -81,6 +86,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--naver-client-id", default="", help="Issued Naver Pay Client ID.")
     parser.add_argument("--naver-chain-id", default="", help="Issued Naver Pay Chain ID.")
     parser.add_argument("--naver-client-secret", default="", help="Issued Naver Pay Client Secret.")
+    parser.add_argument("--naver-application-type", choices=["order", "payment", "combined"], default="order")
+    parser.add_argument("--naver-order-account-id", default="", help="Issued Naver Pay order-type account ID.")
+    parser.add_argument("--naver-order-merchant-auth-key", default="", help="Issued Naver Pay order-type merchant authentication key.")
+    parser.add_argument("--naver-order-button-auth-key", default="", help="Issued Naver Pay order-type button authentication key.")
+    parser.add_argument("--naver-order-common-auth-key", default="", help="Issued Naver Pay order-type common authentication key.")
     parser.add_argument("--naver-mode", choices=["development", "production"], default="development")
     parser.add_argument("--naver-approve-url", default="", help="Optional full HTTPS approval URL from Naver Pay.")
     parser.add_argument("--naver-cancel-url", default="", help="Optional full HTTPS cancel URL from Naver Pay.")

@@ -19,7 +19,7 @@ const staticLocal = args.get("--static-local") === "true";
 
 const requiredTexts = {
   desktopHome: ["ITTEMMALL", "MARCE", "대표 상품 보기"],
-  productDetail: ["MARCE 스위트 피클볼 패들", "바로 구매하기", "USAPA"],
+  productDetail: ["MARCE 스위트 피클볼 패들", "바로 구매하기", "N pay 구매", "네이버페이 주문형 가맹 신청 준비", "USAPA"],
   paymentFlow: ["토스페이먼츠 안내 요청", "토스 결제창 열기", "주문 수정"],
   tossCheckout: ["토스페이먼츠 결제", "토스 결제하기", "주문 요약"],
   admin: ["Orders Admin", "주문 관리"],
@@ -150,6 +150,10 @@ try {
       const status = response.status();
       const url = response.url();
       if (status >= 400) {
+        if (url.endsWith("/payment/order-store.php") && status === 501) {
+          allowedNetworkErrors.push(`${visit.label}: ${status} ${url}`);
+          return;
+        }
         if (staticLocal && (url.endsWith("/track.php") || url.endsWith("/payment/order-store.php"))) {
           allowedNetworkErrors.push(`${visit.label}: ${status} ${url}`);
           return;
@@ -221,6 +225,8 @@ for (const error of allowedNetworkErrors) noteWarning(`static-local network ${er
 for (const error of consoleErrors) {
   if (staticLocal && error.includes("Failed to load resource") && error.includes("501")) {
     noteWarning(`static-local console ${error}`);
+  } else if (error.includes("Failed to load resource") && error.includes("501") && error.includes("order-store.php")) {
+    noteWarning(`owner-gate console ${error}`);
   } else if (error.includes("Failed to load resource")) {
     noteFailure(`console ${error}`);
   } else {

@@ -182,6 +182,9 @@ def validate_release_config(config: dict, *, allow_development_mode: bool, skip_
 def display_command(command: list[str]) -> str:
     sensitive_flags = {
         "--naver-client-secret",
+        "--naver-order-merchant-auth-key",
+        "--naver-order-button-auth-key",
+        "--naver-order-common-auth-key",
         "--admin-token",
         "--track-salt",
     }
@@ -314,6 +317,16 @@ def build_private_config_command(config: dict) -> list[str]:
         required(config, "naver_pay.chain_id"),
         "--naver-client-secret",
         required(config, "naver_pay.client_secret"),
+        "--naver-application-type",
+        value(config, "naver_pay.application_type", "order"),
+        "--naver-order-account-id",
+        value(config, "naver_pay.order_account_id", ""),
+        "--naver-order-merchant-auth-key",
+        value(config, "naver_pay.order_merchant_auth_key", ""),
+        "--naver-order-button-auth-key",
+        value(config, "naver_pay.order_button_auth_key", ""),
+        "--naver-order-common-auth-key",
+        value(config, "naver_pay.order_common_auth_key", ""),
         "--naver-mode",
         value(config, "naver_pay.mode", "production"),
         "--naver-approve-url",
