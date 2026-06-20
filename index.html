@@ -1110,6 +1110,35 @@
         min-height: 54px;
       }
 
+      .npay-button {
+        display: inline-flex;
+        width: 100%;
+        min-height: 54px;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border: 1px solid #45c852;
+        border-radius: 8px;
+        background: #5fdb63;
+        color: #050505;
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .npay-mark {
+        display: inline-flex;
+        width: 24px;
+        height: 24px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: #050505;
+        color: #5fdb63;
+        font-size: 16px;
+        font-weight: 950;
+        line-height: 1;
+      }
+
       .info-list {
         display: grid;
         gap: 12px;
@@ -1310,14 +1339,17 @@
         gap: 10px;
       }
 
-      .detail-bottom-actions.single-action {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .detail-bottom-actions .btn {
+      .detail-bottom-actions .btn,
+      .detail-bottom-actions .npay-button {
         min-height: 52px;
         border-radius: 8px;
         font-size: 14px;
+      }
+
+      .detail-bottom-actions .npay-mark {
+        width: 22px;
+        height: 22px;
+        font-size: 15px;
       }
 
       .origin-card {
@@ -2123,6 +2155,7 @@
             "ViewContent",
             "ProductDetailClick",
             "PurchaseCtaClick",
+            "NpayPurchaseClick",
             "PaymentPageButtonClick",
             "InitiateCheckout",
             "CheckoutPageView",
@@ -2879,13 +2912,14 @@
           }
           if (action === "apply") {
             const checkoutSource = target.dataset.checkoutSource || "direct_buy";
-            trackCommerceEvent("PurchaseCtaClick", {
+            const isNpayTrackingClick = checkoutSource === "npay";
+            trackCommerceEvent(isNpayTrackingClick ? "NpayPurchaseClick" : "PurchaseCtaClick", {
               source: checkoutSource,
               buttonLabel: target.textContent.trim(),
               paymentMethod: "toss_pg",
-              fakeDoorEvent: "PurchaseIntent",
+              fakeDoorEvent: isNpayTrackingClick ? "NpayCheckoutIntent" : "PurchaseIntent",
             });
-            state.form.paymentMethod = state.form.paymentMethod || "toss_pg";
+            state.form.paymentMethod = "toss_pg";
             navigate("apply", {
               form: { ...state.form },
               draftSubmissionId: "",
@@ -3814,9 +3848,13 @@
         function renderDetailBottomBar() {
           return `
             <div class="bottom-bar">
-              <div class="bottom-inner detail-bottom-actions single-action">
+              <div class="bottom-inner detail-bottom-actions">
                 <button class="btn primary" type="button" data-action="apply" data-checkout-source="direct_buy">
                   바로 구매하기
+                </button>
+                <button class="npay-button" type="button" data-action="apply" data-checkout-source="npay" aria-label="N pay 구매">
+                  <span class="npay-mark">N</span>
+                  <span>pay 구매</span>
                 </button>
               </div>
             </div>

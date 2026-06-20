@@ -202,10 +202,14 @@ class LiveReport:
             self.add("PASS", "toss-public", "secret exposure", "no Toss secret in public JS")
 
         home = request(self.base_url, "/")
-        if "payment/naverpay-config.js" in home.text or 'data-checkout-source="npay"' in home.text:
-            self.add("FAIL", "payment-scope", "Naver Pay storefront entry", "still exposed on home")
+        if "payment/naverpay-config.js" in home.text:
+            self.add("FAIL", "payment-scope", "Naver Pay runtime config", "still loaded on home")
         else:
-            self.add("PASS", "payment-scope", "Naver Pay storefront entry", "not exposed")
+            self.add("PASS", "payment-scope", "Naver Pay runtime config", "not loaded")
+        if 'data-checkout-source="npay"' in home.text and "NpayPurchaseClick" in home.text:
+            self.add("PASS", "payment-scope", "N pay click tracking entry", "present")
+        else:
+            self.add("FAIL", "payment-scope", "N pay click tracking entry", "missing")
 
     def check_protected_paths(self) -> None:
         admin = request(self.base_url, "/payment/admin-orders.php")

@@ -101,10 +101,14 @@ class Smoke:
             self.ok("home contains brand and Toss runtime config script")
         else:
             self.fail("home is missing ITTEMMALL or Toss payment runtime config script")
-        if "payment/naverpay-config.js" in text or 'data-checkout-source="npay"' in text:
-            self.fail("home still exposes a Naver Pay storefront entry")
+        if "payment/naverpay-config.js" in text:
+            self.fail("home still loads Naver Pay runtime config")
         else:
-            self.ok("home does not expose a Naver Pay storefront entry")
+            self.ok("home does not load Naver Pay runtime config")
+        if 'data-checkout-source="npay"' in text and "NpayPurchaseClick" in text:
+            self.ok("home keeps N pay click tracking entry")
+        else:
+            self.fail("home is missing N pay click tracking entry")
         if "application/ld+json" in text and "schema.org" in text:
             self.ok("home contains structured data")
         else:

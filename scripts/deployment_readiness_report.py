@@ -231,18 +231,21 @@ def check_public_package() -> list[Check]:
     return checks
 
 
-def check_naver_scope_excluded() -> list[Check]:
+def check_npay_tracking_scope() -> list[Check]:
     index = read_text(ROOT / "index.html")
-    exposed_snippets = [
+    actual_integration_snippets = [
         "payment/naverpay-config.js",
-        'data-checkout-source="npay"',
-        "NpayPurchaseClick",
         "paymentMethods.naver_pay",
     ]
-    exposed = [snippet for snippet in exposed_snippets if snippet in index]
+    exposed = [snippet for snippet in actual_integration_snippets if snippet in index]
     if exposed:
-        return [Check("FAIL", "payment-scope", "잇템몰 고객 화면에 네이버페이 진입점이 남아 있습니다: " + ", ".join(exposed))]
-    return [Check("PASS", "payment-scope", "잇템몰 고객 화면은 Toss PG 기준이며 네이버페이 구매 진입점이 없습니다.")]
+        return [Check("FAIL", "payment-scope", "잇템몰에 실제 네이버페이 연동 흔적이 남아 있습니다: " + ", ".join(exposed))]
+
+    required_tracking = ['data-checkout-source="npay"', "NpayPurchaseClick", "NpayCheckoutIntent"]
+    missing = [snippet for snippet in required_tracking if snippet not in index]
+    if missing:
+        return [Check("FAIL", "payment-scope", "N pay 클릭 추적 버튼/이벤트가 빠져 있습니다: " + ", ".join(missing))]
+    return [Check("PASS", "payment-scope", "잇템몰은 Toss PG 실제 결제 기준이며 N pay 버튼은 클릭 추적용으로만 남아 있습니다.")]
 
 
 def check_public_toss_config() -> list[Check]:
@@ -455,7 +458,7 @@ def build_report() -> list[Check]:
     checks.extend(check_rate_limit_safety())
     checks.extend(check_public_package())
     checks.extend(check_public_toss_config())
-    checks.extend(check_naver_scope_excluded())
+    checks.extend(check_npay_tracking_scope())
     checks.extend(check_private_setup())
     checks.extend(check_legal_pages())
     checks.extend(check_docs())
