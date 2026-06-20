@@ -620,61 +620,6 @@
         line-height: 1.5;
       }
 
-      .server-sync-card {
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #f8fafc;
-        padding: 12px;
-      }
-
-      .server-sync-card strong {
-        display: block;
-        color: #111827;
-        font-size: 12px;
-        font-weight: 950;
-      }
-
-      .server-sync-card p {
-        margin: 5px 0 0;
-        color: var(--muted);
-        font-size: 12px;
-        line-height: 1.5;
-      }
-
-      .server-sync-card.is-synced {
-        border-color: #86efac;
-        background: #f0fdf4;
-      }
-
-      .server-sync-card.is-owner,
-      .server-sync-card.is-failed {
-        border-color: #fed7aa;
-        background: #fff7ed;
-      }
-
-      .npay-prep-note {
-        display: grid;
-        gap: 6px;
-        margin-top: 14px;
-        border: 1px solid #bbf7d0;
-        border-radius: 8px;
-        background: #f0fdf4;
-        padding: 13px;
-      }
-
-      .npay-prep-note strong {
-        color: #064e3b;
-        font-size: 13px;
-        font-weight: 950;
-      }
-
-      .npay-prep-note span {
-        color: #166534;
-        font-size: 12px;
-        font-weight: 800;
-        line-height: 1.5;
-      }
-
       .product-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2169,9 +2114,9 @@
           },
           naver_pay: {
             label: "네이버페이",
-            badge: "주문형 준비",
-            description: "상품 상세의 N pay 구매 버튼 자리에서 주문형 가맹 신청과 연동 검수를 준비합니다. 승인 전에는 실제 네이버페이 결제창을 열지 않습니다.",
-            guideItems: ["상품 상세의 N pay 구매 버튼에서 주문서를 시작합니다.", "주문 정보는 이 브라우저에 저장되고, 운영 서버 설정이 있으면 서버 주문 저장소에도 저장됩니다.", "가맹 승인과 인증키 발급 후 네이버페이 주문등록/구매하기 SDK를 연결합니다."],
+            badge: "추가 적용",
+            description: "네이버페이는 잇템몰 요건 완성 후 결제형 심사와 연동을 진행합니다.",
+            guideItems: ["주문 내용을 확인합니다.", "네이버페이 적용 가능 시 별도 안내드립니다.", "결제 후 배송 준비가 시작됩니다."],
           },
           card_pg: {
             label: "일반결제",
@@ -2524,9 +2469,6 @@
         function formatSubmissionStatus(value) {
           if (value === "order_received") return "주문 접수 완료";
           if (value === "payment_pending") return "결제 안내 대기";
-          if (value === "payment_ready" || value === "ready") return "네이버페이 승인 대기";
-          if (value === "payment_approved" || value === "approved") return "결제 승인 완료";
-          if (value === "payment_failed" || value === "authorization_failed") return "결제 확인 필요";
           return "주문 확인 중";
         }
 
@@ -2541,99 +2483,6 @@
             source: "ittemmall-payment-page",
           });
           return `/payment/toss-checkout.html?${params.toString()}`;
-        }
-
-        function serverOrderEndpoint() {
-          const config = window.ITTEMMALL_NAVER_PAY_CONFIG || {};
-          return config.orderEndpoint || `${window.location.origin}/payment/order-store.php`;
-        }
-
-        function updateStoredSubmission(id, patch) {
-          if (!id) return null;
-          const storedItems = readJson(storageKeys.submissions, []);
-          const items = Array.isArray(storedItems) ? storedItems : [];
-          const next = items.map((item) =>
-            item.id === id ? { ...item, ...patch, updatedAt: new Date().toISOString() } : item,
-          );
-          saveSubmissions(next);
-          return next.find((item) => item.id === id) || null;
-        }
-
-        function buildServerOrderPayload(submission) {
-          const customer = submission.customer || {};
-          return {
-            id: submission.id,
-            productId: submission.productId,
-            selectedOptions: submission.selectedOptions || {},
-            quantity: Number(submission.quantity || 1),
-            customer: {
-              name: customer.name || "",
-              phone: customer.phone || "",
-              email: customer.email || "",
-              fulfillmentPrimary: customer.fulfillmentPrimary || "",
-              request: customer.request || "",
-              agreeNotice: Boolean(customer.agreeNotice || customer.agreeTermsPrivacy),
-              agreeTermsPrivacy: Boolean(customer.agreeTermsPrivacy || customer.agreeNotice),
-              agreeContact: Boolean(customer.agreeContact),
-            },
-            paymentMethod: submission.paymentMethod || "standard",
-            origin: state.origin || { page: "home" },
-            createdAt: submission.createdAt || "",
-            updatedAt: submission.updatedAt || "",
-          };
-        }
-
-        function shouldRenderAfterServerSync(id) {
-          return state.lastSubmissionId === id || state.viewSubmissionId === id;
-        }
-
-        async function syncSubmissionToServer(submission) {
-          if (!submission || !submission.id) return;
-          if (location.protocol === "file:") {
-            updateStoredSubmission(submission.id, {
-              serverSyncStatus: "skipped",
-              serverSyncMessage: "로컬 파일에서는 서버 주문 저장을 건너뜁니다.",
-            });
-            return;
-          }
-
-          updateStoredSubmission(submission.id, {
-            serverSyncStatus: "syncing",
-            serverSyncMessage: "운영 서버 주문 저장소에 저장을 시도하고 있습니다.",
-          });
-          if (shouldRenderAfterServerSync(submission.id)) render();
-
-          try {
-            const response = await fetch(serverOrderEndpoint(), {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ order: buildServerOrderPayload(submission) }),
-              credentials: "same-origin",
-            });
-            const data = await response.json().catch(() => ({}));
-            if (response.ok && data.ok) {
-              updateStoredSubmission(submission.id, {
-                serverSyncStatus: "synced",
-                serverSyncMessage: "서버 주문 저장 완료",
-                serverStoredAt: data.order?.serverStoredAt || new Date().toISOString(),
-                serverPaymentStatus: data.order?.paymentStatus || "",
-                serverStatus: data.order?.status || "",
-              });
-            } else {
-              updateStoredSubmission(submission.id, {
-                serverSyncStatus: response.status === 501 ? "owner_gate" : "failed",
-                serverSyncMessage:
-                  data.message || data.error || "서버 주문 저장을 완료하지 못했습니다.",
-              });
-            }
-          } catch (error) {
-            updateStoredSubmission(submission.id, {
-              serverSyncStatus: "failed",
-              serverSyncMessage: error.message || "서버 주문 저장 요청 중 오류가 발생했습니다.",
-            });
-          }
-
-          if (shouldRenderAfterServerSync(submission.id)) render();
         }
 
         function maskPhone(value) {
@@ -3408,7 +3257,6 @@
           state.editingSubmissionId = "";
           saveRecentAddressFromForm();
           navigate("payment");
-          syncSubmissionToServer(submission);
         }
 
         function upsertSubmission(status = "payment_pending") {
@@ -3443,12 +3291,8 @@
               ...state.form,
               ...address,
               fulfillmentPrimary: address.fulfillmentPrimary,
-              agreeNotice: Boolean(state.form.agreeNotice || state.form.agreeTermsPrivacy),
-              agreeTermsPrivacy: Boolean(state.form.agreeTermsPrivacy || state.form.agreeNotice),
             },
             source: "ittemmall-mobile-mvp-file",
-            serverSyncStatus: existing?.serverSyncStatus || "queued",
-            serverSyncMessage: existing?.serverSyncMessage || "서버 주문 저장 대기",
             createdAt: existing?.createdAt || now,
             updatedAt: now,
           };
@@ -3869,10 +3713,6 @@
                     <div class="quantity-value">${state.quantity}</div>
                     <button type="button" data-action="quantity-plus" aria-label="수량 늘리기">+</button>
                   </div>
-                </div>
-                <div class="npay-prep-note">
-                  <strong>네이버페이 주문형 가맹 신청 준비</strong>
-                  <span>N pay 구매 버튼 위치와 주문서 흐름을 준비했습니다. 가맹 승인 및 인증키 발급 전에는 실제 결제창이 열리지 않습니다.</span>
                 </div>
               </section>
 
@@ -4358,7 +4198,6 @@
           const method = paymentMethods[submission.paymentMethod] || paymentMethods.naver_pay;
           const isManual = submission.paymentMethod === "manual";
           const isToss = submission.paymentMethod === "toss_pg";
-          const isNaverPay = submission.paymentMethod === "naver_pay";
           const tossCheckoutUrl = isToss ? buildTossCheckoutUrl(submission) : "";
           return `
             <main>
@@ -4366,12 +4205,11 @@
                 ${renderOriginCard("결제수단 확인 후 접수 완료 또는 주문 수정으로 이동할 수 있습니다.", "back", "주문서로", "history", "주문 내역")}
                 <section class="payment-status-card">
                   <span class="method-badge">${escapeHtml(method.badge)}</span>
-                  <h1>${escapeHtml(method.label)} ${isNaverPay ? "주문형 준비" : "안내 요청"}</h1>
+                  <h1>${escapeHtml(method.label)} 안내 요청</h1>
                   <p>${escapeHtml(method.description)}</p>
                   <ul class="owner-gate-list">
                     ${(method.guideItems || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
                   </ul>
-                  ${renderServerSyncNotice(submission)}
                   <div class="button-row">
                     ${
                       isToss
@@ -4424,31 +4262,6 @@
                 </div>
               </div>
             </section>
-          `;
-        }
-
-        function renderServerSyncNotice(submission) {
-          const status = submission.serverSyncStatus || "queued";
-          const message = submission.serverSyncMessage || "서버 주문 저장 대기";
-          const labels = {
-            queued: "서버 주문 저장 대기",
-            syncing: "서버 주문 저장 중",
-            synced: "서버 주문 저장 완료",
-            owner_gate: "서버 저장소 설정 대기",
-            failed: "서버 주문 저장 확인 필요",
-            skipped: "서버 주문 저장 건너뜀",
-          };
-          const className =
-            status === "synced"
-              ? "is-synced"
-              : status === "owner_gate" || status === "failed"
-                ? "is-owner"
-                : "";
-          return `
-            <div class="server-sync-card ${className}">
-              <strong>${escapeHtml(labels[status] || labels.queued)}</strong>
-              <p>${escapeHtml(message)}</p>
-            </div>
           `;
         }
 
@@ -4532,14 +4345,6 @@
                   <dd>${escapeHtml(formatPaymentMethod(submission.paymentMethod))}</dd>
                   <dt>상태</dt>
                   <dd>${escapeHtml(formatSubmissionStatus(submission.status || submission.paymentStatus))}</dd>
-                  ${
-                    submission.serverSyncStatus
-                      ? `
-                        <dt>서버 저장</dt>
-                        <dd>${escapeHtml(submission.serverSyncMessage || submission.serverSyncStatus)}</dd>
-                      `
-                      : ""
-                  }
                   <dt>연락처</dt>
                   <dd>${escapeHtml(maskPhone(submission.customer?.phone))}</dd>
                 </dl>
@@ -4699,14 +4504,6 @@
                     <dd>${escapeHtml(submission.customer?.request || "-")}</dd>
                     <dt>저장 시각</dt>
                     <dd>${formatDate(submission.updatedAt)}</dd>
-                    ${
-                      submission.serverSyncStatus
-                        ? `
-                          <dt>서버 저장</dt>
-                          <dd>${escapeHtml(submission.serverSyncMessage || submission.serverSyncStatus)}</dd>
-                        `
-                        : ""
-                    }
                   </dl>
                 </section>
                 <div class="button-row" style="margin-top:14px">

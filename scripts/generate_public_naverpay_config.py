@@ -57,8 +57,6 @@ def build_config(args: argparse.Namespace) -> str:
         f"  var siteOrigin = window.location.origin || {js_string(site_origin)};",
         "  window.ITTEMMALL_NAVER_PAY_CONFIG = {",
         f"    mode: {js_string(args.mode)},",
-        f"    applicationType: {js_string(args.application_type)},",
-        f"    reviewButtonPlacement: {js_string(args.review_button_placement)},",
         f"    clientId: {js_string(client_id)},",
         f"    chainId: {js_string(chain_id)},",
         f"    openType: {js_string(args.open_type)},",
@@ -78,8 +76,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--client-id", required=True, help="Issued public Naver Pay Client ID.")
     parser.add_argument("--chain-id", required=True, help="Issued public Naver Pay Chain ID.")
     parser.add_argument("--mode", choices=["development", "production"], default="production")
-    parser.add_argument("--application-type", choices=["order", "payment", "combined"], default="order")
-    parser.add_argument("--review-button-placement", default="product_detail")
     parser.add_argument("--open-type", choices=["page", "popup"], default="page")
     parser.add_argument("--site-origin", default=DEFAULT_SITE_ORIGIN, help="Fallback public site origin.")
     parser.add_argument("--return-url", default="", help="Optional fixed Naver Pay return URL.")

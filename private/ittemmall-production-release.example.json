@@ -34,14 +34,9 @@
     "enable_approval": false
   },
   "naver_pay": {
-    "application_type": "order",
     "client_id": "ISSUED_CLIENT_ID",
     "chain_id": "ISSUED_CHAIN_ID",
     "client_secret": "ISSUED_CLIENT_SECRET",
-    "order_account_id": "",
-    "order_merchant_auth_key": "",
-    "order_button_auth_key": "",
-    "order_common_auth_key": "",
     "mode": "production",
     "open_type": "page",
     "return_url": "",

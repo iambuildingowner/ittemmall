@@ -20,13 +20,6 @@ return [
     'NAVER_PAY_CLIENT_ID' => 'issued-public-client-id',
     'NAVER_PAY_CHAIN_ID' => 'issued-chain-id',
     'NAVER_PAY_CLIENT_SECRET' => 'issued-server-only-client-secret',
-    'NAVER_PAY_APPLICATION_TYPE' => 'order',
-    // Order-type values are placeholders until Naver Pay Center issues the official guide.
-    // Keep real merchant/common authentication keys outside the public web root.
-    'NAVER_PAY_ORDER_ACCOUNT_ID' => '',
-    'NAVER_PAY_ORDER_MERCHANT_AUTH_KEY' => '',
-    'NAVER_PAY_ORDER_BUTTON_AUTH_KEY' => '',
-    'NAVER_PAY_ORDER_COMMON_AUTH_KEY' => '',
     'NAVER_PAY_MODE' => 'development',
     // Optional. Leave empty unless Naver Pay gives you a merchant-specific approval URL.
     'NAVER_PAY_APPROVE_URL' => '',
