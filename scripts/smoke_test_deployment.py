@@ -97,10 +97,14 @@ class Smoke:
         response = request(self.base_url, "/")
         self.assert_status(response, {200}, "home loads")
         text = response.text
-        if "ITTEMMALL" in text and "payment/toss-config.js" in text and "payment/naverpay-config.js" in text:
-            self.ok("home contains brand and runtime config script")
+        if "ITTEMMALL" in text and "payment/toss-config.js" in text:
+            self.ok("home contains brand and Toss runtime config script")
         else:
-            self.fail("home is missing ITTEMMALL or payment runtime config scripts")
+            self.fail("home is missing ITTEMMALL or Toss payment runtime config script")
+        if "payment/naverpay-config.js" in text or 'data-checkout-source="npay"' in text:
+            self.fail("home still exposes a Naver Pay storefront entry")
+        else:
+            self.ok("home does not expose a Naver Pay storefront entry")
         if "application/ld+json" in text and "schema.org" in text:
             self.ok("home contains structured data")
         else:
@@ -118,7 +122,6 @@ class Smoke:
             "/payment/ops.html",
             "/payment/order-lookup.html",
             "/payment/toss-config.js",
-            "/payment/naverpay-config.js",
             "/assets/ittemmall/favicon.svg",
             "/assets/ittemmall/ittemmall-model-floor.png",
             "/assets/ittemmall/ittemmall-c-pink-thumb-main.png",
@@ -170,37 +173,19 @@ class Smoke:
         else:
             self.fail("404 page is missing recovery actions")
 
-        config = request(self.base_url, "/payment/naverpay-config.js")
+        config = request(self.base_url, "/payment/toss-config.js")
         text = config.text
-        if "ITTEMMALL_NAVER_PAY_CONFIG" not in text:
-            self.fail("runtime config does not define ITTEMMALL_NAVER_PAY_CONFIG")
-        elif "CLIENT_SECRET" in text or "clientSecret" in text:
-            self.fail("runtime config appears to expose a secret field")
+        if "ITTEMMALL_TOSS_PAYMENTS_CONFIG" not in text:
+            self.fail("runtime config does not define ITTEMMALL_TOSS_PAYMENTS_CONFIG")
+        elif "SECRET_KEY" in text or "secretKey" in text:
+            self.fail("runtime config appears to expose a Toss secret field")
         else:
-            self.ok("runtime config exposes only public fields")
+            self.ok("Toss runtime config exposes only public fields")
 
-        public_config_problems = []
-        if 'clientId: ""' in text or "clientId: ''" in text:
-            public_config_problems.append("empty clientId")
-        if 'chainId: ""' in text or "chainId: ''" in text:
-            public_config_problems.append("empty chainId")
-        placeholder_markers = [
-            "NAVER_PAY_PUBLIC_CLIENT_ID",
-            "NAVER_PAY_CHAIN_ID",
-            "PUBLIC_CLIENT_ID",
-            "PUBLIC_CHAIN_ID",
-            "YOUR_CLIENT_ID",
-            "YOUR_CHAIN_ID",
-        ]
-        if any(marker in text for marker in placeholder_markers):
-            public_config_problems.append("placeholder public key")
-
-        if self.require_naver_config and public_config_problems:
-            self.fail("runtime config public Naver Pay settings incomplete: " + ", ".join(public_config_problems))
-        elif public_config_problems:
-            self.warn("runtime config public Naver Pay settings incomplete: " + ", ".join(public_config_problems))
+        if "clientKey" in text:
+            self.ok("Toss runtime config includes clientKey field")
         else:
-            self.ok("runtime config public Naver Pay settings are populated")
+            self.fail("Toss runtime config is missing clientKey field")
 
     def check_payment_pages(self) -> None:
         payment = request(self.base_url, "/payment/")
@@ -235,13 +220,6 @@ class Smoke:
             self.ok("customer order lookup page has expected content")
         else:
             self.fail("customer order lookup page content is unexpected")
-
-        return_page = request(self.base_url, "/payment/return.html?orderId=IT-SMOKE&paymentId=PAY-SMOKE")
-        self.assert_status(return_page, {200}, "Naver Pay return page loads")
-        if "NAVER PAY RETURN" in return_page.text or "네이버페이 승인" in return_page.text:
-            self.ok("Naver Pay return page has expected content")
-        else:
-            self.fail("Naver Pay return page content is unexpected")
 
     def check_protected_paths(self) -> None:
         if self.static_local:
@@ -283,9 +261,9 @@ class Smoke:
             data={"orderId": "IT-SMOKE-CANCEL"},
         )
         if cancel.status in {401, 501}:
-            self.ok(f"Naver Pay cancel API is guarded ({cancel.status})")
+            self.ok(f"legacy cancel API is guarded ({cancel.status})")
         else:
-            self.fail(f"Naver Pay cancel API is not guarded: got {cancel.status}")
+            self.fail(f"legacy cancel API is not guarded: got {cancel.status}")
 
         notification = request(
             self.base_url,
@@ -408,42 +386,13 @@ class Smoke:
             if notification.get("enabled") is True and notification.get("fromLooksValid") is not True:
                 self.fail("healthcheck order notification sender is not a valid email")
 
-        if naver.get("approveUrlLooksHttps") is False:
-            self.fail("healthcheck NAVER_PAY_APPROVE_URL is not HTTPS")
-        if naver.get("cancelUrlLooksHttps") is False:
-            self.fail("healthcheck NAVER_PAY_CANCEL_URL is not HTTPS")
-
         public_naver = data.get("publicNaverPay", {})
-        if isinstance(public_naver, dict) and public_naver:
-            if public_naver.get("configFileExists") is True:
-                self.ok("healthcheck public Naver Pay config file exists")
-            else:
-                self.fail("healthcheck public Naver Pay config file missing")
-            if public_naver.get("clientSecretExposed") is True:
-                self.fail("healthcheck public Naver Pay config exposes clientSecret")
-            else:
-                self.ok("healthcheck public Naver Pay config has no clientSecret")
-            for key in ["clientIdConfigured", "chainIdConfigured", "modeMatchesServer", "clientIdMatchesServer", "chainIdMatchesServer"]:
-                if public_naver.get(key) is True:
-                    self.ok(f"healthcheck publicNaverPay.{key}")
-                elif self.require_naver_config:
-                    self.fail(f"healthcheck publicNaverPay.{key} is false")
-                else:
-                    self.warn(f"healthcheck publicNaverPay.{key} is false")
-        else:
-            self.warn("healthcheck publicNaverPay field is missing")
+        if isinstance(public_naver, dict) and public_naver.get("clientSecretExposed") is True:
+            self.fail("healthcheck legacy Naver Pay public config exposes clientSecret")
 
         readiness = data.get("readiness", {})
         if isinstance(readiness, dict):
-            missing_approval = readiness.get("missingForApproval") or []
             missing_operations = readiness.get("missingForOperations") or []
-            if readiness.get("readyToEnableNaverPayApproval") is True:
-                self.ok("healthcheck readyToEnableNaverPayApproval")
-            elif self.require_naver_config:
-                self.fail(f"healthcheck approval readiness missing: {missing_approval}")
-            else:
-                self.warn(f"healthcheck approval readiness missing: {missing_approval}")
-
             if readiness.get("readyForOrderOperations") is True:
                 self.ok("healthcheck readyForOrderOperations")
             else:
@@ -497,7 +446,7 @@ class Smoke:
                 "agreeTermsPrivacy": True,
                 "agreeContact": False,
             },
-            "paymentMethod": "naver_pay",
+            "paymentMethod": "toss_pg",
             "origin": {"page": "smoke-test"},
         }
 
@@ -617,7 +566,7 @@ def main() -> int:
     parser.add_argument(
         "--require-naver-config",
         action="store_true",
-        help="Fail if public Naver Pay config or server Naver Pay env vars are missing.",
+        help="Legacy no-op option kept for old command compatibility.",
     )
     parser.add_argument(
         "--write-test-order",

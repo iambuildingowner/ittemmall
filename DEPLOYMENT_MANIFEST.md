@@ -26,8 +26,8 @@
 - `payment/notification-test.php`
 - `payment/admin.html`
 - `payment/admin-orders.php`
-- `payment/naverpay-approve.php`
-- `payment/naverpay-cancel.php`
+- `payment/naverpay-approve.php` (비활성 레거시 엔드포인트, 고객 화면 진입 없음)
+- `payment/naverpay-cancel.php` (비활성 레거시 엔드포인트, 고객 화면 진입 없음)
 
 ## 공개 제외
 
@@ -57,7 +57,7 @@
 
 ## 오너 입력 후 production release
 
-1. `ITTEMMALL_LAUNCH_OWNER_CHECKLIST.md`를 기준으로 사업자/배송/환불/PG/페이 값을 수집한다.
+1. `ITTEMMALL_LAUNCH_OWNER_CHECKLIST.md`를 기준으로 사업자/배송/환불/Toss PG 값을 수집한다.
 2. `private/ittemmall-production-release.example.json`을 `private/ittemmall-production-release.production.json`으로 복사한다.
 3. 실제 값을 넣은 뒤 먼저 검증한다:
    `python3 scripts/prepare_production_release.py --config private/ittemmall-production-release.production.json --validate-only`
@@ -77,11 +77,10 @@
 - `ITTEMMALL_TRACK_LOG_PATH`
 - `ITTEMMALL_ADMIN_TOKEN`
 - `TOSS_PAYMENTS_SECRET_KEY`
-- `NAVER_PAY_CLIENT_SECRET`
 
 Toss 실제 결제는 운영 검증 전까지 `TOSS_PAYMENTS_APPROVE_ENABLED=0`과 `payment/toss-config.js`의 `enabled=false`를 유지한다.
 
-네이버페이 실제 승인/취소는 운영 검증 전까지 `NAVER_PAY_APPROVE_ENABLED=1`과 `NAVER_PAY_CANCEL_ENABLED=1`로 켜지 않는다.
+네이버페이 신청/연동은 잇템몰 본몰 범위가 아니며, 마르세 스포츠 프로젝트에서 별도로 진행한다.
 
 ## 완료 기준
 

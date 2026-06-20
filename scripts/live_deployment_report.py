@@ -160,7 +160,7 @@ class LiveReport:
 
     def check_public_pages(self) -> None:
         pages = [
-            ("/", "public", "home", ["ITTEMMALL", "payment/toss-config.js", "payment/naverpay-config.js"]),
+            ("/", "public", "home", ["ITTEMMALL", "payment/toss-config.js"]),
             ("/404.html", "public", "404 recovery", ["페이지를 찾을 수 없습니다", "상품 보기"]),
             ("/payment/ops.html", "ops", "operations page", ["운영 점검", "healthcheck.php", "메일 알림 테스트"]),
             ("/payment/order-lookup.html", "order-lookup", "customer order lookup page", ["주문 조회", "order-lookup.php"]),
@@ -188,7 +188,7 @@ class LiveReport:
         else:
             self.add("PASS", "legal", "owner legal values", "no ITTEMMALL_OWNER_TODO found")
 
-    def check_public_naver_config(self) -> None:
+    def check_payment_scope_config(self) -> None:
         toss_response = request(self.base_url, "/payment/toss-config.js")
         if toss_response.status != 200:
             self.add("FAIL", "toss-public", "runtime config", f"{toss_response.status} {toss_response.url}")
@@ -201,40 +201,11 @@ class LiveReport:
         else:
             self.add("PASS", "toss-public", "secret exposure", "no Toss secret in public JS")
 
-        response = request(self.base_url, "/payment/naverpay-config.js")
-        if response.status != 200:
-            self.add("FAIL", "naver-public", "runtime config", f"{response.status} {response.url}")
-            return
-        text = response.text
-        if "ITTEMMALL_NAVER_PAY_CONFIG" in text:
-            self.add("PASS", "naver-public", "runtime config object", "ITTEMMALL_NAVER_PAY_CONFIG found")
+        home = request(self.base_url, "/")
+        if "payment/naverpay-config.js" in home.text or 'data-checkout-source="npay"' in home.text:
+            self.add("FAIL", "payment-scope", "Naver Pay storefront entry", "still exposed on home")
         else:
-            self.add("FAIL", "naver-public", "runtime config object", "missing ITTEMMALL_NAVER_PAY_CONFIG")
-        if "clientSecret" in text or "CLIENT_SECRET" in text:
-            self.add("FAIL", "naver-public", "secret exposure", "clientSecret-like text found")
-        else:
-            self.add("PASS", "naver-public", "secret exposure", "no clientSecret in public JS")
-
-        for key in ["clientId", "chainId"]:
-            raw = public_config_value(text, key)
-            ready = raw != "" and not looks_placeholder(raw)
-            status: Status = "FAIL" if self.require_naver_config else "OWNER"
-            self.add_bool(
-                "naver-public",
-                f"{key} populated",
-                ready,
-                fail_status=status,
-                next_step=f"Generate payment/naverpay-config.js with real Naver Pay {key}.",
-            )
-
-        mode = public_config_value(text, "mode")
-        if mode == "production":
-            self.add("PASS", "naver-public", "mode", "production")
-        elif mode == "development":
-            status = "FAIL" if self.require_naver_config else "OWNER"
-            self.add(status, "naver-public", "mode", "development", "Regenerate public config with --mode production.")
-        else:
-            self.add("FAIL", "naver-public", "mode", mode or "missing")
+            self.add("PASS", "payment-scope", "Naver Pay storefront entry", "not exposed")
 
     def check_protected_paths(self) -> None:
         admin = request(self.base_url, "/payment/admin-orders.php")
@@ -263,7 +234,7 @@ class LiveReport:
             self.add(
                 "OWNER",
                 "security",
-                "cancel API guard",
+                "legacy cancel API guard",
                 "501 admin token or cancel API not configured",
                 "Set ITTEMMALL_ADMIN_TOKEN first; enable NAVER_PAY_CANCEL_ENABLED only after live approval tests.",
             )
@@ -395,26 +366,9 @@ class LiveReport:
         else:
             self.add("WARN", "config", "private config file", "not loaded; env vars may be used")
 
-        owner_status: Status = "FAIL" if self.require_naver_config else "OWNER"
-        naver_checks = [
-            ("naver-private", "client ID", "naverPay.clientIdConfigured", "Set NAVER_PAY_CLIENT_ID."),
-            ("naver-private", "client secret", "naverPay.clientSecretConfigured", "Set NAVER_PAY_CLIENT_SECRET server-side only."),
-            ("naver-private", "chain ID", "naverPay.chainIdConfigured", "Set NAVER_PAY_CHAIN_ID."),
-            ("naver-public", "public config file", "publicNaverPay.configFileExists", "Upload payment/naverpay-config.js."),
-            ("naver-public", "public client ID", "publicNaverPay.clientIdConfigured", "Regenerate public config with real clientId."),
-            ("naver-public", "public chain ID", "publicNaverPay.chainIdConfigured", "Regenerate public config with real chainId."),
-            ("naver-public", "mode matches server", "publicNaverPay.modeMatchesServer", "Use the same mode in public and private config."),
-            ("naver-public", "client ID matches server", "publicNaverPay.clientIdMatchesServer", "Use the same clientId in public and private config."),
-            ("naver-public", "chain ID matches server", "publicNaverPay.chainIdMatchesServer", "Use the same chainId in public and private config."),
-        ]
-        for area, name, path, next_step in naver_checks:
-            self.add_bool(area, name, json_get(parsed, path), fail_status=owner_status, next_step=next_step)
-
         secret_exposed = json_get(parsed, "publicNaverPay.clientSecretExposed")
-        if secret_exposed is False:
-            self.add("PASS", "naver-public", "secret exposure", "false")
-        else:
-            self.add("FAIL", "naver-public", "secret exposure", bool_label(secret_exposed), "Remove secrets from public JS.")
+        if secret_exposed is True:
+            self.add("FAIL", "legacy-payment", "public secret exposure", bool_label(secret_exposed), "Remove secrets from public JS.")
 
         self.add_bool(
             "admin",
@@ -434,15 +388,7 @@ class LiveReport:
 
         readiness = parsed.get("readiness", {})
         if isinstance(readiness, dict):
-            missing_approval = readiness.get("missingForApproval") or []
             missing_operations = readiness.get("missingForOperations") or []
-            self.add_bool(
-                "readiness",
-                "ready to enable Naver Pay approval",
-                readiness.get("readyToEnableNaverPayApproval"),
-                fail_status=owner_status,
-                next_step="Resolve missingForApproval: " + ", ".join(map(str, missing_approval)),
-            )
             self.add_bool(
                 "readiness",
                 "ready for order operations",
@@ -453,7 +399,7 @@ class LiveReport:
 
     def run(self) -> list[Check]:
         self.check_public_pages()
-        self.check_public_naver_config()
+        self.check_payment_scope_config()
         self.check_protected_paths()
         self.check_health()
         return self.checks
@@ -519,7 +465,7 @@ def main() -> int:
     parser.add_argument(
         "--require-naver-config",
         action="store_true",
-        help="Treat missing Naver Pay production config as FAIL instead of OWNER.",
+        help="Legacy no-op option kept for old command compatibility.",
     )
     parser.add_argument(
         "--strict",

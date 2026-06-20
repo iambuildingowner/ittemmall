@@ -117,8 +117,8 @@ def check_payment_safeguards() -> list[Check]:
     ]
     missing = [snippet for snippet in required if snippet not in approve + cancel]
     if missing:
-        return [Check("FAIL", "payment", "네이버페이 승인/취소 안전장치가 빠져 있습니다: " + ", ".join(missing))]
-    return [Check("PASS", "payment", "네이버페이 승인 전 상태 검증, 중복 승인 멱등 처리, 전체취소 보호 장치가 있습니다.")]
+        return [Check("FAIL", "legacy-payment", "비활성 레거시 결제 엔드포인트 안전장치가 빠져 있습니다: " + ", ".join(missing))]
+    return [Check("PASS", "legacy-payment", "비활성 레거시 결제 엔드포인트에 승인 전 상태 검증과 중복 승인 보호 장치가 있습니다.")]
 
 
 def check_admin_operations() -> list[Check]:
@@ -164,7 +164,6 @@ def check_rate_limit_safety() -> list[Check]:
     text = read_text(ROOT / "payment" / "rate-limit-lib.php")
     endpoints = "\n".join([
         read_text(ROOT / "payment" / "order-store.php"),
-        read_text(ROOT / "payment" / "naverpay-approve.php"),
         read_text(ROOT / "track.php"),
     ])
     required = [
@@ -173,13 +172,12 @@ def check_rate_limit_safety() -> list[Check]:
         "ITTEMMALL_ORDER_STORE_PATH",
         "RATE_LIMITED",
         "order-store",
-        "naverpay-approve",
         "track",
     ]
     missing = [snippet for snippet in required if snippet not in text + endpoints]
     if missing:
         return [Check("FAIL", "rate-limit", "주문/승인/추적 호출 제한 장치가 빠져 있습니다: " + ", ".join(missing))]
-    return [Check("PASS", "rate-limit", "주문 저장, 네이버페이 승인, 추적 POST에 private 파일 기반 호출 제한이 있습니다.")]
+    return [Check("PASS", "rate-limit", "주문 저장과 추적 POST에 private 파일 기반 호출 제한이 있습니다.")]
 
 
 def check_public_package() -> list[Check]:
@@ -233,56 +231,18 @@ def check_public_package() -> list[Check]:
     return checks
 
 
-def check_public_naver_config() -> list[Check]:
-    checks: list[Check] = []
-    text = read_text(ROOT / "payment" / "naverpay-config.js")
-    if "ITTEMMALL_NAVER_PAY_CONFIG" not in text:
-        return [Check("FAIL", "naver-public", "payment/naverpay-config.js에 ITTEMMALL_NAVER_PAY_CONFIG가 없습니다.")]
-
-    if "clientSecret" in text or "CLIENT_SECRET" in text:
-        checks.append(Check("FAIL", "naver-public", "public JS에 clientSecret처럼 보이는 문자열이 있습니다."))
-    else:
-        checks.append(Check("PASS", "naver-public", "public JS에는 clientSecret 필드가 없습니다."))
-
-    client_id = extract_config_value(text, "clientId")
-    chain_id = extract_config_value(text, "chainId")
-    mode = extract_config_value(text, "mode")
-
-    if not client_id or not chain_id:
-        checks.append(
-            Check(
-                "OWNER",
-                "naver-public",
-                "Naver Pay public clientId/chainId가 아직 비어 있습니다.",
-                "가맹점 발급 후 scripts/generate_public_naverpay_config.py 로 payment/naverpay-config.js를 생성하세요.",
-            )
-        )
-    elif is_placeholder(client_id) or is_placeholder(chain_id):
-        checks.append(
-            Check(
-                "OWNER",
-                "naver-public",
-                "Naver Pay public 설정이 예시/테스트 값으로 보입니다.",
-                "실제 발급 clientId/chainId로 다시 생성하세요.",
-            )
-        )
-    else:
-        checks.append(Check("PASS", "naver-public", "Naver Pay public clientId/chainId가 채워져 있습니다."))
-
-    if mode == "production":
-        checks.append(Check("PASS", "naver-public", "Naver Pay public mode가 production입니다."))
-    elif mode == "development":
-        checks.append(
-            Check(
-                "OWNER",
-                "naver-public",
-                "Naver Pay public mode가 development입니다.",
-                "실운영 전 --mode production 으로 public config를 다시 생성하세요.",
-            )
-        )
-    else:
-        checks.append(Check("FAIL", "naver-public", "Naver Pay public mode 값을 읽지 못했습니다."))
-    return checks
+def check_naver_scope_excluded() -> list[Check]:
+    index = read_text(ROOT / "index.html")
+    exposed_snippets = [
+        "payment/naverpay-config.js",
+        'data-checkout-source="npay"',
+        "NpayPurchaseClick",
+        "paymentMethods.naver_pay",
+    ]
+    exposed = [snippet for snippet in exposed_snippets if snippet in index]
+    if exposed:
+        return [Check("FAIL", "payment-scope", "잇템몰 고객 화면에 네이버페이 진입점이 남아 있습니다: " + ", ".join(exposed))]
+    return [Check("PASS", "payment-scope", "잇템몰 고객 화면은 Toss PG 기준이며 네이버페이 구매 진입점이 없습니다.")]
 
 
 def check_public_toss_config() -> list[Check]:
@@ -330,14 +290,14 @@ def check_public_toss_config() -> list[Check]:
 def check_private_setup() -> list[Check]:
     checks: list[Check] = []
     if (ROOT / "scripts" / "generate_private_config.py").is_file():
-        checks.append(Check("PASS", "naver-private", "private PHP 설정 생성 스크립트가 있습니다."))
+        checks.append(Check("PASS", "private", "private PHP 설정 생성 스크립트가 있습니다."))
     else:
-        checks.append(Check("FAIL", "naver-private", "scripts/generate_private_config.py가 없습니다."))
+        checks.append(Check("FAIL", "private", "scripts/generate_private_config.py가 없습니다."))
 
     if (ROOT / "private" / "ittemmall-server-config.example.php").is_file():
-        checks.append(Check("PASS", "naver-private", "private server config 예시가 있습니다."))
+        checks.append(Check("PASS", "private", "private server config 예시가 있습니다."))
     else:
-        checks.append(Check("FAIL", "naver-private", "private/ittemmall-server-config.example.php가 없습니다."))
+        checks.append(Check("FAIL", "private", "private/ittemmall-server-config.example.php가 없습니다."))
 
     release_script = read_text(ROOT / "scripts" / "prepare_production_release.py")
     if (ROOT / "scripts" / "prepare_production_release.py").is_file() and (
@@ -387,8 +347,8 @@ def check_private_setup() -> list[Check]:
     checks.append(
         Check(
             "OWNER",
-            "naver-private",
-            "실제 NAVER_PAY_CLIENT_SECRET과 ITTEMMALL_ADMIN_TOKEN은 운영 서버 private config에 넣어야 합니다.",
+            "private",
+            "실제 TOSS_PAYMENTS_SECRET_KEY와 ITTEMMALL_ADMIN_TOKEN은 운영 서버 private config에 넣어야 합니다.",
             "build/ittemmall-private/ittemmall-server-config.php를 생성한 뒤 public web root 밖에 업로드하세요.",
         )
     )
@@ -453,13 +413,12 @@ def check_legal_pages() -> list[Check]:
 def check_docs() -> list[Check]:
     checks: list[Check] = []
     manifest = read_text(ROOT / "DEPLOYMENT_MANIFEST.md")
-    setup = read_text(ROOT / "payment" / "NAVERPAY_SETUP.md")
+    setup = read_text(ROOT / "payment" / "TOSS_SETUP.md")
     owner_checklist = read_text(ROOT / "ITTEMMALL_LAUNCH_OWNER_CHECKLIST.md")
     required_snippets = [
         "ITTEMMALL_LAUNCH_OWNER_CHECKLIST.md",
         "private/ittemmall-production-release.production.json",
         "check_catalog_consistency.py",
-        "generate_public_naverpay_config.py",
         "generate_private_config.py",
         "prepare_production_release.py",
         "release-backups",
@@ -474,8 +433,8 @@ def check_docs() -> list[Check]:
         "legal/business.html",
         "legal/privacy.html",
         "legal/refund.html",
-        "NAVER_PAY_APPROVE_ENABLED=1",
-        "NAVER_PAY_CANCEL_ENABLED=1",
+        "payment/toss-config.js",
+        "TOSS_PAYMENTS_APPROVE_ENABLED",
     ]
     missing = [snippet for snippet in required_snippets if snippet not in manifest + setup + owner_checklist]
     if missing:
@@ -496,7 +455,7 @@ def build_report() -> list[Check]:
     checks.extend(check_rate_limit_safety())
     checks.extend(check_public_package())
     checks.extend(check_public_toss_config())
-    checks.extend(check_public_naver_config())
+    checks.extend(check_naver_scope_excluded())
     checks.extend(check_private_setup())
     checks.extend(check_legal_pages())
     checks.extend(check_docs())
