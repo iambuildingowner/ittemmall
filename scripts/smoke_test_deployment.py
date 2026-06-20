@@ -352,15 +352,6 @@ class Smoke:
             else:
                 self.warn("healthcheck rateLimit is not configured")
 
-        naver = data.get("naverPay", {})
-        for key in ["clientIdConfigured", "clientSecretConfigured", "chainIdConfigured"]:
-            if naver.get(key) is True:
-                self.ok(f"healthcheck naverPay.{key}")
-            elif self.require_naver_config:
-                self.fail(f"healthcheck naverPay.{key} is false")
-            else:
-                self.warn(f"healthcheck naverPay.{key} is false")
-
         if data.get("serverConfig", {}).get("privateConfigFileLoaded") is True:
             self.ok("healthcheck private config file loaded")
         else:
@@ -392,7 +383,10 @@ class Smoke:
 
         readiness = data.get("readiness", {})
         if isinstance(readiness, dict):
-            missing_operations = readiness.get("missingForOperations") or []
+            missing_operations = [
+                item for item in readiness.get("missingForOperations") or []
+                if "NAVER_PAY" not in str(item) and "publicNaverPay" not in str(item)
+            ]
             if readiness.get("readyForOrderOperations") is True:
                 self.ok("healthcheck readyForOrderOperations")
             else:

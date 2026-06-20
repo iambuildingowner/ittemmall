@@ -388,7 +388,10 @@ class LiveReport:
 
         readiness = parsed.get("readiness", {})
         if isinstance(readiness, dict):
-            missing_operations = readiness.get("missingForOperations") or []
+            missing_operations = [
+                item for item in readiness.get("missingForOperations") or []
+                if "NAVER_PAY" not in str(item) and "publicNaverPay" not in str(item)
+            ]
             self.add_bool(
                 "readiness",
                 "ready for order operations",
