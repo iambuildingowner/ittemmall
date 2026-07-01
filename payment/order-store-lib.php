@@ -70,7 +70,7 @@ function ittemmallProductCatalog(): array
             'price' => 59000,
         ],
         'product-003' => [
-            'name' => '윈드쿨 에어 팬 베스트',
+            'name' => '윈드쿨 에어 선풍기 조끼',
             'price' => 48900,
         ],
     ];
