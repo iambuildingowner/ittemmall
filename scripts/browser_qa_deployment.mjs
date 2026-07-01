@@ -18,8 +18,9 @@ const executablePath = args.get("--chrome-path") || undefined;
 const staticLocal = args.get("--static-local") === "true";
 
 const requiredTexts = {
-  desktopHome: ["ITTEMMALL", "MARCE", "대표 상품 보기"],
+  desktopHome: ["ITTEMMALL", "MARCE", "테스트 상품 보기"],
   productDetail: ["MARCE 스위트 피클볼 패들", "바로 구매하기", "USAPA"],
+  windcoolDetail: ["윈드쿨 에어 팬 베스트", "₩ 48,900", "N pay 구매", "보조배터리"],
   paymentFlow: ["토스페이먼츠 안내 요청", "토스 결제창 열기", "주문 수정"],
   tossCheckout: ["토스페이먼츠 결제", "토스 결제하기", "주문 요약"],
   admin: ["Orders Admin", "주문 관리"],
@@ -42,6 +43,29 @@ const visits = [
     url: `${baseUrl}/#/product/pink`,
     viewport: { width: 1440, height: 1100 },
     texts: requiredTexts.productDetail,
+  },
+  {
+    label: "windcool fan vest detail",
+    url: `${baseUrl}/?codex_test=1#/product/windcool-vest`,
+    viewport: { width: 390, height: 900 },
+    texts: requiredTexts.windcoolDetail,
+    setup: async (page) => {
+      await page.waitForFunction(() => location.hash === "#/product/windcool-vest", null, { timeout: 10000 });
+      await page.waitForFunction(() => document.body.innerText.includes("윈드쿨 에어 팬 베스트"), null, {
+        timeout: 10000,
+      });
+      const oldPriceVisible = await page.evaluate(() => {
+        const text = document.body.innerText;
+        return text.includes("₩ 79,000") || text.includes("₩ 99,000") || text.includes("20%");
+      });
+      if (oldPriceVisible) {
+        throw new Error("windcool detail still shows old price or discount");
+      }
+      const npayButtons = await page.locator('button[data-action="apply"][data-checkout-source="npay"]').count();
+      if (npayButtons < 1) {
+        throw new Error("windcool detail is missing N pay tracking button");
+      }
+    },
   },
   {
     label: "desktop payment flow",

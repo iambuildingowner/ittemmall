@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light only" />
     <meta name="darkreader-lock" />
-    <title>ITTEMMALL | MARCE 피클볼</title>
+    <title>ITTEMMALL | 아이템 테스트몰</title>
     <meta
       name="description"
-      content="USAPA 공식 승인 인증을 받은 MARCE 스위트 피클볼 패들을 확인하고 배송지 입력, 결제수단 선택, 주문 접수까지 진행할 수 있는 ITTEMMALL 페이지입니다."
+      content="ITTEMMALL은 여러 카테고리의 신상품을 빠르게 비교하고 구매 의도와 결제 흐름을 확인할 수 있는 종합 아이템 테스트몰입니다."
     />
     <link rel="canonical" href="https://ittemmall.com/" />
+    <link rel="icon" type="image/svg+xml" href="assets/ittemmall/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
@@ -43,8 +44,8 @@
           },
           {
             "@type": "ItemList",
-            "@id": "https://ittemmall.com/#marce-products",
-            "name": "ITTEMMALL MARCE 상품",
+            "@id": "https://ittemmall.com/#products",
+            "name": "ITTEMMALL 테스트 상품",
             "itemListElement": [
               {
                 "@type": "ListItem",
@@ -83,6 +84,26 @@
                     "priceCurrency": "KRW",
                     "availability": "https://schema.org/InStock",
                     "url": "https://ittemmall.com/"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@type": "Product",
+                  "name": "윈드쿨 에어 팬 베스트",
+                  "brand": {
+                    "@type": "Brand",
+                    "name": "ITTEMMALL"
+                  },
+                  "image": "https://ittemmall.com/assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "48900",
+                    "priceCurrency": "KRW",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://ittemmall.com/#/product/windcool-vest"
                   }
                 }
               }
@@ -130,15 +151,15 @@
         --bg: #ffffff;
         --paper: #ffffff;
         --ink: #111111;
-        --brand: #1d4985;
-        --brand-light: #9ec4ea;
-        --muted: #71717a;
+        --brand: #111111;
+        --brand-light: #d4d4d8;
+        --muted: #666666;
         --line: #e4e4e7;
-        --soft: #f7f7f8;
+        --soft: #f7f7f7;
         --accent: var(--brand);
-        --accent-2: #f59e0b;
+        --accent-2: #525252;
         --danger: #b91c1c;
-        --shadow: 0 24px 60px rgba(24, 24, 27, 0.16);
+        --shadow: 0 24px 60px rgba(17, 17, 17, 0.14);
       }
 
       * {
@@ -182,7 +203,7 @@
         min-height: 100vh;
         margin: 0 auto;
         background: var(--paper);
-        box-shadow: 0 0 0 1px rgba(29, 73, 133, 0.06);
+        box-shadow: 0 0 0 1px rgba(17, 17, 17, 0.08);
       }
 
       .app-header {
@@ -267,11 +288,11 @@
 
       .hero {
         position: relative;
-        min-height: 316px;
+        min-height: 340px;
         overflow: hidden;
         border: 1px solid var(--brand);
         border-radius: 8px;
-        background: #050505;
+        background: #101010;
         color: white;
       }
 
@@ -281,13 +302,13 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        opacity: 1;
+        opacity: 0.82;
       }
 
       .hero::after {
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.32);
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.72));
         content: "";
       }
 
@@ -295,7 +316,7 @@
         position: relative;
         z-index: 1;
         display: flex;
-        min-height: 316px;
+        min-height: 340px;
         flex-direction: column;
         justify-content: space-between;
         padding: 26px;
@@ -430,6 +451,40 @@
         margin-bottom: 12px;
       }
 
+      .category-strip {
+        display: flex;
+        gap: 8px;
+        margin: 12px -16px 14px;
+        overflow-x: auto;
+        padding: 0 16px 2px;
+        scrollbar-width: none;
+      }
+
+      .category-strip::-webkit-scrollbar {
+        display: none;
+      }
+
+      .category-chip {
+        display: inline-flex;
+        min-height: 38px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: white;
+        color: #27272a;
+        padding: 0 13px;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .category-chip.is-active {
+        border-color: var(--brand);
+        background: var(--brand);
+        color: white;
+      }
+
       .field-shell {
         position: relative;
       }
@@ -475,7 +530,7 @@
       .textarea:focus,
       .search-input:focus {
         border-color: var(--brand);
-        box-shadow: 0 0 0 3px rgba(29, 73, 133, 0.14);
+        box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.12);
       }
 
       .input[readonly] {
@@ -543,8 +598,8 @@
 
       .payment-method-option:has(input:checked) {
         border-color: var(--brand);
-        background: #eff6ff;
-        box-shadow: 0 0 0 3px rgba(29, 73, 133, 0.1);
+        background: #f4f4f5;
+        box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
       }
 
       .payment-method-option input {
@@ -680,6 +735,35 @@
 
       .product-body {
         padding: 12px;
+      }
+
+      .product-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .product-kicker,
+      .status-chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 4px 7px;
+        font-size: 10px;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .product-kicker {
+        background: #f4f4f5;
+        color: #27272a;
+      }
+
+      .status-chip {
+        border: 1px solid #d4d4d8;
+        background: white;
+        color: #52525b;
       }
 
       .product-actions {
@@ -1184,7 +1268,7 @@
       .story-feature-image {
         margin: 8px 0 22px;
         border: 1px solid var(--line);
-        box-shadow: 0 18px 44px rgba(29, 73, 133, 0.08);
+        box-shadow: 0 18px 44px rgba(17, 17, 17, 0.08);
       }
 
       .certification-card {
@@ -1357,13 +1441,13 @@
         gap: 10px;
         margin-bottom: 14px;
         padding: 13px;
-        background: #f0fdfa;
-        border-color: #99f6e4;
+        background: #f7f7f7;
+        border-color: #d4d4d8;
       }
 
       .origin-card p {
         margin: 0;
-        color: #115e59;
+        color: #3f3f46;
         font-size: 12px;
         font-weight: 800;
         line-height: 1.45;
@@ -1810,13 +1894,13 @@
         const siteConfig = {
           brandName: "ITTEMMALL",
           logoText: "ITTEMMALL",
-          mainHeadline: "지금 주문 접수 가능한\n상품을 확인해보세요",
+          mainHeadline: "여러 아이템을 먼저\n잇템몰에서 테스트합니다",
           mainSubcopy:
-            "MARCE 스위트 피클볼 패들을 핑크와 블랙 두 가지 컬러로 비교하고 배송지와 결제수단까지 선택할 수 있습니다.",
-          heroEyebrow: "MARCE PICKLEBALL",
-          heroImage: "assets/ittemmall/ittemmall-model-floor.png",
-          heroButtonText: "대표 상품 보기",
-          productSectionTitle: "전체 상품",
+            "패션잡화, 스포츠, 생활용품, 시즌 상품까지 한 화면에서 비교하고 구매 버튼 클릭 의도를 확인합니다.",
+          heroEyebrow: "ITTEM ITEM TEST",
+          heroImage: "assets/ittemmall/ittemmall-brand-hero-final.png",
+          heroButtonText: "테스트 상품 보기",
+          productSectionTitle: "테스트 상품",
           footerLinks: ["고객센터", "사업자 정보", "이용약관", "개인정보처리방침"],
           legalInfo: {
             companyName: "공간",
@@ -1869,13 +1953,26 @@
           },
         };
 
+        const categories = [
+          { id: "all", label: "전체" },
+          { id: "fashion", label: "패션잡화" },
+          { id: "sports", label: "스포츠" },
+          { id: "living", label: "생활용품" },
+          { id: "digital", label: "디지털" },
+          { id: "seasonal", label: "시즌" },
+        ];
+
         const products = [
           {
             id: "product-001",
             name: "MARCE 스위트 피클볼 패들 (USAPA인증) - 핑크",
+            cardTitle: "MARCE 스위트 패들 - 핑크",
             shortDescription: "USAPA 공식 승인 인증을 받은 핑크 컬러 밸런스형 피클볼 패들",
             longDescription:
               "공식 경기 기준을 충족한 피클볼 패들. 입문자는 쉽게, 중급자는 더 강하게. 컨트롤·스핀·파워를 모두 갖춘 밸런스형 피클볼 패들입니다.",
+            categoryId: "sports",
+            categoryLabel: "스포츠",
+            statusLabel: "판매 테스트",
             price: 59000,
             originalPrice: 0,
             discountRate: 0,
@@ -1902,6 +1999,9 @@
               { label: "추천 실력", value: "입문자 ~ 중급자" },
             ],
             story: {
+              highlightEyebrow: "왜 MARCE 스위트인가",
+              highlightCopy:
+                "MARCE 스위트 피클볼 패들은 단순한 입문용 패들이 아닙니다. 처음에는 쉽게 적응하고, 실력이 늘수록 스핀과 파워를 활용할 수 있는 밸런스형 피클볼 패들입니다.",
               brandImages: [
                 {
                   src: "assets/ittemmall/ittemmall-c-hero-model.png",
@@ -1989,9 +2089,13 @@
           {
             id: "product-002",
             name: "MARCE 스위트 피클볼 패들 (USAPA인증) - 블랙",
+            cardTitle: "MARCE 스위트 패들 - 블랙",
             shortDescription: "USAPA 공식 승인 인증을 받은 블랙 컬러 밸런스형 피클볼 패들",
             longDescription:
               "공식 경기 기준을 충족한 피클볼 패들. 입문자는 쉽게, 중급자는 더 강하게. 컨트롤·스핀·파워를 모두 갖춘 밸런스형 피클볼 패들입니다.",
+            categoryId: "sports",
+            categoryLabel: "스포츠",
+            statusLabel: "판매 테스트",
             price: 59000,
             originalPrice: 0,
             discountRate: 0,
@@ -2018,6 +2122,9 @@
               { label: "추천 실력", value: "입문자 ~ 중급자" },
             ],
             story: {
+              highlightEyebrow: "왜 MARCE 스위트인가",
+              highlightCopy:
+                "MARCE 스위트 피클볼 패들은 단순한 입문용 패들이 아닙니다. 처음에는 쉽게 적응하고, 실력이 늘수록 스핀과 파워를 활용할 수 있는 밸런스형 피클볼 패들입니다.",
               brandImages: [
                 {
                   src: "assets/ittemmall/ittemmall-c-hero-model.png",
@@ -2099,6 +2206,121 @@
                 { label: "코어", value: "8mm 벌집형 PP 코어" },
                 { label: "페이스 소재", value: "마찰감 있는 카본 파이버" },
                 { label: "구조", value: "2세대 열성형 구조" },
+              ],
+            },
+          },
+          {
+            id: "product-003",
+            slug: "windcool-vest",
+            name: "윈드쿨 에어 팬 베스트",
+            cardTitle: "윈드쿨 팬 베스트",
+            shortDescription: "듀얼 팬으로 조끼 안쪽 공기 순환을 돕는 여름 야외활동용 팬 베스트",
+            longDescription:
+              "작업, 낚시, 캠핑처럼 더운 날 오래 밖에 있어야 할 때 입는 팬 베스트입니다. 보조배터리를 연결해 듀얼 팬이 조끼 안쪽 공기 순환을 돕고, 메쉬 원단과 다중 포켓으로 실용성을 더했습니다.",
+            categoryId: "seasonal",
+            categoryLabel: "시즌",
+            statusLabel: "판매 테스트",
+            price: 48900,
+            originalPrice: 0,
+            discountRate: 0,
+            extraFeeLabel: "추가 비용",
+            extraFee: 0,
+            image: "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
+            cardMediaClass: "",
+            detailMediaClass: "",
+            images: [
+              "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
+              "assets/ittemmall/fan-vest/windcool-vest-back-fans.jpg",
+              "assets/ittemmall/fan-vest/windcool-vest-fan-detail.jpg",
+              "assets/ittemmall/fan-vest/windcool-vest-pocket-detail.jpg",
+            ],
+            options: [
+              { label: "색상", values: ["차콜"] },
+              { label: "사이즈", values: ["M", "L", "XL", "2XL", "3XL"] },
+              { label: "구성", values: ["조끼+팬+케이블 세트"] },
+            ],
+            infoItems: [
+              { label: "제품명", value: "윈드쿨 에어 팬 베스트" },
+              { label: "제품 유형", value: "선풍기조끼 / 팬 베스트" },
+              { label: "색상", value: "차콜" },
+              { label: "사이즈", value: "M, L, XL, 2XL, 3XL" },
+              { label: "전원 방식", value: "USB 보조배터리 연결 방식" },
+              { label: "구성품", value: "조끼, 팬 2개, 연결 케이블" },
+              { label: "보조배터리", value: "별도 준비 필요" },
+            ],
+            story: {
+              highlightEyebrow: "왜 윈드쿨 팬 베스트인가",
+              highlightCopy:
+                "한여름 야외활동에서는 시원함만큼 착용감과 실용성이 중요합니다. 윈드쿨 에어 팬 베스트는 조끼 안쪽으로 공기 흐름을 만들고, 메쉬 원단과 수납 포켓을 더해 작업과 레저 모두에 맞춘 테스트 상품입니다.",
+              brandImages: [
+                {
+                  src: "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
+                  alt: "윈드쿨 에어 팬 베스트 착용 이미지",
+                },
+                {
+                  src: "assets/ittemmall/fan-vest/windcool-vest-back-fans.jpg",
+                  alt: "윈드쿨 에어 팬 베스트 후면 듀얼 팬 이미지",
+                },
+              ],
+              featureImage: {
+                src: "assets/ittemmall/fan-vest/windcool-vest-fan-detail.jpg",
+                alt: "윈드쿨 에어 팬 베스트 팬 디테일 이미지",
+              },
+              showcaseImage: {
+                src: "assets/ittemmall/fan-vest/windcool-vest-pocket-detail.jpg",
+                alt: "윈드쿨 에어 팬 베스트 포켓과 메쉬 디테일 이미지",
+              },
+              highlights: [
+                "듀얼 팬으로 조끼 안쪽 공기 순환 보조",
+                "작업, 낚시, 캠핑, 주말 농장에 맞춘 여름 아이템",
+                "메쉬 원단과 다중 포켓으로 더운 날 실용성 강화",
+                "보조배터리 별도 방식으로 필요한 용량을 직접 선택",
+                "N pay 구매 클릭 반응을 보기 좋은 시즌성 테스트 상품",
+              ],
+              sections: [
+                {
+                  eyebrow: "포인트 01",
+                  title: "몸 안쪽으로 바람을 순환시키는 듀얼 팬",
+                  paragraphs: [
+                    "조끼 하단에 팬을 장착해 외부 공기를 안쪽으로 보내는 구조입니다.",
+                    "가만히 서 있어도 열기가 쌓이는 여름 현장, 낚시터, 캠핑장에서 착용 쾌적감을 돕습니다.",
+                    "강한 냉방 효과를 보장하는 제품이 아니라, 더운 환경에서 공기 흐름을 보조하는 팬 베스트입니다.",
+                  ],
+                },
+                {
+                  eyebrow: "포인트 02",
+                  title: "메쉬 원단과 넉넉한 수납 포켓",
+                  paragraphs: [
+                    "앞면 포켓에는 휴대폰, 장갑, 작은 공구나 소지품을 나눠 넣기 좋습니다.",
+                    "메쉬 원단 중심의 가벼운 착용감으로 티셔츠 위에 걸치기 편한 구성을 목표로 했습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "포인트 03",
+                  title: "작업복처럼, 레저복처럼",
+                  paragraphs: [
+                    "건설 현장, 물류, 야외 판매, 주말 농장처럼 오래 밖에 있어야 하는 상황에 맞습니다.",
+                    "낚시, 캠핑, 등산 전후 대기 시간처럼 여름 레저에서도 부담 없이 입기 좋은 테스트 아이템입니다.",
+                  ],
+                },
+              ],
+              recommendTitle: "이런 분께 추천합니다",
+              recommendations: [
+                "한여름 야외 작업 시간이 긴 분",
+                "낚시, 캠핑, 주말 농장처럼 밖에 오래 머무는 분",
+                "시원한 조끼를 찾지만 펠티어 고가 제품은 부담스러운 분",
+                "보조배터리를 이미 가지고 있어 조끼와 팬 세트만 필요한 분",
+              ],
+              specs: [
+                { label: "제품명", value: "윈드쿨 에어 팬 베스트" },
+                { label: "제품 유형", value: "선풍기조끼 / 팬 베스트" },
+                { label: "색상", value: "차콜" },
+                { label: "사이즈", value: "M, L, XL, 2XL, 3XL" },
+                { label: "구성품", value: "조끼, 팬 2개, USB 연결 케이블" },
+                { label: "전원", value: "USB 보조배터리 연결 방식" },
+                { label: "보조배터리", value: "별도 준비 필요" },
+                { label: "세탁", value: "팬과 케이블을 분리한 뒤 손세탁 권장" },
+                { label: "확인 필요", value: "실제 원단, 팬 규격, KC 관련 고지, 수입원/제조원 정보" },
               ],
             },
           },
@@ -2198,6 +2420,7 @@
           menuOpen: false,
           infoPanelType: "",
           searchQuery: "",
+          selectedCategory: "all",
           scroll: {},
           ...savedState,
         };
@@ -2498,6 +2721,7 @@
         }
 
         function productRouteSlug(product) {
+          if (product.slug) return product.slug;
           const color = product.options
             .find((option) => option.label === "색상")
             ?.values[0];
@@ -2865,6 +3089,20 @@
               document.getElementById("products")?.scrollIntoView({ block: "start" });
             }, 40);
           }
+          if (action === "set-category") {
+            state.selectedCategory = target.dataset.categoryId || "all";
+            persistState();
+            render();
+            window.setTimeout(() => {
+              document.getElementById("products")?.scrollIntoView({ block: "start" });
+            }, 40);
+          }
+          if (action === "clear-product-filters") {
+            state.searchQuery = "";
+            state.selectedCategory = "all";
+            persistState();
+            render();
+          }
           if (action === "menu-products") {
             navigate("home");
             window.setTimeout(() => {
@@ -2971,6 +3209,7 @@
                 menuOpen: false,
                 infoPanelType: "",
                 searchQuery: "",
+                selectedCategory: "all",
                 scroll: {},
               });
               navigate("home");
@@ -3165,9 +3404,13 @@
 
         function updateProductVisibility() {
           const query = state.searchQuery.trim().toLowerCase();
+          const selectedCategory = state.selectedCategory || "all";
           document.querySelectorAll("[data-product-card]").forEach((card) => {
             const haystack = card.dataset.productCard.toLowerCase();
-            card.classList.toggle("hidden", query && !haystack.includes(query));
+            const category = card.dataset.category || "";
+            const queryMatch = !query || haystack.includes(query);
+            const categoryMatch = selectedCategory === "all" || category === selectedCategory;
+            card.classList.toggle("hidden", !queryMatch || !categoryMatch);
           });
           const empty = document.getElementById("productFilterEmpty");
           if (empty) {
@@ -3437,8 +3680,8 @@
               <div class="menu-grid">
                 <a class="menu-item" href="#/home" data-action="home">
                   <span>
-                    <strong>홈 / 상품 리스트</strong>
-                    <span>메인 화면으로 이동</span>
+                    <strong>홈 / 테스트 상품</strong>
+                    <span>카테고리와 상품 목록으로 이동</span>
                   </span>
                   ${icon("chevron-right", 18)}
                 </a>
@@ -3573,14 +3816,31 @@
                   </div>
                 </div>
 
+                <div class="category-strip" aria-label="상품 카테고리">
+                  ${categories
+                    .map(
+                      (category) => `
+                        <button
+                          class="category-chip ${state.selectedCategory === category.id ? "is-active" : ""}"
+                          type="button"
+                          data-action="set-category"
+                          data-category-id="${category.id}"
+                        >
+                          ${escapeHtml(category.label)}
+                        </button>
+                      `,
+                    )
+                    .join("")}
+                </div>
+
                 <div class="product-grid">
                   ${products.map(renderProductCard).join("")}
                 </div>
                 <div id="productFilterEmpty" class="state-card hidden" style="margin-top:12px">
-                  <h2>검색 결과가 없습니다.</h2>
-                  <p>다른 키워드로 다시 검색하거나 대표 상품을 확인해보세요.</p>
+                  <h2>조건에 맞는 상품이 없습니다.</h2>
+                  <p>다른 키워드나 카테고리를 선택하거나 전체 테스트 상품을 다시 확인해보세요.</p>
                   <div class="button-row">
-                    <button class="btn" type="button" data-action="search">다시 검색</button>
+                    <button class="btn" type="button" data-action="clear-product-filters">전체 보기</button>
                     <button class="btn primary" type="button" data-action="select-product" data-id="${heroProduct.id}">대표 상품 보기</button>
                   </div>
                 </div>
@@ -3596,14 +3856,19 @@
           return `
             <article
               class="product-card ${product.cardMediaClass ? `is-${product.cardMediaClass}` : ""}"
-              data-product-card="${escapeHtml(`${product.name} ${product.shortDescription}`)}"
+              data-category="${escapeHtml(product.categoryId || "")}"
+              data-product-card="${escapeHtml(`${product.categoryLabel || ""} ${product.statusLabel || ""} ${product.name} ${product.shortDescription}`)}"
             >
               <button class="product-card-main" type="button" data-action="select-product" data-id="${product.id}">
                 <div class="product-media">
                   <img src="${product.image}" alt="${escapeHtml(product.name)}" />
                 </div>
                 <div class="product-body">
-                  <p class="product-title">${escapeHtml(product.name)}</p>
+                  <div class="product-meta-row">
+                    <span class="product-kicker">${escapeHtml(product.categoryLabel || "상품")}</span>
+                    <span class="status-chip">${escapeHtml(product.statusLabel || "테스트")}</span>
+                  </div>
+                  <p class="product-title">${escapeHtml(product.cardTitle || product.name)}</p>
                   <p class="product-desc">${escapeHtml(product.shortDescription)}</p>
                   <div class="price-row">
                     <p class="price">₩ ${formatPrice(product.price)}</p>
@@ -3737,6 +4002,8 @@
         function renderProductStory(product) {
           const story = product.story;
           if (!story) return "";
+          const highlightEyebrow = story.highlightEyebrow || `왜 ${product.name}인가`;
+          const highlightCopy = story.highlightCopy || product.longDescription;
           return `
             <section class="divider-section story-stack">
               ${(story.brandImages || [])
@@ -3778,11 +4045,11 @@
               ${(story.highlights || []).length
                 ? `
                   <section class="story-block why-block">
-                    <p class="eyebrow">왜 MARCE 스위트인가</p>
+                    <p class="eyebrow">${escapeHtml(highlightEyebrow)}</p>
                     <ul class="highlight-list">
                       ${story.highlights.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
                     </ul>
-                    <p class="story-copy">MARCE 스위트 피클볼 패들은 단순한 입문용 패들이 아닙니다. 처음에는 쉽게 적응하고, 실력이 늘수록 스핀과 파워를 활용할 수 있는 밸런스형 피클볼 패들입니다.</p>
+                    <p class="story-copy">${escapeHtml(highlightCopy)}</p>
                   </section>
                 `
                 : ""}
@@ -3945,7 +4212,7 @@
 
         function getOptionTone(value) {
           const normalized = String(value).trim().toLowerCase();
-          if (["black", "블랙"].includes(normalized)) return "black";
+          if (["black", "블랙", "charcoal", "차콜"].includes(normalized)) return "black";
           if (["white", "화이트"].includes(normalized)) return "white";
           if (["gray", "grey", "그레이"].includes(normalized)) return "gray";
           if (["pink", "핑크"].includes(normalized)) return "pink";
@@ -3956,6 +4223,7 @@
           const normalized = String(value).trim().toLowerCase();
           if (["pink", "핑크"].includes(normalized)) return "#e5bcc0";
           if (["black", "블랙"].includes(normalized)) return "#111111";
+          if (["charcoal", "차콜"].includes(normalized)) return "#2f3437";
           if (["white", "화이트"].includes(normalized)) return "#ffffff";
           if (["gray", "grey", "그레이"].includes(normalized)) return "#d4d4d8";
           return "#e5bcc0";
@@ -3966,6 +4234,7 @@
           if (normalized === "블랙") return "BLACK";
           if (normalized === "화이트") return "WHITE";
           if (normalized === "그레이") return "GRAY";
+          if (normalized === "차콜") return "CHARCOAL";
           if (normalized === "핑크") return "핑크";
           return value;
         }

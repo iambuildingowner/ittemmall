@@ -69,6 +69,10 @@ function ittemmallProductCatalog(): array
             'name' => 'MARCE 스위트 피클볼 패들 (USAPA인증) - 블랙',
             'price' => 59000,
         ],
+        'product-003' => [
+            'name' => '윈드쿨 에어 팬 베스트',
+            'price' => 48900,
+        ],
     ];
 }
 
