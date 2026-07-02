@@ -109,6 +109,10 @@
   - N pay 버튼 표시 확인
   - NpayPurchaseClick 이벤트에 productSlug=windcool-vest, value=48900, UTM attribution 포함 확인
   - track.php 운영 서버 POST는 2xx로 수신되지만 기존 배포본은 `{"ok":true,"stored":false}` 응답이었다. 이후 track.php를 기본 private 로그 경로 자동 저장 방식으로 수정했으므로, 배포 후 N pay 테스트 클릭/삭제를 2회 반복해 재검증해야 한다.
+  - 2026-07-02 14:44 KST: 커밋 `723e04e` 배포 후 운영 헬스체크에서 `tracking.autoPrivateLogEnabled=true`, `effectiveLogReady=true`, `effectiveSaltReady=true` 확인.
+  - 2026-07-02 14:45 KST: 실제 운영 N pay 버튼 1차 클릭 `test_run_id=windcool-vest-npay-live-01` 후 cleanup 삭제 4건 확인. 삭제 이벤트는 `ViewContent`, `NpayPurchaseClick`, `NpayPurchaseClick_windcool_vest`, `CheckoutPageView`.
+  - 2026-07-02 14:45 KST: 실제 운영 N pay 버튼 2차 클릭 `test_run_id=windcool-vest-npay-live-02` 후 cleanup 삭제 4건 확인. 삭제 이벤트는 `ViewContent`, `NpayPurchaseClick`, `NpayPurchaseClick_windcool_vest`, `CheckoutPageView`.
+  - 2026-07-02 14:46 KST: 위 test_run_id 2개와 직접 POST 예비 테스트 ID를 재삭제했을 때 모두 `removed=0`으로 테스트 기록 잔여 없음 확인.
 - Meta 게시 로그:
   - 1차 게시 시도: 광고 세트/광고 일정이 24시간보다 짧다는 Meta 오류로 실패
   - 조치: 종료 시간을 2026-07-02 22:36 GMT+9로 변경

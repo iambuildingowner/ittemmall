@@ -179,3 +179,19 @@
 - N pay 버튼 클릭 시 `NpayPurchaseClick` 전체 이벤트와 `NpayPurchaseClick_windcool_vest` 상품별 이벤트 저장 확인 완료
 - 로컬 Python 서버에서는 `/track.php` POST를 처리하지 못해 501이 발생하지만, 브라우저 저장 이벤트는 정상 확인됨
 - 운영 서버 또는 PHP 가능 서버에서는 `track.php` 수신까지 별도 확인 필요
+
+## 2026-07-02 운영 N pay 서버 로그 확인 결과
+
+- 배포 커밋: `723e04e`
+- 운영 헬스체크: `tracking.autoPrivateLogEnabled=true`, `effectiveLogReady=true`, `effectiveSaltReady=true`
+- 직접 POST 예비 확인: `NpayPurchaseClick_windcool_vest`가 `stored:true`로 저장되고, `direct-windcool-preflight-01` cleanup에서 1건 삭제됨
+- 실제 N pay 버튼 1차 테스트: `test_run_id=windcool-vest-npay-live-01`
+  - 버튼 이벤트명: `NpayPurchaseClick_windcool_vest`
+  - cleanup 삭제: 4건
+  - 삭제 이벤트: `ViewContent`, `NpayPurchaseClick`, `NpayPurchaseClick_windcool_vest`, `CheckoutPageView`
+- 실제 N pay 버튼 2차 테스트: `test_run_id=windcool-vest-npay-live-02`
+  - 버튼 이벤트명: `NpayPurchaseClick_windcool_vest`
+  - cleanup 삭제: 4건
+  - 삭제 이벤트: `ViewContent`, `NpayPurchaseClick`, `NpayPurchaseClick_windcool_vest`, `CheckoutPageView`
+- 테스트 로그 잔여 확인: 위 test_run_id 3개를 다시 cleanup 했을 때 모두 `removed=0`
+- 결론: 선풍기조끼 N pay 버튼은 운영 서버에서 상품별 클릭값을 취할 수 있고, 테스트 로그 삭제까지 확인 완료
