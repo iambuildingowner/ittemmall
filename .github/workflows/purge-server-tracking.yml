@@ -47,6 +47,8 @@ jobs:
           set -euo pipefail
           token="$(openssl rand -hex 24)"
           script="__codex_purge_pixel_events_${RUN_ID}.php"
+          export PURGE_TOKEN="$token"
+          export PURGE_SCRIPT="$script"
           echo "PURGE_TOKEN=${token}" >> "$GITHUB_ENV"
           echo "PURGE_SCRIPT=${script}" >> "$GITHUB_ENV"
           cat > "$script" <<'PHP'
@@ -55,7 +57,7 @@ jobs:
           header('Content-Type: application/json; charset=utf-8');
           header('Cache-Control: no-store');
 
-          $expected = getenv('CODEX_PURGE_TOKEN') ?: '';
+          $expected = '__CODEX_PURGE_TOKEN__';
           $given = (string)($_GET['token'] ?? '');
           if ($expected === '' || !hash_equals($expected, $given)) {
               http_response_code(403);
@@ -154,6 +156,12 @@ jobs:
 
           echo json_encode($result, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
           PHP
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          p = Path(os.environ['PURGE_SCRIPT'])
+          p.write_text(p.read_text().replace('__CODEX_PURGE_TOKEN__', os.environ['PURGE_TOKEN']))
+          PY
           lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
             -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; cd \"$HOSTINGER_FTP_TARGET_DIR\"; put \"$script\" -o \"$script\"; bye"
 
