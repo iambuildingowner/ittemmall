@@ -47,4 +47,5 @@ jobs:
           local-dir: ./build/ittemmall-public/
           server-dir: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
           dangerous-clean-slate: false
+          timeout: 190000
           log-level: standard
