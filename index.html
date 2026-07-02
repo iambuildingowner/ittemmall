@@ -1428,18 +1428,19 @@
 
       .size-table {
         width: 100%;
-        min-width: 620px;
+        table-layout: fixed;
         border-collapse: collapse;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 1.45;
       }
 
       .size-table th,
       .size-table td {
         border-bottom: 1px solid var(--line);
-        padding: 12px 10px;
+        padding: 11px 6px;
         text-align: center;
-        white-space: nowrap;
+        overflow-wrap: anywhere;
+        word-break: keep-all;
       }
 
       .size-table th {
@@ -2394,8 +2395,8 @@
               sizeGuide: {
                 title: "사이즈 선택 가이드",
                 copy: "조끼를 평평하게 펼친 상태에서 가슴둘레, 어깨너비, 총장을 기준으로 확인하세요.",
-                image: "assets/ittemmall/fan-vest/windcool-vest-size-guide.svg",
-                alt: "윈드쿨 선풍기 조끼 사이즈 측정 위치 안내 이미지",
+                image: "assets/ittemmall/fan-vest/windcool-vest-size-guide-photo.jpg",
+                alt: "윈드쿨 선풍기 조끼를 펼쳐 줄자로 사이즈를 확인하는 사진",
               },
               sizeChart: [
                 { size: "M", chest: "104", shoulder: "42", length: "62", recommend: "95 전후 / 얇은 반팔 위 착용" },

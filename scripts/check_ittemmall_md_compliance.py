@@ -103,11 +103,11 @@ def run_checks(args: argparse.Namespace) -> list[Check]:
 
     if args.size_sensitive:
         add(checks, "사이즈 옵션", '{ label: "사이즈"' in block, "착용/반품 영향 상품 필수")
-        add(checks, "사이즈 설명 이미지 데이터", "sizeGuide:" in block and "windcool-vest-size-guide.svg" in block, "상세페이지 이미지 필수")
+        add(checks, "사이즈 설명 이미지 데이터", "sizeGuide:" in block and "windcool-vest-size-guide-photo.jpg" in block, "상세페이지 이미지 필수")
         add(checks, "사이즈표 데이터", "sizeChart:" in block and all(f'size: "{size}"' in block for size in ["M", "L", "XL", "2XL", "3XL"]), "M~3XL 표기")
         add(checks, "측정/권장/오차 안내", "sizeNotes:" in block and "1~3cm" in block and "작업복" in block, "측정 기준과 권장 선택법")
 
-        guide_path = ROOT / "assets/ittemmall/fan-vest/windcool-vest-size-guide.svg"
+        guide_path = ROOT / "assets/ittemmall/fan-vest/windcool-vest-size-guide-photo.jpg"
         add(checks, "사이즈 이미지 파일", guide_path.is_file(), guide_path.relative_to(ROOT).as_posix())
 
     add(checks, "상품 정보 중복 방지", "hideStandaloneInfo: true" in block, "사이즈/상품 정보 단일 블록 사용")
