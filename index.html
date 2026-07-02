@@ -1314,6 +1314,25 @@
         color: var(--on-brand);
       }
 
+      .phone-shell.is-white-theme .why-block {
+        border: 1px solid var(--line);
+        background: #ffffff;
+        color: var(--ink);
+      }
+
+      .phone-shell.is-white-theme .why-block .eyebrow {
+        color: var(--accent);
+      }
+
+      .phone-shell.is-white-theme .why-block .story-copy {
+        color: #3f3f46;
+      }
+
+      .phone-shell.is-white-theme .why-block .highlight-list li {
+        border-left-color: var(--accent-2, var(--brand-light));
+        color: var(--ink);
+      }
+
       .highlight-list,
       .plain-list {
         display: grid;
@@ -2044,6 +2063,7 @@
             standaloneStore: true,
             hideStandaloneInfo: true,
             theme: {
+              mode: "white",
               brand: "#111111",
               brandLight: "#E6F8FC",
               accent: "#2A9EC2",
@@ -3823,7 +3843,7 @@
           const app = document.getElementById("app");
           const product = currentProduct();
           app.innerHTML = `
-            <div class="phone-shell ${isStandaloneProduct(product) ? "is-standalone-store" : ""}" style="${productThemeStyle(product)}">
+            <div class="phone-shell ${isStandaloneProduct(product) ? "is-standalone-store" : ""} ${themeModeClass(product)}" style="${productThemeStyle(product)}">
               ${renderHeader()}
               ${renderPage()}
               ${renderInfoPanel()}
@@ -3832,6 +3852,12 @@
           updateProductVisibility();
           syncSubmitButton();
           trackPageViewIfNeeded();
+        }
+
+        function themeModeClass(product) {
+          if (product?.theme?.mode === "white") return "is-white-theme";
+          if (product?.theme?.mode === "black") return "is-black-theme";
+          return "";
         }
 
         function productThemeStyle(product) {
