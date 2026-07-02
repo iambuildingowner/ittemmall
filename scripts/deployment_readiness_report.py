@@ -241,7 +241,14 @@ def check_npay_tracking_scope() -> list[Check]:
     if exposed:
         return [Check("FAIL", "payment-scope", "잇템몰에 실제 네이버페이 연동 흔적이 남아 있습니다: " + ", ".join(exposed))]
 
-    required_tracking = ['data-checkout-source="npay"', "NpayPurchaseClick", "NpayCheckoutIntent"]
+    required_tracking = [
+        'data-checkout-source="npay"',
+        'data-checkout-source="direct_buy"',
+        "NpayPurchaseClick",
+        "PurchaseCtaClick",
+        "NpayPurchaseClick_",
+        "PurchaseCtaClick_",
+    ]
     missing = [snippet for snippet in required_tracking if snippet not in index]
     if missing:
         return [Check("FAIL", "payment-scope", "N pay 클릭 추적 버튼/이벤트가 빠져 있습니다: " + ", ".join(missing))]

@@ -112,6 +112,114 @@ function ittemmallTrackCleanupTestEvents(string $testRunId): array
     return ['removed' => $removed, 'events' => $events];
 }
 
+function ittemmallTrackIsDisabledValue(string $value): bool
+{
+    return in_array(strtolower(trim($value)), ['0', 'false', 'no', 'off', 'disabled'], true);
+}
+
+function ittemmallTrackNotificationRecipient(): string
+{
+    $email = ittemmallConfigValue('ITTEMMALL_NOTIFY_EMAIL', 'staysiaofficial@gmail.com');
+    return filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : '';
+}
+
+function ittemmallTrackNotificationFrom(): string
+{
+    $email = ittemmallConfigValue('ITTEMMALL_NOTIFY_FROM', 'no-reply@ittemmall.com');
+    return filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : 'no-reply@ittemmall.com';
+}
+
+function ittemmallTrackNotificationEnabled(): bool
+{
+    $enabled = ittemmallConfigValue('ITTEMMALL_NOTIFY_ENABLED', '1');
+    return !ittemmallTrackIsDisabledValue($enabled) && ittemmallTrackNotificationRecipient() !== '';
+}
+
+function ittemmallTrackIsPurchaseNotificationEvent(string $eventName, array $payload): bool
+{
+    if (($payload['__test'] ?? false) === true) {
+        return false;
+    }
+    return str_starts_with($eventName, 'NpayPurchaseClick_') || str_starts_with($eventName, 'PurchaseCtaClick_');
+}
+
+function ittemmallTrackMoney(mixed $value): string
+{
+    $amount = is_numeric($value) ? (float)$value : 0.0;
+    return number_format($amount) . '원';
+}
+
+function ittemmallTrackNotificationLabel(string $eventName): string
+{
+    if (str_starts_with($eventName, 'NpayPurchaseClick_')) {
+        return 'N pay 버튼 클릭';
+    }
+    if (str_starts_with($eventName, 'PurchaseCtaClick_')) {
+        return '바로 구매 버튼 클릭';
+    }
+    return $eventName;
+}
+
+function ittemmallTrackJsonLine(mixed $value): string
+{
+    return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+}
+
+function ittemmallTrackSendPurchaseNotification(array $event): array
+{
+    $eventName = (string)($event['event'] ?? '');
+    $payload = is_array($event['payload'] ?? null) ? $event['payload'] : [];
+    if (!ittemmallTrackNotificationEnabled() || !ittemmallTrackIsPurchaseNotificationEvent($eventName, $payload)) {
+        return ['attempted' => false, 'sent' => false];
+    }
+
+    $recipient = ittemmallTrackNotificationRecipient();
+    $from = ittemmallTrackNotificationFrom();
+    $eventLabel = ittemmallTrackNotificationLabel($eventName);
+    $productName = ittemmallTrackCleanString((string)($payload['productName'] ?? $payload['content_name'] ?? $event['product_focus'] ?? '상품명 미확인'), 160);
+    $productSlug = ittemmallTrackCleanString((string)($payload['productSlug'] ?? $event['product_focus'] ?? ''), 120);
+    $price = ittemmallTrackMoney($payload['price'] ?? $payload['value'] ?? 0);
+    $amount = ittemmallTrackMoney($payload['amount'] ?? $payload['value'] ?? 0);
+    $quantity = ittemmallTrackCleanString((string)($payload['quantity'] ?? '1'), 20);
+    $url = ittemmallTrackCleanString((string)($event['url'] ?? ''), 1000);
+    $kstTime = ittemmallTrackCleanString((string)($event['server_time_kst'] ?? ''), 80);
+    $selectedOptions = $payload['selectedOptions'] ?? [];
+    $attribution = $payload['attribution'] ?? ($event['attribution'] ?? []);
+
+    $subject = sprintf('[잇템몰 클릭] %s / %s', $eventLabel, $productName);
+    $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+    $body = implode("\n", [
+        '잇템몰 상품 클릭 로그가 들어왔습니다.',
+        '',
+        '종류: ' . $eventLabel,
+        '이벤트: ' . $eventName,
+        '상품명: ' . $productName,
+        '상품 slug: ' . ($productSlug !== '' ? $productSlug : '-'),
+        '상품 ID: ' . ittemmallTrackCleanString((string)($payload['productId'] ?? '-'), 80),
+        '가격: ' . $price,
+        '수량: ' . $quantity,
+        '계산 금액: ' . $amount,
+        '선택 옵션: ' . (is_array($selectedOptions) && $selectedOptions !== [] ? ittemmallTrackJsonLine($selectedOptions) : '-'),
+        'URL: ' . ($url !== '' ? $url : '-'),
+        '유입값: ' . (is_array($attribution) && $attribution !== [] ? ittemmallTrackJsonLine($attribution) : '-'),
+        '서버 시간: ' . ($kstTime !== '' ? $kstTime : '-'),
+    ]) . "\n";
+
+    $headers = implode("\r\n", [
+        'MIME-Version: 1.0',
+        'Content-Type: text/plain; charset=UTF-8',
+        'Content-Transfer-Encoding: 8bit',
+        'From: ITTEMMALL <' . $from . '>',
+    ]);
+
+    $sent = @mail($recipient, $encodedSubject, $body, $headers);
+    return [
+        'attempted' => true,
+        'sent' => $sent,
+        'recipient' => $recipient,
+    ];
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     ittemmallTrackResponse(405, ['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
 }
@@ -210,9 +318,15 @@ if (file_put_contents($logPath, $line, FILE_APPEND | LOCK_EX) === false) {
 }
 @chmod($logPath, 0600);
 
+$notification = ittemmallTrackSendPurchaseNotification($event);
+
 ittemmallTrackResponse(200, [
     'ok' => true,
     'stored' => true,
     'test' => ($payload['__test'] ?? false) === true,
     'event' => $eventName,
+    'notification' => [
+        'attempted' => $notification['attempted'],
+        'sent' => $notification['sent'],
+    ],
 ]);

@@ -24,7 +24,7 @@ Options -Indexes
   RewriteRule \.(md|markdown|xlsx?|csv|tsv|pdf|log|json|jsonl|bak|zip|py|sh|ya?ml|sql|sqlite|env|ini|conf)$ - [F,L,NC]
   RewriteRule ^제주도/?$ /제주도/index.html [L]
 
-  RewriteRule ^(acc|account|all|cart|category|checkout|headband|myshop|order|orders|product|search)(/.*)?$ / [L,R=302]
+  RewriteRule ^(acc|account|all|cart|category|checkout|headband|marce|myshop|order|orders|product|search)(/.*)?$ / [L,R=302]
 
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

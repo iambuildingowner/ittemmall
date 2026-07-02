@@ -332,6 +332,8 @@ def build_private_config_command(config: dict) -> list[str]:
         command.extend(["--admin-token", admin_token])
     if flag(config, "notification.enable"):
         command.append("--enable-notify")
+    else:
+        command.append("--disable-notify")
     if flag(config, "toss_payments.enable_approval"):
         command.append("--enable-toss-approval")
     if flag(config, "naver_pay.enable_approval"):

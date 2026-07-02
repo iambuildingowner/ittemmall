@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light only" />
     <meta name="darkreader-lock" />
-    <title>ITTEMMALL | 아이템 테스트몰</title>
+    <title>ITTEMMALL | 시즌 라이프스타일 셀렉트샵</title>
     <meta
       name="description"
-      content="ITTEMMALL은 여러 카테고리의 신상품을 빠르게 비교하고 구매 의도와 결제 흐름을 확인할 수 있는 종합 아이템 테스트몰입니다."
+      content="ITTEMMALL은 러닝, 스포츠, 야외활동, 시즌 생활용품을 한곳에서 확인하고 주문할 수 있는 라이프스타일 셀렉트샵입니다."
     />
     <link rel="canonical" href="https://ittemmall.com/" />
     <link rel="icon" type="image/svg+xml" href="assets/ittemmall/favicon.svg" />
@@ -45,51 +45,31 @@
           {
             "@type": "ItemList",
             "@id": "https://ittemmall.com/#products",
-            "name": "ITTEMMALL 테스트 상품",
+            "name": "ITTEMMALL 추천 상품",
             "itemListElement": [
               {
                 "@type": "ListItem",
                 "position": 1,
                 "item": {
                   "@type": "Product",
-                  "name": "MARCE 스위트 피클볼 패들 (USAPA인증) - 핑크",
+                  "name": "러너윈 테크니컬 헤드밴드",
                   "brand": {
                     "@type": "Brand",
-                    "name": "MARCE"
+                    "name": "RUNNERWIN"
                   },
-                  "image": "https://ittemmall.com/assets/ittemmall/ittemmall-c-pink-thumb-main.png",
+                  "image": "https://ittemmall.com/assets/images/runnerwin-wide-headband-main.png",
                   "offers": {
                     "@type": "Offer",
-                    "price": "59000",
+                    "price": "7900",
                     "priceCurrency": "KRW",
                     "availability": "https://schema.org/InStock",
-                    "url": "https://ittemmall.com/"
+                    "url": "https://ittemmall.com/#/product/runnerwin-headband"
                   }
                 }
               },
               {
                 "@type": "ListItem",
                 "position": 2,
-                "item": {
-                  "@type": "Product",
-                  "name": "MARCE 스위트 피클볼 패들 (USAPA인증) - 블랙",
-                  "brand": {
-                    "@type": "Brand",
-                    "name": "MARCE"
-                  },
-                  "image": "https://ittemmall.com/assets/ittemmall/ittemmall-c-black-thumb-main.png",
-                  "offers": {
-                    "@type": "Offer",
-                    "price": "59000",
-                    "priceCurrency": "KRW",
-                    "availability": "https://schema.org/InStock",
-                    "url": "https://ittemmall.com/"
-                  }
-                }
-              },
-              {
-                "@type": "ListItem",
-                "position": 3,
                 "item": {
                   "@type": "Product",
                   "name": "윈드쿨 에어 선풍기 조끼",
@@ -1961,13 +1941,13 @@
         const siteConfig = {
           brandName: "ITTEMMALL",
           logoText: "ITTEMMALL",
-          mainHeadline: "여러 아이템을 먼저\n잇템몰에서 테스트합니다",
+          mainHeadline: "러닝과 야외활동을\n가볍게 준비하세요",
           mainSubcopy:
-            "패션잡화, 스포츠, 생활용품, 시즌 상품까지 한 화면에서 비교하고 구매 버튼 클릭 의도를 확인합니다.",
-          heroEyebrow: "ITTEM ITEM TEST",
-          heroImage: "assets/ittemmall/ittemmall-brand-hero-final.png",
-          heroButtonText: "테스트 상품 보기",
-          productSectionTitle: "테스트 상품",
+            "러닝 헤드밴드, 선풍기 조끼처럼 지금 필요한 시즌 아이템을 한곳에서 확인하고 바로 주문할 수 있습니다.",
+          heroEyebrow: "ITTEMMALL SELECT",
+          heroImage: "assets/images/runnerwin-wide-headband-main.png",
+          heroButtonText: "상품 보기",
+          productSectionTitle: "추천 상품",
           footerLinks: ["고객센터", "사업자 정보", "이용약관", "개인정보처리방침"],
           legalInfo: {
             companyName: "공간",
@@ -2031,248 +2011,101 @@
 
         const products = [
           {
-            id: "product-001",
-            name: "MARCE 스위트 피클볼 패들 (USAPA인증) - 핑크",
-            cardTitle: "MARCE 스위트 패들 - 핑크",
-            shortDescription: "USAPA 공식 승인 인증을 받은 핑크 컬러 밸런스형 피클볼 패들",
+            id: "product-004",
+            slug: "runnerwin-headband",
+            name: "러너윈 테크니컬 헤드밴드",
+            cardTitle: "러너윈 테크니컬 헤드밴드",
+            shortDescription: "러닝 중 이마와 헤어라인을 넓게 감싸주는 와이드 스포츠 헤드밴드",
             longDescription:
-              "공식 경기 기준을 충족한 피클볼 패들. 입문자는 쉽게, 중급자는 더 강하게. 컨트롤·스핀·파워를 모두 갖춘 밸런스형 피클볼 패들입니다.",
-            categoryId: "sports",
-            categoryLabel: "스포츠",
-            statusLabel: "판매 테스트",
-            price: 59000,
+              "운동 중 눈가로 흐르는 땀을 줄이고 머리카락을 정돈하기 좋은 와이드 헤드밴드입니다. 블랙과 화이트 컬러로 러닝, 헬스, 테니스, 일상 운동복에 가볍게 맞출 수 있습니다.",
+            categoryId: "fashion",
+            categoryLabel: "패션잡화",
+            statusLabel: "신상품",
+            price: 7900,
             originalPrice: 0,
             discountRate: 0,
             extraFeeLabel: "추가 비용",
             extraFee: 0,
-            image: "assets/ittemmall/ittemmall-c-pink-thumb-main.png",
-            cardMediaClass: "portrait",
-            detailMediaClass: "portrait",
+            image: "assets/images/runnerwin-wide-headband-main.png",
+            cardMediaClass: "",
+            detailMediaClass: "",
             images: [
-              "assets/ittemmall/ittemmall-c-pink-thumb-main.png",
-              "assets/ittemmall/ittemmall-c-pink-preview-2.png",
-              "assets/ittemmall/ittemmall-c-pink-showcase.png",
-              "assets/ittemmall/ittemmall-c-hero-model.png",
-              "assets/ittemmall/ittemmall-c-lifestyle-kit.png",
+              "assets/images/runnerwin-wide-headband-main.png",
+              "assets/images/runnerwin-wide-headband-black-product.jpg",
+              "assets/images/runnerwin-wide-headband-white-product.jpg",
+              "assets/images/runnerwin-wide-headband-stretch.png",
             ],
             options: [
-              { label: "색상", values: ["핑크"] },
-              { label: "타입", values: ["MARCE 스위트"] },
+              { label: "색상", values: ["블랙", "화이트"] },
+              { label: "사이즈", values: ["FREE"] },
             ],
             infoItems: [
-              { label: "제품명", value: "MARCE 스위트 피클볼 패들 (USAPA인증) - 핑크" },
-              { label: "제품 유형", value: "피클볼 패들" },
-              { label: "승인 인증", value: "USAPA 공식 승인 인증 완료" },
-              { label: "추천 실력", value: "입문자 ~ 중급자" },
+              { label: "제품명", value: "러너윈 테크니컬 헤드밴드" },
+              { label: "제품 유형", value: "와이드 스포츠 헤드밴드" },
+              { label: "색상", value: "블랙, 화이트" },
+              { label: "사이즈", value: "FREE" },
+              { label: "착용 상황", value: "러닝, 헬스, 테니스, 야외 운동" },
             ],
             story: {
-              highlightEyebrow: "왜 MARCE 스위트인가",
+              highlightEyebrow: "왜 러너윈 헤드밴드인가",
               highlightCopy:
-                "MARCE 스위트 피클볼 패들은 단순한 입문용 패들이 아닙니다. 처음에는 쉽게 적응하고, 실력이 늘수록 스핀과 파워를 활용할 수 있는 밸런스형 피클볼 패들입니다.",
+                "러닝 중 흐르는 땀과 흩어지는 머리카락은 집중력을 쉽게 떨어뜨립니다. 러너윈 테크니컬 헤드밴드는 이마와 헤어라인을 넓게 감싸 운동 중 깔끔한 착용감을 돕습니다.",
               brandImages: [
                 {
-                  src: "assets/ittemmall/ittemmall-c-hero-model.png",
-                  alt: "MARCE 브랜드 히어로 사진",
+                  src: "assets/images/runnerwin-wide-headband-main.png",
+                  alt: "러너윈 테크니컬 헤드밴드 착용 이미지",
                 },
                 {
-                  src: "assets/ittemmall/ittemmall-c-lifestyle-kit.png",
-                  alt: "MARCE 상품 연출 사진",
+                  src: "assets/images/runnerwin-wide-headband-black-product.jpg",
+                  alt: "러너윈 테크니컬 헤드밴드 블랙 제품 이미지",
                 },
               ],
-              certification: {
-                image: "assets/ittemmall/pickleball-usa-approved.png",
-                title: "USAPA 공식 승인 인증을 받은 피클볼 패들",
-                lines: [
-                  "공식 경기 기준을 충족한 피클볼 패들.",
-                  "입문자는 쉽게, 중급자는 더 강하게.",
-                  "컨트롤·스핀·파워를 모두 갖춘 밸런스형 피클볼 패들입니다.",
-                ],
-              },
               featureImage: {
-                src: "assets/ittemmall/ittemmall-c-pink-preview-2.png",
-                alt: "MARCE 스위트 피클볼 패들 핑크 상세 이미지",
+                src: "assets/images/runnerwin-wide-headband-stretch.png",
+                alt: "러너윈 테크니컬 헤드밴드 신축성 이미지",
               },
               showcaseImage: {
-                src: "assets/ittemmall/ittemmall-c-pink-showcase.png",
-                alt: "MARCE 스위트 피클볼 패들 핑크 종합 상세 이미지",
+                src: "assets/images/runnerwin-wide-headband-white-product.jpg",
+                alt: "러너윈 테크니컬 헤드밴드 화이트 제품 이미지",
               },
               highlights: [
-                "입문자와 중급자에게 주목받는 밸런스형 설계",
-                "USAPA 공식 승인 인증 완료",
-                "컨트롤·스핀·파워를 함께 고려한 구성",
-                "입문자·중급자 친화 설계",
-                "별도 튜닝 없이 바로 사용 가능",
+                "이마를 넓게 감싸는 와이드 핏",
+                "러닝과 실내 운동에 어울리는 가벼운 착용감",
+                "블랙/화이트 기본 컬러 구성",
+                "머리카락 정돈과 땀 흐름 완화에 도움",
               ],
               sections: [
                 {
                   eyebrow: "포인트 01",
-                  title: "넓은 스윗스팟으로 쉬운 컨트롤",
+                  title: "눈가로 흐르는 땀을 줄이는 와이드 디자인",
                   paragraphs: [
-                    "피클볼을 처음 시작할 때 가장 중요한 건 공을 안정적으로 맞히는 감각입니다.",
-                    "MARCE 스위트 피클볼 패들은 넓은 스윗스팟으로 중심에서 살짝 벗어난 타구도 안정적으로 받아줍니다.",
-                    "미스샷 부담은 줄이고, 랠리의 자신감은 높여주는 피클볼 패들입니다.",
+                    "좁은 밴드보다 이마를 넓게 감싸 운동 중 흐르는 땀을 한 번 더 잡아줍니다.",
+                    "러닝, 헬스, 테니스처럼 움직임이 많은 운동에서 얼굴 주변을 깔끔하게 유지하기 좋습니다.",
                   ],
                 },
                 {
                   eyebrow: "포인트 02",
-                  title: "2,036 RPM 스핀 성능",
+                  title: "운동복에 맞추기 쉬운 기본 컬러",
                   paragraphs: [
-                    "MARCE 스위트 피클볼 패들은 마찰감 있는 카본 파이버 표면을 적용해 공을 더 강하게 잡아주는 타구감을 제공합니다.",
-                    "테스트 기준 2,036 RPM의 스핀 성능으로 드라이브, 리턴, 컷 샷까지 더 공격적으로 플레이할 수 있습니다.",
-                  ],
-                },
-                {
-                  eyebrow: "포인트 03",
-                  title: "파워를 살리는 2세대 구조",
-                  paragraphs: [
-                    "2세대 열성형 구조, 폼 주입 벽면, 8mm 벌집형 PP 코어를 적용했습니다.",
-                    "단단한 타구감, 안정적인 반발력, 흔들림을 줄인 컨트롤로 입문자에게는 편안함을, 중급자에게는 더 강한 플레이를 제공합니다.",
+                    "블랙과 화이트 두 가지 컬러로 운동복, 모자, 이어폰과 함께 매치하기 쉽습니다.",
+                    "가방에 넣어두고 운동 전후로 간편하게 착용할 수 있는 데일리 스포츠 액세서리입니다.",
                   ],
                 },
               ],
               recommendTitle: "이런 분께 추천합니다",
               recommendations: [
-                "공식 승인 인증을 받은 피클볼 패들을 찾는 분",
-                "처음 시작해도 다루기 쉬운 패들이 필요한 분",
-                "컨트롤, 스핀, 파워를 모두 원하는 분",
-                "입문용을 넘어 오래 쓸 수 있는 피클볼 패들을 찾는 분",
+                "러닝 중 눈가로 땀이 흐르는 게 불편한 분",
+                "운동할 때 머리카락을 깔끔하게 정돈하고 싶은 분",
+                "가볍게 쓰는 스포츠 액세서리를 찾는 분",
+                "블랙/화이트 기본 컬러 헤드밴드가 필요한 분",
               ],
               specs: [
-                { label: "제품명", value: "MARCE 스위트 피클볼 패들 (USAPA인증) - 핑크" },
-                { label: "제품 유형", value: "피클볼 패들" },
-                { label: "승인 인증", value: "USAPA 공식 승인 인증 완료" },
-                { label: "추천 실력", value: "입문자 ~ 중급자" },
-                { label: "평균 무게", value: "약 232g ± 5g" },
-                { label: "전체 크기", value: "41.9 × 19.1cm" },
-                { label: "두께", value: "1.6cm" },
-                { label: "그립 크기", value: "14.0 × 10.8cm" },
-                { label: "RPM", value: "2,036" },
-                { label: "코어", value: "8mm 벌집형 PP 코어" },
-                { label: "페이스 소재", value: "마찰감 있는 카본 파이버" },
-                { label: "구조", value: "2세대 열성형 구조" },
-              ],
-            },
-          },
-          {
-            id: "product-002",
-            name: "MARCE 스위트 피클볼 패들 (USAPA인증) - 블랙",
-            cardTitle: "MARCE 스위트 패들 - 블랙",
-            shortDescription: "USAPA 공식 승인 인증을 받은 블랙 컬러 밸런스형 피클볼 패들",
-            longDescription:
-              "공식 경기 기준을 충족한 피클볼 패들. 입문자는 쉽게, 중급자는 더 강하게. 컨트롤·스핀·파워를 모두 갖춘 밸런스형 피클볼 패들입니다.",
-            categoryId: "sports",
-            categoryLabel: "스포츠",
-            statusLabel: "판매 테스트",
-            price: 59000,
-            originalPrice: 0,
-            discountRate: 0,
-            extraFeeLabel: "추가 비용",
-            extraFee: 0,
-            image: "assets/ittemmall/ittemmall-c-black-thumb-main.png",
-            cardMediaClass: "portrait",
-            detailMediaClass: "portrait",
-            images: [
-              "assets/ittemmall/ittemmall-c-black-thumb-main.png",
-              "assets/ittemmall/ittemmall-c-black-preview-2.png",
-              "assets/ittemmall/ittemmall-c-black-showcase.png",
-              "assets/ittemmall/ittemmall-c-hero-model.png",
-              "assets/ittemmall/ittemmall-c-lifestyle-kit.png",
-            ],
-            options: [
-              { label: "색상", values: ["블랙"] },
-              { label: "타입", values: ["MARCE 스위트"] },
-            ],
-            infoItems: [
-              { label: "제품명", value: "MARCE 스위트 피클볼 패들 (USAPA인증) - 블랙" },
-              { label: "제품 유형", value: "피클볼 패들" },
-              { label: "승인 인증", value: "USAPA 공식 승인 인증 완료" },
-              { label: "추천 실력", value: "입문자 ~ 중급자" },
-            ],
-            story: {
-              highlightEyebrow: "왜 MARCE 스위트인가",
-              highlightCopy:
-                "MARCE 스위트 피클볼 패들은 단순한 입문용 패들이 아닙니다. 처음에는 쉽게 적응하고, 실력이 늘수록 스핀과 파워를 활용할 수 있는 밸런스형 피클볼 패들입니다.",
-              brandImages: [
-                {
-                  src: "assets/ittemmall/ittemmall-c-hero-model.png",
-                  alt: "MARCE 브랜드 히어로 사진",
-                },
-                {
-                  src: "assets/ittemmall/ittemmall-c-lifestyle-kit.png",
-                  alt: "MARCE 상품 연출 사진",
-                },
-              ],
-              certification: {
-                image: "assets/ittemmall/pickleball-usa-approved.png",
-                title: "USAPA 공식 승인 인증을 받은 피클볼 패들",
-                lines: [
-                  "공식 경기 기준을 충족한 피클볼 패들.",
-                  "입문자는 쉽게, 중급자는 더 강하게.",
-                  "컨트롤·스핀·파워를 모두 갖춘 밸런스형 피클볼 패들입니다.",
-                ],
-              },
-              featureImage: {
-                src: "assets/ittemmall/ittemmall-c-black-preview-2.png",
-                alt: "MARCE 스위트 피클볼 패들 블랙 상세 이미지",
-              },
-              showcaseImage: {
-                src: "assets/ittemmall/ittemmall-c-black-showcase.png",
-                alt: "MARCE 스위트 피클볼 패들 블랙 종합 상세 이미지",
-              },
-              highlights: [
-                "입문자와 중급자에게 주목받는 밸런스형 설계",
-                "USAPA 공식 승인 인증 완료",
-                "컨트롤·스핀·파워를 함께 고려한 구성",
-                "입문자·중급자 친화 설계",
-                "별도 튜닝 없이 바로 사용 가능",
-              ],
-              sections: [
-                {
-                  eyebrow: "포인트 01",
-                  title: "넓은 스윗스팟으로 쉬운 컨트롤",
-                  paragraphs: [
-                    "피클볼을 처음 시작할 때 가장 중요한 건 공을 안정적으로 맞히는 감각입니다.",
-                    "MARCE 스위트 피클볼 패들은 넓은 스윗스팟으로 중심에서 살짝 벗어난 타구도 안정적으로 받아줍니다.",
-                    "미스샷 부담은 줄이고, 랠리의 자신감은 높여주는 피클볼 패들입니다.",
-                  ],
-                },
-                {
-                  eyebrow: "포인트 02",
-                  title: "2,036 RPM 스핀 성능",
-                  paragraphs: [
-                    "MARCE 스위트 피클볼 패들은 마찰감 있는 카본 파이버 표면을 적용해 공을 더 강하게 잡아주는 타구감을 제공합니다.",
-                    "테스트 기준 2,036 RPM의 스핀 성능으로 드라이브, 리턴, 컷 샷까지 더 공격적으로 플레이할 수 있습니다.",
-                  ],
-                },
-                {
-                  eyebrow: "포인트 03",
-                  title: "파워를 살리는 2세대 구조",
-                  paragraphs: [
-                    "2세대 열성형 구조, 폼 주입 벽면, 8mm 벌집형 PP 코어를 적용했습니다.",
-                    "단단한 타구감, 안정적인 반발력, 흔들림을 줄인 컨트롤로 입문자에게는 편안함을, 중급자에게는 더 강한 플레이를 제공합니다.",
-                  ],
-                },
-              ],
-              recommendTitle: "이런 분께 추천합니다",
-              recommendations: [
-                "공식 승인 인증을 받은 피클볼 패들을 찾는 분",
-                "처음 시작해도 다루기 쉬운 패들이 필요한 분",
-                "컨트롤, 스핀, 파워를 모두 원하는 분",
-                "입문용을 넘어 오래 쓸 수 있는 피클볼 패들을 찾는 분",
-              ],
-              specs: [
-                { label: "제품명", value: "MARCE 스위트 피클볼 패들 (USAPA인증) - 블랙" },
-                { label: "제품 유형", value: "피클볼 패들" },
-                { label: "승인 인증", value: "USAPA 공식 승인 인증 완료" },
-                { label: "추천 실력", value: "입문자 ~ 중급자" },
-                { label: "평균 무게", value: "약 232g ± 5g" },
-                { label: "전체 크기", value: "41.9 × 19.1cm" },
-                { label: "두께", value: "1.6cm" },
-                { label: "그립 크기", value: "14.0 × 10.8cm" },
-                { label: "RPM", value: "2,036" },
-                { label: "코어", value: "8mm 벌집형 PP 코어" },
-                { label: "페이스 소재", value: "마찰감 있는 카본 파이버" },
-                { label: "구조", value: "2세대 열성형 구조" },
+                { label: "제품명", value: "러너윈 테크니컬 헤드밴드" },
+                { label: "제품 유형", value: "와이드 스포츠 헤드밴드" },
+                { label: "색상", value: "블랙, 화이트" },
+                { label: "사이즈", value: "FREE" },
+                { label: "구성품", value: "헤드밴드 1개" },
+                { label: "관리 방법", value: "운동 후 가볍게 손세탁 후 그늘 건조 권장" },
               ],
             },
           },
@@ -2286,7 +2119,7 @@
               "작업, 낚시, 캠핑처럼 더운 날 오래 밖에 있어야 할 때 입는 선풍기 조끼입니다. 보조배터리를 연결해 듀얼 팬이 조끼 안쪽 공기 순환을 돕고, 메쉬 원단과 다중 포켓으로 실용성을 더했습니다.",
             categoryId: "seasonal",
             categoryLabel: "시즌",
-            statusLabel: "판매 테스트",
+            statusLabel: "시즌 상품",
             price: 48900,
             originalPrice: 0,
             discountRate: 0,
@@ -2319,7 +2152,7 @@
             story: {
               highlightEyebrow: "왜 윈드쿨 선풍기 조끼인가",
               highlightCopy:
-                "한여름 야외활동에서는 시원함만큼 착용감과 실용성이 중요합니다. 윈드쿨 에어 선풍기 조끼는 조끼 안쪽으로 공기 흐름을 만들고, 메쉬 원단과 수납 포켓을 더해 작업과 레저 모두에 맞춘 테스트 상품입니다.",
+                "한여름 야외활동에서는 시원함만큼 착용감과 실용성이 중요합니다. 윈드쿨 에어 선풍기 조끼는 조끼 안쪽으로 공기 흐름을 만들고, 메쉬 원단과 수납 포켓을 더해 작업과 레저 모두에 맞춘 시즌 아이템입니다.",
               brandImages: [
                 {
                   src: "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
@@ -2343,7 +2176,7 @@
                 "작업, 낚시, 캠핑, 주말 농장에 맞춘 여름 아이템",
                 "메쉬 원단과 다중 포켓으로 더운 날 실용성 강화",
                 "보조배터리 별도 방식으로 필요한 용량을 직접 선택",
-                "N pay 구매 클릭 반응을 보기 좋은 시즌성 테스트 상품",
+                "여름철 외부 활동 전 준비하기 좋은 시즌 아이템",
               ],
               sections: [
                 {
@@ -2368,7 +2201,7 @@
                   title: "작업복처럼, 레저복처럼",
                   paragraphs: [
                     "건설 현장, 물류, 야외 판매, 주말 농장처럼 오래 밖에 있어야 하는 상황에 맞습니다.",
-                    "낚시, 캠핑, 등산 전후 대기 시간처럼 여름 레저에서도 부담 없이 입기 좋은 테스트 아이템입니다.",
+                    "낚시, 캠핑, 등산 전후 대기 시간처럼 여름 레저에서도 부담 없이 입기 좋은 시즌 아이템입니다.",
                   ],
                 },
               ],
@@ -2413,11 +2246,13 @@
           },
         ];
 
+        const visibleProducts = products.filter((product) => !product.retired);
+
         const paymentMethods = {
           toss_pg: {
             label: "토스페이먼츠",
             badge: "결제창",
-            description: "토스페이먼츠 테스트 결제창에서 카드와 간편결제 선택 화면을 확인할 수 있습니다.",
+            description: "토스페이먼츠 결제창에서 카드와 간편결제 선택 화면을 확인할 수 있습니다.",
             guideItems: ["주문 내용을 확인합니다.", "토스페이먼츠 결제창에서 결제수단을 선택합니다.", "결제 인증 결과는 성공/실패 페이지에서 다시 확인합니다."],
           },
           card_pg: {
@@ -2493,12 +2328,12 @@
         const savedState = readJson(storageKeys.state, {});
         const state = {
           page: "home",
-          selectedProductId: products[0].id,
+          selectedProductId: visibleProducts[0].id,
           selectedImageIndex: 0,
-          selectedOptions: getInitialSelectedOptions(products[0]),
+          selectedOptions: getInitialSelectedOptions(visibleProducts[0]),
           quantity: 1,
           form: { ...emptyForm },
-          origin: { page: "home", label: "메인 상품 탐색", hash: "#/home" },
+          origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
           editingSubmissionId: "",
           draftSubmissionId: "",
           completeMode: "create",
@@ -2516,14 +2351,14 @@
         state.menuOpen = false;
         state.infoPanelType = "";
         if (!findProduct(state.selectedProductId)) {
-          state.selectedProductId = products[0].id;
-          state.selectedOptions = getInitialSelectedOptions(products[0]);
+          state.selectedProductId = visibleProducts[0].id;
+          state.selectedOptions = getInitialSelectedOptions(visibleProducts[0]);
         }
 
         if (location.hash) {
           applyHash(location.hash);
-        } else if (state.page) {
-          setHash(hashForState());
+        } else {
+          state.page = "home";
         }
 
         if (state.page === "history") {
@@ -2606,7 +2441,7 @@
             name,
             payload: trackedPayload,
             createdAt: new Date().toISOString(),
-            path: location.hash || "#/home",
+            path: location.hash || "/",
           };
 
           window.__ittemmallPixelEvents = window.__ittemmallPixelEvents || [];
@@ -2640,7 +2475,8 @@
         function shouldSendServerTrackingEvent(eventName) {
           return (
             trackingConfig.serverLoggedEvents.includes(eventName) ||
-            eventName.startsWith("NpayPurchaseClick_")
+            eventName.startsWith("NpayPurchaseClick_") ||
+            eventName.startsWith("PurchaseCtaClick_")
           );
         }
 
@@ -2733,15 +2569,22 @@
           return `NpayPurchaseClick_${token}`;
         }
 
+        function productPurchaseEventName(product) {
+          const token = pixelEventToken(productRouteId(product.id) || product.id).slice(0, 32);
+          return `PurchaseCtaClick_${token}`;
+        }
+
         function buildCommercePayload(product, extra = {}) {
           const quantity = Number(state.quantity || 1);
           const amount = getOrderTotal(product, quantity);
           const productScopedNpayEventName = productNpayEventName(product);
+          const productScopedPurchaseEventName = productPurchaseEventName(product);
           return {
             productId: product.id,
             productSlug: productRouteId(product.id),
             productName: product.name,
             productScopedNpayEventName,
+            productScopedPurchaseEventName,
             content_ids: [product.id],
             content_name: product.name,
             content_type: "product",
@@ -2768,6 +2611,14 @@
               baseEventName: name,
               productScoped: true,
               measurementUnit: "product_npay_click",
+            });
+          }
+          if (name === "PurchaseCtaClick") {
+            trackPixelEvent(payload.productScopedPurchaseEventName, {
+              ...payload,
+              baseEventName: name,
+              productScoped: true,
+              measurementUnit: "product_purchase_click",
             });
           }
           return event;
@@ -2846,7 +2697,7 @@
         }
 
         function findProduct(id) {
-          return products.find((product) => product.id === id);
+          return visibleProducts.find((product) => product.id === id);
         }
 
         function productRouteSlug(product) {
@@ -2866,13 +2717,13 @@
 
         function productFromRouteId(routeId) {
           return (
-            products.find((product) => productRouteSlug(product) === routeId) ||
+            visibleProducts.find((product) => productRouteSlug(product) === routeId) ||
             findProduct(routeId)
           );
         }
 
         function currentProduct() {
-          return findProduct(state.selectedProductId) || products[0];
+          return findProduct(state.selectedProductId) || visibleProducts[0];
         }
 
         function hasDraft() {
@@ -3021,6 +2872,11 @@
           }
         }
 
+        function setRootUrlForHome() {
+          if (!location.hash) return;
+          window.history.pushState(null, "", `${location.pathname}${location.search}`);
+        }
+
         function applyHash(hash) {
           const parts = hash.replace(/^#\/?/, "").split("/");
           const route = parts[0] || "home";
@@ -3095,7 +2951,11 @@
           Object.assign(state, patch, { page, menuOpen: false, infoPanelType: "" });
           if (page === "history") loadHistory();
           persistState();
-          setHash(hashForState());
+          if (page === "home") {
+            setRootUrlForHome();
+          } else {
+            setHash(hashForState());
+          }
           render();
           requestAnimationFrame(restoreScroll);
         }
@@ -3172,6 +3032,7 @@
         function handleClick(event) {
           const target = event.target.closest("[data-action]");
           if (!target) return;
+          event.preventDefault();
 
           const action = target.dataset.action;
           const id = target.dataset.id || "";
@@ -3197,7 +3058,11 @@
           if (action === "close-info") {
             state.infoPanelType = "";
             if (location.hash.startsWith("#/info/")) {
-              setHash(hashForState());
+              if (state.page === "home") {
+                setRootUrlForHome();
+              } else {
+                setHash(hashForState());
+              }
             }
             persistState();
             render();
@@ -3205,7 +3070,7 @@
 
           if (action === "home") {
             navigate("home", {
-              origin: { page: "home", label: "메인 상품 탐색", hash: "#/home" },
+              origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
             });
           }
 
@@ -3284,7 +3149,7 @@
               source: checkoutSource,
               buttonLabel: target.textContent.trim(),
               paymentMethod: "toss_pg",
-              fakeDoorEvent: isNpayTrackingClick ? "NpayCheckoutIntent" : "PurchaseIntent",
+              commerceEventType: isNpayTrackingClick ? "npay_button_click" : "purchase_button_click",
             });
             state.form.paymentMethod = "toss_pg";
             navigate("apply", {
@@ -3324,12 +3189,12 @@
               localStorage.removeItem(storageKeys.recentAddresses);
               Object.assign(state, {
                 page: "home",
-                selectedProductId: products[0].id,
+                selectedProductId: visibleProducts[0].id,
                 selectedImageIndex: 0,
-                selectedOptions: getInitialSelectedOptions(products[0]),
+                selectedOptions: getInitialSelectedOptions(visibleProducts[0]),
                 quantity: 1,
                 form: { ...emptyForm },
-                origin: { page: "home", label: "메인 상품 탐색", hash: "#/home" },
+                origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
                 editingSubmissionId: "",
                 draftSubmissionId: "",
                 completeMode: "create",
@@ -3575,7 +3440,7 @@
         }
 
         function resumeOrigin() {
-          const origin = state.origin || { page: "home", hash: "#/home" };
+          const origin = state.origin || { page: "home", hash: "/" };
           if (origin.page === "detail") {
             navigate("detail");
             return;
@@ -3610,7 +3475,7 @@
               agreeContact: Boolean(state.form.agreeContact),
             },
             originLabel: state.origin?.label || "상품 탐색",
-            fakeDoorEvent: "PaymentPageIntent",
+            commerceEventType: "payment_page_button_click",
           });
           trackPixelEvent("PaymentPageButtonClick", payload);
           trackPixelEvent("InitiateCheckout", payload);
@@ -3735,20 +3600,20 @@
           if (state.page === "detail") {
             trackCommerceEvent("ViewContent", {
               source: "product_detail_view",
-              fakeDoorEvent: "ProductDetailView",
+              commerceEventType: "product_detail_view",
             });
           }
           if (state.page === "apply") {
             trackCommerceEvent("CheckoutPageView", {
               source: "order_form_view",
-              fakeDoorEvent: "OrderFormView",
+              commerceEventType: "order_form_view",
             });
           }
           if (state.page === "payment") {
             trackCommerceEvent("PaymentPageView", {
               source: "payment_method_waiting_view",
               paymentMethod: state.form.paymentMethod || "toss_pg",
-              fakeDoorEvent: "PaymentMethodWaitingView",
+              commerceEventType: "payment_method_waiting_view",
             });
           }
         }
@@ -3807,9 +3672,9 @@
             <nav class="menu-panel" aria-label="주요 메뉴">
               <p class="menu-kicker">MENU</p>
               <div class="menu-grid">
-                <a class="menu-item" href="#/home" data-action="home">
+                <a class="menu-item" href="/" data-action="home">
                   <span>
-                    <strong>홈 / 테스트 상품</strong>
+                    <strong>홈 / 상품</strong>
                     <span>카테고리와 상품 목록으로 이동</span>
                   </span>
                   ${icon("chevron-right", 18)}
@@ -3897,7 +3762,7 @@
         }
 
         function renderHomePage() {
-          const heroProduct = products[0];
+          const heroProduct = visibleProducts[0];
           const heroImage = siteConfig.heroImage || heroProduct.image;
           return `
             <main>
@@ -3963,11 +3828,11 @@
                 </div>
 
                 <div class="product-grid">
-                  ${products.map(renderProductCard).join("")}
+                  ${visibleProducts.map(renderProductCard).join("")}
                 </div>
                 <div id="productFilterEmpty" class="state-card hidden" style="margin-top:12px">
                   <h2>조건에 맞는 상품이 없습니다.</h2>
-                  <p>다른 키워드나 카테고리를 선택하거나 전체 테스트 상품을 다시 확인해보세요.</p>
+                  <p>다른 키워드나 카테고리를 선택하거나 전체 상품을 다시 확인해보세요.</p>
                   <div class="button-row">
                     <button class="btn" type="button" data-action="clear-product-filters">전체 보기</button>
                     <button class="btn primary" type="button" data-action="select-product" data-id="${heroProduct.id}">대표 상품 보기</button>
@@ -3995,7 +3860,7 @@
                 <div class="product-body">
                   <div class="product-meta-row">
                     <span class="product-kicker">${escapeHtml(product.categoryLabel || "상품")}</span>
-                    <span class="status-chip">${escapeHtml(product.statusLabel || "테스트")}</span>
+                    <span class="status-chip">${escapeHtml(product.statusLabel || "판매중")}</span>
                   </div>
                   <p class="product-title">${escapeHtml(product.cardTitle || product.name)}</p>
                   <p class="product-desc">${escapeHtml(product.shortDescription)}</p>
@@ -4648,7 +4513,7 @@
                     <h2>결제 대기 주문을 찾지 못했습니다.</h2>
                     <p>주문서를 다시 작성하거나 저장된 주문 내역에서 확인할 수 있습니다.</p>
                     <div class="button-row">
-                      <button class="btn primary" type="button" data-action="select-product" data-id="${products[0].id}">주문서 다시 작성</button>
+                      <button class="btn primary" type="button" data-action="select-product" data-id="${visibleProducts[0].id}">주문서 다시 작성</button>
                       <button class="btn" type="button" data-action="history">주문 내역</button>
                     </div>
                   </div>
@@ -4868,7 +4733,7 @@
                 <h2>아직 주문 내역이 없습니다.</h2>
                 <p>상품 상세에서 주문서를 접수하면 이곳에 내역이 쌓이고 새로고침 후에도 남습니다.</p>
                 <div class="button-row">
-                  <button class="btn primary" type="button" data-action="select-product" data-id="${products[0].id}">대표 상품 보기</button>
+                  <button class="btn primary" type="button" data-action="select-product" data-id="${visibleProducts[0].id}">대표 상품 보기</button>
                   <button class="btn" type="button" data-action="home">상품 목록</button>
                 </div>
                 ${
@@ -4888,7 +4753,7 @@
                 ${
                   hasDraft()
                     ? `<button class="btn warning" type="button" data-action="resume-draft">주문서 작성 이어가기</button>`
-                    : `<button class="btn" type="button" data-action="select-product" data-id="${products[0].id}">대표 상품 보기</button>`
+                    : `<button class="btn" type="button" data-action="select-product" data-id="${visibleProducts[0].id}">대표 상품 보기</button>`
                 }
               </div>
             </div>

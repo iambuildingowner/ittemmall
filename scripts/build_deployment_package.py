@@ -17,7 +17,6 @@ FILES = [
     ".htaccess",
     "404.html",
     "index.html",
-    "marce/index.html",
     "제주도/index.html",
     "robots.txt",
     "sitemap.xml",
@@ -51,7 +50,6 @@ FILES = [
 
 ASSET_SOURCE_FILES = [
     "index.html",
-    "marce/index.html",
     "legal/business.html",
     "legal/privacy.html",
     "legal/refund.html",
@@ -131,7 +129,7 @@ def normalize_asset_path(raw_path: str) -> str:
 
 
 def referenced_assets() -> list[str]:
-    pattern = re.compile(r"(?:\.\./|\./)?assets/ittemmall/[A-Za-z0-9._/-]+")
+    pattern = re.compile(r"(?:\.\./|\./)?assets/(?:ittemmall|images)/[A-Za-z0-9._/-]+")
     assets: set[str] = set()
     for relative_path in ASSET_SOURCE_FILES:
         source = ROOT / relative_path

@@ -205,8 +205,8 @@
           <p class="eyebrow">TOSS PAYMENTS</p>
           <h1>토스페이먼츠 결제</h1>
           <p>
-            토스페이먼츠 테스트 결제창으로 결제수단 선택과 인증 흐름을 확인합니다.
-            테스트 키 사용 중에는 실제 결제 금액이 출금되지 않습니다.
+            토스페이먼츠 결제창에서 카드와 간편결제를 선택할 수 있습니다.
+            주문 내용과 결제 정보를 확인한 뒤 진행해주세요.
           </p>
           <div id="payment-method" aria-live="polite"></div>
           <div id="agreement" aria-live="polite"></div>
@@ -242,7 +242,7 @@
         var params = new URLSearchParams(window.location.search);
         var amount = parseAmount(params.get("amount"));
         var orderId = normalizeOrderId(params.get("orderId"));
-        var orderName = cleanText(params.get("orderName") || "MARCE 스위트 피클볼 패들", 100);
+        var orderName = cleanText(params.get("orderName") || "ITTEMMALL 주문", 100);
         var customerName = cleanText(params.get("customerName") || "", 100);
         var customerEmail = cleanText(params.get("customerEmail") || "", 100);
         var customerMobilePhone = String(params.get("customerMobilePhone") || "").replace(/\D/g, "").slice(0, 11);

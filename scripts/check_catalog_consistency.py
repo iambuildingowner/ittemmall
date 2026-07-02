@@ -35,6 +35,8 @@ def frontend_products(index_path: Path = ROOT / "index.html") -> dict[str, Catal
     )
     for item in product_pattern.finditer(match.group("body")):
         body = item.group("body")
+        if re.search(r"\bretired:\s*true\b", body):
+            continue
         name = re.search(r"\bname:\s*\"(?P<name>[^\"]+)\"", body)
         price = re.search(r"\bprice:\s*(?P<price>\d+)", body)
         if not name or not price:

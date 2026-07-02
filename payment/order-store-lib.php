@@ -61,13 +61,9 @@ function ittemmallWithOrderStoreLock(callable $callback)
 function ittemmallProductCatalog(): array
 {
     return [
-        'product-001' => [
-            'name' => 'MARCE 스위트 피클볼 패들 (USAPA인증) - 핑크',
-            'price' => 59000,
-        ],
-        'product-002' => [
-            'name' => 'MARCE 스위트 피클볼 패들 (USAPA인증) - 블랙',
-            'price' => 59000,
+        'product-004' => [
+            'name' => '러너윈 테크니컬 헤드밴드',
+            'price' => 7900,
         ],
         'product-003' => [
             'name' => '윈드쿨 에어 선풍기 조끼',

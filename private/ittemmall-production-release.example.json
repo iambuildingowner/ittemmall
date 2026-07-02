@@ -22,8 +22,8 @@
     "admin_token": ""
   },
   "notification": {
-    "enable": false,
-    "email": "orders@ittemmall.com",
+    "enable": true,
+    "email": "staysiaofficial@gmail.com",
     "from": "no-reply@ittemmall.com"
   },
   "toss_payments": {

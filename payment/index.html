@@ -19,16 +19,16 @@
           params.get("codex_test") === "1" ||
           params.get("pixel_test") === "1";
         var payload = {
-          content_ids: ["product-001"],
-          content_name: "MARCE Sweet Pickleball Paddle Pink",
+          content_ids: ["product-004"],
+          content_name: "러너윈 테크니컬 헤드밴드",
           content_type: "product",
-          value: 79000,
+          value: 7900,
           currency: "KRW",
-          product_slug: "pink",
+          product_slug: "runnerwin-headband",
           site_name: "ittemmall",
-          checkout_scope: "ittemmall_ittemmall_pink",
+          checkout_scope: "ittemmall_runnerwin_headband",
           source: "ittemmall_payment_hub",
-          fakeDoorEvent: "PaymentPageView",
+          commerceEventType: "payment_page_view",
         };
 
         if (isTest) payload.__test = true;
@@ -80,7 +80,7 @@
               timestamp: new Date().toISOString(),
               meta_pixel_id: pixelId,
               brand: "ITTEMMALL",
-              product_focus: "ittemmall-pickleball-paddle-pink",
+              product_focus: "runnerwin-headband",
             };
             var body = JSON.stringify(event);
             if (navigator.sendBeacon) {
