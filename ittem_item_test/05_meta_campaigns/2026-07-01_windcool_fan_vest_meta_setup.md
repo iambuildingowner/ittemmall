@@ -113,6 +113,11 @@
   - 2026-07-02 14:45 KST: 실제 운영 N pay 버튼 1차 클릭 `test_run_id=windcool-vest-npay-live-01` 후 cleanup 삭제 4건 확인. 삭제 이벤트는 `ViewContent`, `NpayPurchaseClick`, `NpayPurchaseClick_windcool_vest`, `CheckoutPageView`.
   - 2026-07-02 14:45 KST: 실제 운영 N pay 버튼 2차 클릭 `test_run_id=windcool-vest-npay-live-02` 후 cleanup 삭제 4건 확인. 삭제 이벤트는 `ViewContent`, `NpayPurchaseClick`, `NpayPurchaseClick_windcool_vest`, `CheckoutPageView`.
   - 2026-07-02 14:46 KST: 위 test_run_id 2개와 직접 POST 예비 테스트 ID를 재삭제했을 때 모두 `removed=0`으로 테스트 기록 잔여 없음 확인.
+  - 2026-07-02 15:04 KST: 이후 `main` 브랜치 커밋 `f7c727c`의 자동 배포가 라이브를 러너윈 헤드밴드 버전으로 덮어써 `#/product/windcool-vest` 상세가 열리지 않고, track.php는 `ignored` 응답을 반환하는 상태가 됨.
+  - 2026-07-02 15:16 KST: `codex/ittemmall-baseline` 커밋 `3532e77`을 재배포해 라이브 루트에서 `windcool-vest`가 다시 포함되고, `러너윈/헤드밴드` 문구가 사라진 것을 확인.
+  - 2026-07-02 15:17 KST: 복구 후 직접 POST `restore-direct-windcool-01`은 `stored:true`, cleanup 삭제 1건 확인.
+  - 2026-07-02 15:17 KST: 실제 운영 `#/product/windcool-vest` 상세에서 제목 `윈드쿨 에어 선풍기 조끼`, 가격 `48,900`, 버튼 이벤트 `NpayPurchaseClick_windcool_vest` 확인. 테스트 클릭 `restore-windcool-npay-live-01` cleanup 삭제 2건 확인.
+  - 2026-07-02 15:18 KST: 복구 테스트 ID 2개 재삭제 시 모두 `removed=0`으로 테스트 기록 잔여 없음 확인.
 - Meta 게시 로그:
   - 1차 게시 시도: 광고 세트/광고 일정이 24시간보다 짧다는 Meta 오류로 실패
   - 조치: 종료 시간을 2026-07-02 22:36 GMT+9로 변경
