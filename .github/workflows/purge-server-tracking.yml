@@ -1,0 +1,192 @@
+name: Purge Server Tracking Logs
+
+on:
+  workflow_dispatch:
+    inputs:
+      cutoff_kst:
+        description: Delete tracking records at or before this KST timestamp.
+        required: true
+        type: string
+
+jobs:
+  purge:
+    name: Purge pixel event records
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Validate FTP secrets
+        env:
+          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
+        run: |
+          missing=0
+          for name in HOSTINGER_FTP_SERVER HOSTINGER_FTP_USERNAME HOSTINGER_FTP_PASSWORD HOSTINGER_FTP_TARGET_DIR; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing GitHub secret: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp jq
+
+      - name: Upload purge script
+        env:
+          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          token="$(openssl rand -hex 24)"
+          script="__codex_purge_pixel_events_${RUN_ID}.php"
+          echo "PURGE_TOKEN=${token}" >> "$GITHUB_ENV"
+          echo "PURGE_SCRIPT=${script}" >> "$GITHUB_ENV"
+          cat > "$script" <<'PHP'
+          <?php
+          declare(strict_types=1);
+          header('Content-Type: application/json; charset=utf-8');
+          header('Cache-Control: no-store');
+
+          $expected = getenv('CODEX_PURGE_TOKEN') ?: '';
+          $given = (string)($_GET['token'] ?? '');
+          if ($expected === '' || !hash_equals($expected, $given)) {
+              http_response_code(403);
+              echo json_encode(['ok' => false, 'error' => 'FORBIDDEN']);
+              exit;
+          }
+
+          require_once __DIR__ . '/payment/server-config-lib.php';
+
+          $cutoffRaw = (string)($_GET['cutoff_kst'] ?? '');
+          try {
+              $cutoff = new DateTimeImmutable($cutoffRaw, new DateTimeZone('Asia/Seoul'));
+          } catch (Throwable $e) {
+              http_response_code(400);
+              echo json_encode(['ok' => false, 'error' => 'BAD_CUTOFF']);
+              exit;
+          }
+          $cutoffTs = $cutoff->getTimestamp();
+
+          $dirs = [];
+          $effective = ittemmallEffectiveTrackLogPath();
+          $dirs[] = dirname($effective);
+          $dirs[] = __DIR__ . '/data/pixel-events';
+          $dirs = array_values(array_unique(array_filter($dirs)));
+
+          $result = [
+              'ok' => true,
+              'cutoff_kst' => $cutoff->setTimezone(new DateTimeZone('Asia/Seoul'))->format('c'),
+              'dirs' => [],
+              'files_seen' => 0,
+              'files_deleted' => 0,
+              'files_rewritten' => 0,
+              'records_deleted' => 0,
+              'records_kept' => 0,
+          ];
+
+          foreach ($dirs as $dir) {
+              $dirResult = ['dir' => $dir, 'exists' => is_dir($dir), 'files' => []];
+              if (!is_dir($dir)) {
+                  $result['dirs'][] = $dirResult;
+                  continue;
+              }
+              $files = glob(rtrim($dir, '/') . '/*.ndjson') ?: [];
+              foreach ($files as $file) {
+                  $result['files_seen'] += 1;
+                  $deleted = 0;
+                  $kept = [];
+                  $lines = file($file, FILE_IGNORE_NEW_LINES);
+                  if ($lines === false) {
+                      $dirResult['files'][] = ['file' => basename($file), 'error' => 'READ_FAILED'];
+                      continue;
+                  }
+                  foreach ($lines as $line) {
+                      if (trim($line) === '') {
+                          continue;
+                      }
+                      $entry = json_decode($line, true);
+                      $timeRaw = is_array($entry) ? (string)($entry['server_time_kst'] ?? $entry['createdAt'] ?? $entry['server_time_utc'] ?? '') : '';
+                      $ts = null;
+                      if ($timeRaw !== '') {
+                          try {
+                              $ts = (new DateTimeImmutable($timeRaw))->getTimestamp();
+                          } catch (Throwable $e) {
+                              $ts = null;
+                          }
+                      }
+                      if ($ts === null || $ts <= $cutoffTs) {
+                          $deleted += 1;
+                          continue;
+                      }
+                      $kept[] = $line;
+                  }
+                  $result['records_deleted'] += $deleted;
+                  $result['records_kept'] += count($kept);
+                  if (count($kept) === 0) {
+                      if (@unlink($file)) {
+                          $result['files_deleted'] += 1;
+                          $dirResult['files'][] = ['file' => basename($file), 'deleted_records' => $deleted, 'kept_records' => 0, 'action' => 'deleted_file'];
+                      } else {
+                          $dirResult['files'][] = ['file' => basename($file), 'error' => 'DELETE_FAILED'];
+                      }
+                      continue;
+                  }
+                  $tmp = $file . '.codex-tmp';
+                  if (file_put_contents($tmp, implode(PHP_EOL, $kept) . PHP_EOL, LOCK_EX) === false || !rename($tmp, $file)) {
+                      @unlink($tmp);
+                      $dirResult['files'][] = ['file' => basename($file), 'error' => 'REWRITE_FAILED'];
+                      continue;
+                  }
+                  @chmod($file, 0600);
+                  $result['files_rewritten'] += 1;
+                  $dirResult['files'][] = ['file' => basename($file), 'deleted_records' => $deleted, 'kept_records' => count($kept), 'action' => 'rewritten'];
+              }
+              $result['dirs'][] = $dirResult;
+          }
+
+          echo json_encode($result, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+          PHP
+          lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
+            -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; cd \"$HOSTINGER_FTP_TARGET_DIR\"; put \"$script\" -o \"$script\"; bye"
+
+      - name: Run purge script
+        env:
+          CUTOFF_KST: ${{ inputs.cutoff_kst }}
+          CODEX_PURGE_TOKEN: ${{ env.PURGE_TOKEN }}
+          PURGE_SCRIPT: ${{ env.PURGE_SCRIPT }}
+        run: |
+          set -euo pipefail
+          encoded_cutoff="$(python3 - <<'PY'
+          import os, urllib.parse
+          print(urllib.parse.quote(os.environ['CUTOFF_KST'], safe=''))
+          PY
+          )"
+          response="$(curl -fsS "https://ittemmall.com/${PURGE_SCRIPT}?token=${CODEX_PURGE_TOKEN}&cutoff_kst=${encoded_cutoff}")"
+          echo "$response"
+          echo "$response" > purge-result.json
+          ok="$(jq -r '.ok' purge-result.json)"
+          if [ "$ok" != "true" ]; then
+            exit 1
+          fi
+
+      - name: Remove purge script
+        if: always()
+        env:
+          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
+          PURGE_SCRIPT: ${{ env.PURGE_SCRIPT }}
+        run: |
+          if [ -n "${PURGE_SCRIPT:-}" ]; then
+            lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
+              -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; cd \"$HOSTINGER_FTP_TARGET_DIR\"; rm -f \"$PURGE_SCRIPT\"; bye" || true
+          fi
