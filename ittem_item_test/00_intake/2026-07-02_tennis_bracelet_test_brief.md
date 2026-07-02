@@ -88,6 +88,29 @@
   - 주얼리는 소재/알레르기/변색 기대치가 민감하므로 925실버처럼 오인될 표현을 쓰면 안 된다.
   - 저가 경쟁이 강해 이미지/선물감/상세 신뢰가 약하면 N pay 클릭이 낮을 수 있다.
 
+## 배포 / 로그 테스트 기록
+
+- GitHub Actions 배포: `Deploy to Hostinger` 성공
+- 운영 상품 URL: `https://ittemmall.com/tennis-bracelet/`
+- 운영 광고 이미지 URL: `https://ittemmall.com/assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v2.png`
+- 운영 렌더 확인:
+  - 상품명 `아쿠아글로우 테니스 브레이슬릿` 노출
+  - 가격 `49,900원` 노출
+  - 사이즈 선택 가이드와 사이즈표 노출
+  - `바로 구매하기` / `N pay 구매` 버튼 노출
+  - 테니스 팔찌 이미지 깨짐 없음
+  - 공개 화면에 티파니/Tiffany, 테스트 의도 문구 없음
+- 운영 로그 테스트 1차:
+  - 테스트 ID: `tennis-live-20260702-a01`
+  - `PurchaseCtaClick_tennis_bracelet`: `stored:true`, `notification.sent:true`
+  - `NpayPurchaseClick_tennis_bracelet`: `stored:true`, `notification.sent:true`
+  - 테스트 로그 삭제: 8건 삭제 완료
+- 운영 로그 테스트 2차:
+  - 테스트 ID: `tennis-live-20260702-a02`
+  - `PurchaseCtaClick_tennis_bracelet`: `stored:true`, `notification.sent:true`
+  - `NpayPurchaseClick_tennis_bracelet`: `stored:true`, `notification.sent:true`
+  - 테스트 로그 삭제: 8건 삭제 완료
+
 ## 출처
 
 - 네이버 쇼핑 검색 URL: https://search.shopping.naver.com/search/all?query=%ED%85%8C%EB%8B%88%EC%8A%A4%20%ED%8C%94%EC%B0%8C
