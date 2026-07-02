@@ -61,6 +61,10 @@ function ittemmallWithOrderStoreLock(callable $callback)
 function ittemmallProductCatalog(): array
 {
     return [
+        'product-005' => [
+            'name' => '아쿠아글로우 테니스 브레이슬릿',
+            'price' => 49900,
+        ],
         'product-004' => [
             'name' => '러너윈 테크니컬 헤드밴드',
             'price' => 7900,
