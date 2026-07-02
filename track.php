@@ -49,6 +49,69 @@ function ittemmallTrackCleanPayload(mixed $value, int $depth = 0): mixed
     return ittemmallTrackCleanString((string)$value, 1000);
 }
 
+function ittemmallTrackKstTimestamp(DateTimeImmutable $utcNow): string
+{
+    return $utcNow->setTimezone(new DateTimeZone('Asia/Seoul'))->format('c');
+}
+
+function ittemmallTrackTestRunId(array $payload): string
+{
+    $testRunId = ittemmallTrackCleanString((string)($payload['testRunId'] ?? $payload['test_run_id'] ?? ''), 120);
+    if (!preg_match('/^[A-Za-z0-9._:-]{12,120}$/', $testRunId)) {
+        return '';
+    }
+    return $testRunId;
+}
+
+function ittemmallTrackCleanupTestEvents(string $testRunId): array
+{
+    $logPath = ittemmallEffectiveTrackLogPath();
+    if (!is_file($logPath)) {
+        return ['removed' => 0, 'events' => []];
+    }
+
+    $lines = file($logPath, FILE_IGNORE_NEW_LINES);
+    if ($lines === false) {
+        ittemmallTrackResponse(500, ['ok' => false, 'error' => 'TRACK_READ_FAILED']);
+    }
+
+    $kept = [];
+    $removed = 0;
+    $events = [];
+    foreach ($lines as $line) {
+        if (trim($line) === '') {
+            continue;
+        }
+        $entry = json_decode($line, true);
+        $payload = is_array($entry) && is_array($entry['payload'] ?? null) ? $entry['payload'] : [];
+        $entryTestRunId = ittemmallTrackTestRunId($payload);
+        $isTest = ($payload['__test'] ?? false) === true;
+        if ($isTest && $entryTestRunId !== '' && hash_equals($testRunId, $entryTestRunId)) {
+            $removed += 1;
+            $eventName = (string)($entry['event'] ?? '');
+            if ($eventName !== '') {
+                $events[$eventName] = ($events[$eventName] ?? 0) + 1;
+            }
+            continue;
+        }
+        $kept[] = $line;
+    }
+
+    $dir = dirname($logPath);
+    $tmpPath = $dir . '/.' . basename($logPath) . '.tmp';
+    $content = $kept === [] ? '' : implode(PHP_EOL, $kept) . PHP_EOL;
+    if (file_put_contents($tmpPath, $content, LOCK_EX) === false) {
+        ittemmallTrackResponse(500, ['ok' => false, 'error' => 'TRACK_CLEANUP_WRITE_FAILED']);
+    }
+    if (!rename($tmpPath, $logPath)) {
+        @unlink($tmpPath);
+        ittemmallTrackResponse(500, ['ok' => false, 'error' => 'TRACK_CLEANUP_RENAME_FAILED']);
+    }
+    @chmod($logPath, 0600);
+    ksort($events);
+    return ['removed' => $removed, 'events' => $events];
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     ittemmallTrackResponse(405, ['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
 }
@@ -83,24 +146,59 @@ if ($eventName === '') {
     ittemmallTrackResponse(400, ['ok' => false, 'error' => 'MISSING_EVENT']);
 }
 
+$payload = ittemmallTrackCleanPayload($body['payload'] ?? []);
+if (!is_array($payload)) {
+    $payload = [];
+}
+
+if ($eventName === '__cleanup_test_events') {
+    $testRunId = ittemmallTrackTestRunId($payload);
+    if ($testRunId === '') {
+        ittemmallTrackResponse(400, ['ok' => false, 'error' => 'MISSING_TEST_RUN_ID']);
+    }
+    $cleanup = ittemmallTrackCleanupTestEvents($testRunId);
+    ittemmallTrackResponse(200, [
+        'ok' => true,
+        'cleanup' => true,
+        'testRunId' => $testRunId,
+        'removed' => $cleanup['removed'],
+        'events' => $cleanup['events'],
+    ]);
+}
+
+$salt = ittemmallEffectiveTrackSalt();
+if ($salt === '') {
+    ittemmallTrackResponse(500, ['ok' => false, 'error' => 'TRACK_SALT_CREATE_FAILED']);
+}
+
+$utcNow = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+$ipHash = hash('sha256', (string)($_SERVER['REMOTE_ADDR'] ?? '') . ':' . $salt);
+$productFocus = ittemmallTrackCleanString(
+    (string)($body['product_focus'] ?? $payload['productSlug'] ?? $payload['productId'] ?? 'ittemmall'),
+    160
+);
+
 $event = [
     'event' => $eventName,
-    'payload' => ittemmallTrackCleanPayload($body['payload'] ?? []),
+    'payload' => $payload,
     'brand' => ittemmallTrackCleanString((string)($body['brand'] ?? 'ITTEMMALL'), 80),
+    'product_focus' => $productFocus,
     'path' => ittemmallTrackCleanString((string)($body['path'] ?? ''), 500),
     'url' => ittemmallTrackCleanString((string)($body['url'] ?? ''), 1000),
     'referrer' => ittemmallTrackCleanString((string)($body['referrer'] ?? ''), 1000),
     'attribution' => ittemmallTrackCleanPayload($body['attribution'] ?? []),
     'userAgent' => ittemmallTrackCleanString((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 500),
-    'ipHash' => hash('sha256', (string)($_SERVER['REMOTE_ADDR'] ?? '') . ':' . ittemmallTrackEnv('ITTEMMALL_TRACK_SALT')),
-    'createdAt' => gmdate('c'),
+    'ipHash' => $ipHash,
+    'request' => [
+        'ip_hash' => $ipHash,
+        'user_agent' => ittemmallTrackCleanString((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 500),
+    ],
+    'createdAt' => $utcNow->format('c'),
+    'server_time_utc' => $utcNow->format('c'),
+    'server_time_kst' => ittemmallTrackKstTimestamp($utcNow),
 ];
 
-$logPath = ittemmallTrackEnv('ITTEMMALL_TRACK_LOG_PATH');
-if ($logPath === '') {
-    ittemmallTrackResponse(200, ['ok' => true, 'stored' => false]);
-}
-
+$logPath = ittemmallEffectiveTrackLogPath();
 $dir = dirname($logPath);
 if (!is_dir($dir) && !mkdir($dir, 0700, true)) {
     ittemmallTrackResponse(500, ['ok' => false, 'error' => 'TRACK_DIRECTORY_CREATE_FAILED']);
@@ -112,4 +210,9 @@ if (file_put_contents($logPath, $line, FILE_APPEND | LOCK_EX) === false) {
 }
 @chmod($logPath, 0600);
 
-ittemmallTrackResponse(200, ['ok' => true, 'stored' => true]);
+ittemmallTrackResponse(200, [
+    'ok' => true,
+    'stored' => true,
+    'test' => ($payload['__test'] ?? false) === true,
+    'event' => $eventName,
+]);

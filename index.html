@@ -1392,6 +1392,73 @@
         text-align: right;
       }
 
+      .size-guide-block {
+        display: grid;
+        gap: 16px;
+      }
+
+      .size-guide-image {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        margin: 14px 0 0;
+        background: white;
+      }
+
+      .size-guide-image img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .size-table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+      }
+
+      .size-table {
+        width: 100%;
+        min-width: 620px;
+        border-collapse: collapse;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .size-table th,
+      .size-table td {
+        border-bottom: 1px solid var(--line);
+        padding: 12px 10px;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .size-table th {
+        background: var(--soft);
+        color: var(--ink);
+        font-weight: 900;
+      }
+
+      .size-table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .size-notes {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .size-notes li {
+        color: #52525b;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.55;
+      }
+
       .bottom-bar {
         position: fixed;
         right: 0;
@@ -2228,6 +2295,7 @@
             image: "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
             cardMediaClass: "",
             detailMediaClass: "",
+            hideStandaloneInfo: true,
             images: [
               "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
               "assets/ittemmall/fan-vest/windcool-vest-back-fans.jpg",
@@ -2311,6 +2379,25 @@
                 "시원한 조끼를 찾지만 펠티어 고가 제품은 부담스러운 분",
                 "보조배터리를 이미 가지고 있어 조끼와 팬 세트만 필요한 분",
               ],
+              sizeGuide: {
+                title: "사이즈 선택 가이드",
+                copy: "조끼를 평평하게 펼친 상태에서 가슴둘레, 어깨너비, 총장을 기준으로 확인하세요.",
+                image: "assets/ittemmall/fan-vest/windcool-vest-size-guide.svg",
+                alt: "윈드쿨 선풍기 조끼 사이즈 측정 위치 안내 이미지",
+              },
+              sizeChart: [
+                { size: "M", chest: "104", shoulder: "42", length: "62", recommend: "95 전후 / 얇은 반팔 위 착용" },
+                { size: "L", chest: "108", shoulder: "44", length: "64", recommend: "100 전후 / 기본 추천" },
+                { size: "XL", chest: "112", shoulder: "46", length: "66", recommend: "105 전후 / 여유 착용" },
+                { size: "2XL", chest: "116", shoulder: "48", length: "68", recommend: "110 전후 / 작업복 위 착용" },
+                { size: "3XL", chest: "120", shoulder: "50", length: "70", recommend: "115 전후 / 두꺼운 이너 착용" },
+              ],
+              sizeNotes: [
+                "실측은 단면이 아니라 둘레 기준 안내값입니다.",
+                "작업복이나 두꺼운 티셔츠 위에 입을 경우 한 사이즈 크게 선택하는 것을 권장합니다.",
+                "측정 위치와 생산 차수에 따라 1~3cm 오차가 있을 수 있습니다.",
+              ],
+              specTitle: "사이즈 / 상품 정보",
               specs: [
                 { label: "제품명", value: "윈드쿨 에어 선풍기 조끼" },
                 { label: "제품 유형", value: "선풍기조끼 / 팬 베스트" },
@@ -2509,7 +2596,11 @@
 
         function trackPixelEvent(name, payload) {
           const isTest = isTrackingTestMode();
-          const trackedPayload = isTest ? { ...(payload || {}), __test: true } : payload;
+          const params = new URLSearchParams(location.search);
+          const testRunId = params.get("test_run_id") || params.get("testRunId") || "";
+          const trackedPayload = isTest
+            ? { ...(payload || {}), __test: true, ...(testRunId ? { testRunId } : {}) }
+            : payload;
           const event = {
             id: `PX-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
             name,
@@ -2546,8 +2637,15 @@
           return event;
         }
 
+        function shouldSendServerTrackingEvent(eventName) {
+          return (
+            trackingConfig.serverLoggedEvents.includes(eventName) ||
+            eventName.startsWith("NpayPurchaseClick_")
+          );
+        }
+
         function sendServerTrackingEvent(event) {
-          if (!trackingConfig.serverLoggedEvents.includes(event.name)) return;
+          if (!shouldSendServerTrackingEvent(event.name)) return;
           if (location.protocol === "file:") return;
           const body = JSON.stringify({
             event: event.name,
@@ -2590,6 +2688,8 @@
             "ad_id",
             "fbclid",
             "product",
+            "test_run_id",
+            "testRunId",
           ];
           return fields.reduce((acc, key) => {
             const value = params.get(key);
@@ -2610,19 +2710,38 @@
 
         function copyTrackingTestParams(url) {
           const params = new URLSearchParams(location.search);
-          ["test", "codex_test", "pixel_test"].forEach((key) => {
+          ["test", "codex_test", "pixel_test", "test_run_id", "testRunId"].forEach((key) => {
             if (params.get(key) === "1") url.searchParams.set(key, "1");
+            if ((key === "test_run_id" || key === "testRunId") && params.get(key)) {
+              url.searchParams.set(key, params.get(key));
+            }
           });
           return url;
+        }
+
+        function pixelEventToken(value) {
+          const token = String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "_")
+            .replace(/^_+|_+$/g, "");
+          return token || "product";
+        }
+
+        function productNpayEventName(product) {
+          const token = pixelEventToken(productRouteId(product.id) || product.id).slice(0, 32);
+          return `NpayPurchaseClick_${token}`;
         }
 
         function buildCommercePayload(product, extra = {}) {
           const quantity = Number(state.quantity || 1);
           const amount = getOrderTotal(product, quantity);
+          const productScopedNpayEventName = productNpayEventName(product);
           return {
             productId: product.id,
             productSlug: productRouteId(product.id),
             productName: product.name,
+            productScopedNpayEventName,
             content_ids: [product.id],
             content_name: product.name,
             content_type: "product",
@@ -2641,7 +2760,17 @@
         }
 
         function trackCommerceEvent(name, extra = {}, product = currentProduct()) {
-          return trackPixelEvent(name, buildCommercePayload(product, extra));
+          const payload = buildCommercePayload(product, extra);
+          const event = trackPixelEvent(name, payload);
+          if (name === "NpayPurchaseClick") {
+            trackPixelEvent(payload.productScopedNpayEventName, {
+              ...payload,
+              baseEventName: name,
+              productScoped: true,
+              measurementUnit: "product_npay_click",
+            });
+          }
+          return event;
         }
 
         function persistState() {
@@ -3976,21 +4105,27 @@
 
               ${renderProductStory(product)}
 
-              <section class="divider-section">
-                <h2 style="margin:0;font-size:17px">상품 정보</h2>
-                <dl class="info-list">
-                  ${(product.infoItems || product.detailInfo || [])
-                    .map(
-                      (item) => `
-                        <div class="info-line">
-                          <dt>${escapeHtml(item.label)}</dt>
-                          <dd>${escapeHtml(item.value)}</dd>
-                        </div>
-                      `,
-                    )
-                    .join("")}
-                </dl>
-              </section>
+              ${
+                product.hideStandaloneInfo
+                  ? ""
+                  : `
+                    <section class="divider-section">
+                      <h2 style="margin:0;font-size:17px">상품 정보</h2>
+                      <dl class="info-list">
+                        ${(product.infoItems || product.detailInfo || [])
+                          .map(
+                            (item) => `
+                              <div class="info-line">
+                                <dt>${escapeHtml(item.label)}</dt>
+                                <dd>${escapeHtml(item.value)}</dd>
+                              </div>
+                            `,
+                          )
+                          .join("")}
+                      </dl>
+                    </section>
+                  `
+              }
 
               ${renderTrustRow()}
               ${renderFooter()}
@@ -4089,10 +4224,12 @@
                 `
                 : ""}
 
+              ${renderSizeGuide(story)}
+
               ${(story.specs || []).length
                 ? `
                   <section class="story-block">
-                    <p class="eyebrow">제품 사양</p>
+                    <p class="eyebrow">${escapeHtml(story.specTitle || "제품 사양")}</p>
                     <dl class="spec-list">
                       ${story.specs
                         .map(
@@ -4112,6 +4249,70 @@
           `;
         }
 
+        function renderSizeGuide(story) {
+          if (!story.sizeGuide && !(story.sizeChart || []).length) return "";
+          return `
+            <section class="story-block size-guide-block">
+              <div>
+                <p class="eyebrow">${escapeHtml(story.sizeGuide?.title || "사이즈 선택 가이드")}</p>
+                ${
+                  story.sizeGuide?.copy
+                    ? `<p class="story-copy">${escapeHtml(story.sizeGuide.copy)}</p>`
+                    : ""
+                }
+                ${
+                  story.sizeGuide?.image
+                    ? `
+                      <figure class="size-guide-image">
+                        <img src="${story.sizeGuide.image}" alt="${escapeHtml(story.sizeGuide.alt || story.sizeGuide.title || "사이즈 안내 이미지")}" />
+                      </figure>
+                    `
+                    : ""
+                }
+              </div>
+              ${
+                (story.sizeChart || []).length
+                  ? `
+                    <div class="size-table-wrap" aria-label="사이즈표">
+                      <table class="size-table">
+                        <thead>
+                          <tr>
+                            <th>사이즈</th>
+                            <th>가슴둘레(cm)</th>
+                            <th>어깨너비(cm)</th>
+                            <th>총장(cm)</th>
+                            <th>권장 선택</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${story.sizeChart
+                            .map(
+                              (row) => `
+                                <tr>
+                                  <td>${escapeHtml(row.size)}</td>
+                                  <td>${escapeHtml(row.chest)}</td>
+                                  <td>${escapeHtml(row.shoulder)}</td>
+                                  <td>${escapeHtml(row.length)}</td>
+                                  <td>${escapeHtml(row.recommend)}</td>
+                                </tr>
+                              `,
+                            )
+                            .join("")}
+                        </tbody>
+                      </table>
+                    </div>
+                  `
+                  : ""
+              }
+              ${
+                (story.sizeNotes || []).length
+                  ? `<ul class="size-notes">${story.sizeNotes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+                  : ""
+              }
+            </section>
+          `;
+        }
+
         function renderDetailBottomBar() {
           return `
             <div class="bottom-bar">
@@ -4119,7 +4320,7 @@
                 <button class="btn primary" type="button" data-action="apply" data-checkout-source="direct_buy">
                   바로 구매하기
                 </button>
-                <button class="npay-button" type="button" data-action="apply" data-checkout-source="npay" aria-label="N pay 구매">
+                <button class="npay-button" type="button" data-action="apply" data-checkout-source="npay" data-pixel-event="${escapeHtml(productNpayEventName(currentProduct()))}" aria-label="N pay 구매">
                   <span class="npay-mark">N</span>
                   <span>pay 구매</span>
                 </button>

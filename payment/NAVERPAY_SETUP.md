@@ -81,7 +81,8 @@ Never put `ITTEMMALL_ORDER_STORE_PATH` inside `public_html`, `www`, `htdocs`, or
 The order store uses a `.lock` file to avoid concurrent write loss and writes a `.bak` copy before replacing the JSON file. Keep those files in the same private directory and out of the public web root.
 Order creation, Naver Pay approval, and tracking POST requests use a private JSON rate-limit file. Leave `ITTEMMALL_RATE_LIMIT_PATH` empty to derive it from `ITTEMMALL_ORDER_STORE_PATH`, or set it to a private absolute path outside `public_html`, `www`, or `htdocs`.
 After a Naver Pay order reaches approved, canceled, or cancel-pending state, the server keeps its product, quantity, and amount immutable against later client resubmits. The approval endpoint also checks that the stored order is a Naver Pay order in `payment_ready/ready` state before calling Naver Pay.
-If `ITTEMMALL_TRACK_LOG_PATH` is omitted, `track.php` returns success without storing logs.
+If `ITTEMMALL_TRACK_LOG_PATH` is omitted, `track.php` writes tracking logs to the default private sibling folder outside the public web root: `../ittemmall-private/data/pixel-events/{KST-date}.ndjson`.
+Test events must include a `testRunId`, and cleanup must remove those `__test=true` rows before reporting the test complete.
 If hosting cannot set environment variables, copy `private/ittemmall-server-config.example.php` to a private non-public path and set `ITTEMMALL_SERVER_CONFIG_PATH`. If that env var is also unavailable, place the real config at the default sibling path `../ittemmall-private/ittemmall-server-config.php` relative to the public web root.
 
 You can generate a private config file skeleton with random `ITTEMMALL_TRACK_SALT` and `ITTEMMALL_ADMIN_TOKEN`:

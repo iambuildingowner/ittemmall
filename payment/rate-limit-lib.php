@@ -15,7 +15,7 @@ function ittemmallRateLimitConfiguredPath(): string
         return $orderPath . '.rate-limit.json';
     }
 
-    $trackPath = ittemmallConfigValue('ITTEMMALL_TRACK_LOG_PATH');
+    $trackPath = ittemmallEffectiveTrackLogPath();
     if ($trackPath !== '') {
         return $trackPath . '.rate-limit.json';
     }
@@ -37,6 +37,9 @@ function ittemmallRateLimitCleanScope(string $scope): string
 function ittemmallRateLimitClientHash(): string
 {
     $salt = ittemmallConfigValue('ITTEMMALL_TRACK_SALT');
+    if ($salt === '') {
+        $salt = ittemmallEffectiveTrackSalt();
+    }
     if ($salt === '') {
         $salt = ittemmallConfigValue('ITTEMMALL_ADMIN_TOKEN', 'ittemmall-rate-limit');
     }

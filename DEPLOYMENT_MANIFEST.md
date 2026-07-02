@@ -74,9 +74,10 @@
 
 - `ITTEMMALL_ORDER_STORE_PATH`
 - `ITTEMMALL_RATE_LIMIT_PATH`
-- `ITTEMMALL_TRACK_LOG_PATH`
 - `ITTEMMALL_ADMIN_TOKEN`
 - `TOSS_PAYMENTS_SECRET_KEY`
+
+추적 로그는 `ITTEMMALL_TRACK_LOG_PATH`와 `ITTEMMALL_TRACK_SALT`가 있으면 해당 값을 쓰고, 없으면 public web root 밖 기본 private 폴더 `../ittemmall-private/data/pixel-events/{KST-date}.ndjson`에 저장한다.
 
 Toss 실제 결제는 운영 검증 전까지 `TOSS_PAYMENTS_APPROVE_ENABLED=0`과 `payment/toss-config.js`의 `enabled=false`를 유지한다.
 

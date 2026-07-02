@@ -139,8 +139,19 @@
 
 - 상세 진입: 기존 ProductDetailClick 흐름 사용
 - 일반 구매 CTA: PurchaseCtaClick
-- N pay 버튼 클릭: NpayPurchaseClick
+- N pay 버튼 전체 클릭: NpayPurchaseClick
+- N pay 버튼 상품별 클릭: NpayPurchaseClick_windcool_vest
 - 주의: NpayPurchaseClick은 결제 성공이 아니라 N pay 구매 버튼 클릭 의도값이다.
+
+## 검증 손익 공식
+
+- 기준 공식: 매출 100 기준 광고비 20 / 원가 30 / 부대비용 20 / 순수익 30
+- 목표 구매 전환율: 2%
+- 판매가: 48,900원
+- 허용 광고비: 48,900원 x 20% = 9,780원
+- 목표 CPC: 9,780원 / 50 = 약 196원
+- 테스트 광고비: 운영 편의상 10,000원으로 반올림 가능
+- 탈락 기준: 테스트 광고비 소진 후 `NpayPurchaseClick_windcool_vest`가 0이면 기본 탈락
 
 ## 확인 필요
 
@@ -165,6 +176,6 @@
 - 상세 URL 직접 진입 확인 완료
 - 모바일 폭 390px에서 상품 카드, 상세 상단, 옵션, 하단 CTA 확인 완료
 - 이미지 누락 없음 확인 완료
-- N pay 버튼 클릭 시 `NpayPurchaseClick` 이벤트 저장 확인 완료
+- N pay 버튼 클릭 시 `NpayPurchaseClick` 전체 이벤트와 `NpayPurchaseClick_windcool_vest` 상품별 이벤트 저장 확인 완료
 - 로컬 Python 서버에서는 `/track.php` POST를 처리하지 못해 501이 발생하지만, 브라우저 저장 이벤트는 정상 확인됨
 - 운영 서버 또는 PHP 가능 서버에서는 `track.php` 수신까지 별도 확인 필요

@@ -6,6 +6,65 @@ function ittemmallServerConfigDefaultPath(): string
     return dirname(__DIR__, 2) . '/ittemmall-private/ittemmall-server-config.php';
 }
 
+function ittemmallDefaultPrivateDir(): string
+{
+    return dirname(__DIR__, 2) . '/ittemmall-private';
+}
+
+function ittemmallKstDate(): string
+{
+    return (new DateTimeImmutable('now', new DateTimeZone('Asia/Seoul')))->format('Y-m-d');
+}
+
+function ittemmallEffectiveTrackLogPath(?string $date = null): string
+{
+    $date = $date ?: ittemmallKstDate();
+    $configured = ittemmallConfigValue('ITTEMMALL_TRACK_LOG_PATH');
+    if ($configured !== '') {
+        if (str_contains($configured, '{date}')) {
+            return str_replace('{date}', $date, $configured);
+        }
+        if (str_ends_with($configured, '/') || is_dir($configured)) {
+            return rtrim($configured, '/') . '/' . $date . '.ndjson';
+        }
+        return $configured;
+    }
+    return ittemmallDefaultPrivateDir() . '/data/pixel-events/' . $date . '.ndjson';
+}
+
+function ittemmallTrackSaltPath(): string
+{
+    return ittemmallDefaultPrivateDir() . '/track-salt.txt';
+}
+
+function ittemmallEffectiveTrackSalt(): string
+{
+    $configured = ittemmallConfigValue('ITTEMMALL_TRACK_SALT');
+    if ($configured !== '') {
+        return $configured;
+    }
+
+    $saltPath = ittemmallTrackSaltPath();
+    if (is_file($saltPath)) {
+        $salt = trim((string)file_get_contents($saltPath));
+        if ($salt !== '') {
+            return $salt;
+        }
+    }
+
+    $dir = dirname($saltPath);
+    if (!is_dir($dir) && !mkdir($dir, 0700, true)) {
+        return '';
+    }
+
+    $salt = bin2hex(random_bytes(32));
+    if (file_put_contents($saltPath, $salt . PHP_EOL, LOCK_EX) === false) {
+        return '';
+    }
+    @chmod($saltPath, 0600);
+    return $salt;
+}
+
 function ittemmallServerConfigPath(): string
 {
     $path = getenv('ITTEMMALL_SERVER_CONFIG_PATH');

@@ -106,6 +106,20 @@ $orderLockPath = ittemmallOrderStoreLockPath();
 $orderLockExists = $orderLockPath !== '' && is_file($orderLockPath);
 $orderLockWritable = $orderLockExists ? is_writable($orderLockPath) : $orderStoreDirectoryWritable;
 $rateLimit = ittemmallRateLimitInspect();
+$trackLogPath = ittemmallEffectiveTrackLogPath();
+$trackLogDir = $trackLogPath === '' ? '' : dirname($trackLogPath);
+$trackLogConfigured = ittemmallHealthEnvPresent('ITTEMMALL_TRACK_LOG_PATH');
+$trackSaltConfigured = ittemmallHealthEnvPresent('ITTEMMALL_TRACK_SALT');
+$trackSaltPath = ittemmallTrackSaltPath();
+$trackLogDirectoryExists = $trackLogDir !== '' && is_dir($trackLogDir);
+$trackLogDirectoryWritable = $trackLogDirectoryExists && is_writable($trackLogDir);
+$trackPrivateDir = ittemmallDefaultPrivateDir();
+$trackPrivateDirExists = is_dir($trackPrivateDir);
+$trackPrivateDirWritable = $trackPrivateDirExists && is_writable($trackPrivateDir);
+$trackSaltFileExists = is_file($trackSaltPath);
+$trackSaltFileReadable = $trackSaltFileExists && is_readable($trackSaltPath);
+$trackEffectiveLogReady = $trackLogPath !== '' && ($trackLogDirectoryWritable || (!$trackLogDirectoryExists && ($trackPrivateDirWritable || (!$trackPrivateDirExists && is_writable(dirname($trackPrivateDir))))));
+$trackEffectiveSaltReady = $trackSaltConfigured || $trackSaltFileReadable || $trackPrivateDirWritable || (!$trackPrivateDirExists && is_writable(dirname($trackPrivateDir)));
 $mailReady = function_exists('mail');
 $clientId = ittemmallConfigValue('NAVER_PAY_CLIENT_ID');
 $clientSecret = ittemmallConfigValue('NAVER_PAY_CLIENT_SECRET');
@@ -257,6 +271,13 @@ echo json_encode([
     'tracking' => [
         'logPathConfigured' => ittemmallHealthEnvPresent('ITTEMMALL_TRACK_LOG_PATH'),
         'saltConfigured' => ittemmallHealthEnvPresent('ITTEMMALL_TRACK_SALT'),
+        'autoPrivateLogEnabled' => !$trackLogConfigured,
+        'effectiveLogReady' => $trackEffectiveLogReady,
+        'effectiveSaltReady' => $trackEffectiveSaltReady,
+        'directoryExists' => $trackLogDirectoryExists,
+        'directoryWritable' => $trackLogDirectoryWritable,
+        'saltFileExists' => $trackSaltFileExists,
+        'saltFileReadable' => $trackSaltFileReadable,
     ],
     'rateLimit' => $rateLimit,
     'admin' => [
