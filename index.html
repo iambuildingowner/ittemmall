@@ -53,26 +53,6 @@
                 "position": 1,
                 "item": {
                   "@type": "Product",
-                  "name": "아쿠아글로우 테니스 브레이슬릿",
-                  "brand": {
-                    "@type": "Brand",
-                    "name": "ITTEMMALL"
-                  },
-                  "image": "https://ittemmall.com/assets/ittemmall/tennis-bracelet/tennis-bracelet-hero.jpg",
-                  "offers": {
-                    "@type": "Offer",
-                    "price": "49900",
-                    "priceCurrency": "KRW",
-                    "availability": "https://schema.org/InStock",
-                    "url": "https://ittemmall.com/tennis-bracelet/"
-                  }
-                }
-              },
-              {
-                "@type": "ListItem",
-                "position": 2,
-                "item": {
-                  "@type": "Product",
                   "name": "러너윈 테크니컬 헤드밴드",
                   "brand": {
                     "@type": "Brand",
@@ -90,7 +70,7 @@
               },
               {
                 "@type": "ListItem",
-                "position": 3,
+                "position": 2,
                 "item": {
                   "@type": "Product",
                   "name": "윈드쿨 에어 선풍기 조끼",
@@ -212,9 +192,9 @@
         position: sticky;
         top: 0;
         z-index: 50;
-        border-bottom: 1px solid var(--brand);
-        background: var(--brand);
-        color: var(--on-brand);
+        border-bottom: 1px solid var(--header-border, var(--brand));
+        background: var(--header-bg, var(--brand));
+        color: var(--header-text, var(--on-brand));
         backdrop-filter: blur(14px);
       }
 
@@ -263,6 +243,10 @@
         letter-spacing: 0.39em;
         line-height: 1;
         text-indent: 0.39em;
+      }
+
+      .app-header .brand-logo {
+        color: inherit;
       }
 
       .page-title {
@@ -1965,9 +1949,9 @@
           logoText: "ITTEMMALL",
           mainHeadline: "지금 필요한 데일리 아이템을\n가볍게 준비하세요",
           mainSubcopy:
-            "테니스 팔찌, 러닝 헤드밴드, 선풍기 조끼처럼 지금 필요한 상품을 한곳에서 확인하고 바로 주문할 수 있습니다.",
+            "러닝 헤드밴드, 선풍기 조끼처럼 지금 필요한 상품을 한곳에서 확인하고 바로 주문할 수 있습니다.",
           heroEyebrow: "ITTEMMALL SELECT",
-          heroImage: "assets/ittemmall/tennis-bracelet/tennis-bracelet-hero.jpg",
+          heroImage: "assets/ittemmall/ittemmall-brand-hero-final.png",
           heroButtonText: "상품 보기",
           productSectionTitle: "추천 상품",
           footerLinks: ["고객센터", "사업자 정보", "이용약관", "개인정보처리방침"],
@@ -2056,14 +2040,19 @@
             ],
             cardMediaClass: "",
             detailMediaClass: "",
+            hiddenFromMainSite: true,
+            standaloneStore: true,
             hideStandaloneInfo: true,
             theme: {
-              brand: "#87CEEB",
-              brandLight: "#CDEFF8",
+              brand: "#111111",
+              brandLight: "#E6F8FC",
               accent: "#2A9EC2",
-              accent2: "#16708A",
-              soft: "#F1FBFE",
-              onBrand: "#061F28",
+              accent2: "#87CEEB",
+              soft: "#F7FDFF",
+              onBrand: "#FFFFFF",
+              headerBg: "#FFFFFF",
+              headerText: "#111111",
+              headerBorder: "#E5E7EB",
             },
             images: [
               "assets/ittemmall/tennis-bracelet/tennis-bracelet-hero.jpg",
@@ -2414,6 +2403,7 @@
         ];
 
         const visibleProducts = products.filter((product) => !product.retired);
+        const homeProducts = visibleProducts.filter((product) => !product.hiddenFromMainSite);
 
         const paymentMethods = {
           toss_pg: {
@@ -2495,9 +2485,9 @@
         const savedState = readJson(storageKeys.state, {});
         const state = {
           page: "home",
-          selectedProductId: visibleProducts[0].id,
+          selectedProductId: homeProducts[0].id,
           selectedImageIndex: 0,
-          selectedOptions: getInitialSelectedOptions(visibleProducts[0]),
+          selectedOptions: getInitialSelectedOptions(homeProducts[0]),
           quantity: 1,
           form: { ...emptyForm },
           origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
@@ -2518,8 +2508,8 @@
         state.menuOpen = false;
         state.infoPanelType = "";
         if (!findProduct(state.selectedProductId)) {
-          state.selectedProductId = visibleProducts[0].id;
-          state.selectedOptions = getInitialSelectedOptions(visibleProducts[0]);
+          state.selectedProductId = homeProducts[0].id;
+          state.selectedOptions = getInitialSelectedOptions(homeProducts[0]);
         }
 
         function productFromPathname() {
@@ -2538,6 +2528,13 @@
           ensureOptionsForProduct();
         } else {
           state.page = "home";
+        }
+        if (state.page === "home" && currentProduct().hiddenFromMainSite) {
+          state.selectedProductId = homeProducts[0].id;
+          state.selectedOptions = getInitialSelectedOptions(homeProducts[0]);
+        }
+        if (state.page === "detail" && currentProduct().standaloneStore) {
+          setStandaloneProductUrl(currentProduct());
         }
 
         if (state.page === "history") {
@@ -2885,6 +2882,18 @@
           return visibleProducts.find((product) => product.id === id);
         }
 
+        function mainSiteProduct() {
+          return homeProducts[0] || visibleProducts[0];
+        }
+
+        function isStandaloneProduct(product = currentProduct()) {
+          return Boolean(product?.standaloneStore);
+        }
+
+        function representativeProduct() {
+          return isStandaloneProduct() ? currentProduct() : mainSiteProduct();
+        }
+
         function productRouteSlug(product) {
           if (product.slug) return product.slug;
           const color = product.options
@@ -2908,7 +2917,7 @@
         }
 
         function currentProduct() {
-          return findProduct(state.selectedProductId) || visibleProducts[0];
+          return findProduct(state.selectedProductId) || mainSiteProduct();
         }
 
         function hasDraft() {
@@ -3062,10 +3071,32 @@
           window.history.pushState(null, "", `/${location.search}`);
         }
 
+        function setStandaloneProductUrl(product) {
+          if (!product || location.protocol === "file:") {
+            setHash(hashForState());
+            return;
+          }
+          const targetPath = `/${productRouteSlug(product)}/`;
+          const targetUrl = `${targetPath}${location.search}`;
+          if (location.pathname !== targetPath || location.hash) {
+            window.history.pushState(null, "", targetUrl);
+          }
+        }
+
         function applyHash(hash) {
           const parts = hash.replace(/^#\/?/, "").split("/");
           const route = parts[0] || "home";
           const id = parts[1] || "";
+          const pathProduct = productFromPathname();
+
+          function keepStandalonePageClosed() {
+            if (pathProduct?.standaloneStore && state.page === "home") {
+              state.page = "detail";
+              state.selectedProductId = pathProduct.id;
+              state.selectedImageIndex = 0;
+              ensureOptionsForProduct();
+            }
+          }
 
           const routeProduct = productFromRouteId(id);
           if (route === "product" && routeProduct) {
@@ -3104,6 +3135,7 @@
           if (route === "info" && siteConfig.infoPanels[id]) {
             state.page = "home";
             state.infoPanelType = id;
+            keepStandalonePageClosed();
             return;
           }
 
@@ -3114,6 +3146,7 @@
           }
 
           state.page = "home";
+          keepStandalonePageClosed();
         }
 
         function handleHashChange() {
@@ -3138,6 +3171,8 @@
           persistState();
           if (page === "home") {
             setRootUrlForHome();
+          } else if (page === "detail" && isStandaloneProduct()) {
+            setStandaloneProductUrl(currentProduct());
           } else {
             setHash(hashForState());
           }
@@ -3254,14 +3289,28 @@
           }
 
           if (action === "home") {
-            navigate("home", {
-              origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
-            });
+            if (isStandaloneProduct()) {
+              navigate("detail", {
+                origin: {
+                  page: "detail",
+                  label: `${currentProduct().name} 전용 페이지`,
+                  hash: `/${productRouteId(state.selectedProductId)}/`,
+                },
+              });
+            } else {
+              navigate("home", {
+                origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
+              });
+            }
           }
 
           if (action === "back") goBack();
           if (action === "history") navigate("history");
           if (action === "search") {
+            if (isStandaloneProduct()) {
+              navigate("detail");
+              return;
+            }
             navigate("home");
             window.setTimeout(() => {
               document.getElementById("productSearch")?.focus();
@@ -3283,6 +3332,10 @@
             render();
           }
           if (action === "menu-products") {
+            if (isStandaloneProduct()) {
+              navigate("detail");
+              return;
+            }
             navigate("home");
             window.setTimeout(() => {
               document.getElementById("products")?.scrollIntoView({ block: "start" });
@@ -3374,9 +3427,9 @@
               localStorage.removeItem(storageKeys.recentAddresses);
               Object.assign(state, {
                 page: "home",
-                selectedProductId: visibleProducts[0].id,
+                selectedProductId: mainSiteProduct().id,
                 selectedImageIndex: 0,
-                selectedOptions: getInitialSelectedOptions(visibleProducts[0]),
+                selectedOptions: getInitialSelectedOptions(mainSiteProduct()),
                 quantity: 1,
                 form: { ...emptyForm },
                 origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
@@ -3626,6 +3679,10 @@
 
         function resumeOrigin() {
           const origin = state.origin || { page: "home", hash: "/" };
+          if (isStandaloneProduct() && origin.page === "home") {
+            navigate("detail");
+            return;
+          }
           if (origin.page === "detail") {
             navigate("detail");
             return;
@@ -3766,7 +3823,7 @@
           const app = document.getElementById("app");
           const product = currentProduct();
           app.innerHTML = `
-            <div class="phone-shell" style="${productThemeStyle(product)}">
+            <div class="phone-shell ${isStandaloneProduct(product) ? "is-standalone-store" : ""}" style="${productThemeStyle(product)}">
               ${renderHeader()}
               ${renderPage()}
               ${renderInfoPanel()}
@@ -3789,6 +3846,9 @@
             "--accent-2": product.theme.accent2,
             "--soft": product.theme.soft,
             "--on-brand": product.theme.onBrand,
+            "--header-bg": product.theme.headerBg,
+            "--header-text": product.theme.headerText,
+            "--header-border": product.theme.headerBorder,
           };
 
           return Object.entries(themeMap)
@@ -3968,7 +4028,7 @@
         }
 
         function renderHomePage() {
-          const heroProduct = visibleProducts[0];
+          const heroProduct = mainSiteProduct();
           const heroImage = siteConfig.heroImage || heroProduct.image;
           return `
             <main>
@@ -4034,7 +4094,7 @@
                 </div>
 
                 <div class="product-grid">
-                  ${visibleProducts.map(renderProductCard).join("")}
+                  ${homeProducts.map(renderProductCard).join("")}
                 </div>
                 <div id="productFilterEmpty" class="state-card hidden" style="margin-top:12px">
                   <h2>조건에 맞는 상품이 없습니다.</h2>
@@ -4721,7 +4781,7 @@
                     <h2>결제 대기 주문을 찾지 못했습니다.</h2>
                     <p>주문서를 다시 작성하거나 저장된 주문 내역에서 확인할 수 있습니다.</p>
                     <div class="button-row">
-                      <button class="btn primary" type="button" data-action="select-product" data-id="${visibleProducts[0].id}">주문서 다시 작성</button>
+                      <button class="btn primary" type="button" data-action="select-product" data-id="${representativeProduct().id}">주문서 다시 작성</button>
                       <button class="btn" type="button" data-action="history">주문 내역</button>
                     </div>
                   </div>
@@ -4941,7 +5001,7 @@
                 <h2>아직 주문 내역이 없습니다.</h2>
                 <p>상품 상세에서 주문서를 접수하면 이곳에 내역이 쌓이고 새로고침 후에도 남습니다.</p>
                 <div class="button-row">
-                  <button class="btn primary" type="button" data-action="select-product" data-id="${visibleProducts[0].id}">대표 상품 보기</button>
+                  <button class="btn primary" type="button" data-action="select-product" data-id="${representativeProduct().id}">대표 상품 보기</button>
                   <button class="btn" type="button" data-action="home">상품 목록</button>
                 </div>
                 ${
@@ -4961,7 +5021,7 @@
                 ${
                   hasDraft()
                     ? `<button class="btn warning" type="button" data-action="resume-draft">주문서 작성 이어가기</button>`
-                    : `<button class="btn" type="button" data-action="select-product" data-id="${visibleProducts[0].id}">대표 상품 보기</button>`
+                    : `<button class="btn" type="button" data-action="select-product" data-id="${representativeProduct().id}">대표 상품 보기</button>`
                 }
               </div>
             </div>
