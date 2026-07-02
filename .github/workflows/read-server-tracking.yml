@@ -57,6 +57,8 @@ jobs:
           cleanup() {
             lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
               -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; rm -f \"${target_dir}/${reader}\"; bye" >/dev/null 2>&1 || true
+            curl -sS --ssl-reqd -u "$HOSTINGER_FTP_USERNAME:$HOSTINGER_FTP_PASSWORD" \
+              -Q "DELE ${target_dir}/${reader}" "ftp://${HOSTINGER_FTP_SERVER}/" >/dev/null 2>&1 || true
           }
           trap cleanup EXIT
 
@@ -202,8 +204,11 @@ jobs:
 
           perl -0pi -e "s/__CODEX_TOKEN__/$token/g" "$reader"
 
-          lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
-            -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; put -O \"$target_dir\" \"$reader\"; bye"
+          if ! lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
+            -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; cd \"$target_dir\"; put \"$reader\"; bye"; then
+            curl -sS --ssl-reqd --ftp-create-dirs -u "$HOSTINGER_FTP_USERNAME:$HOSTINGER_FTP_PASSWORD" \
+              -T "$reader" "ftp://${HOSTINGER_FTP_SERVER}/${target_dir}/${reader}"
+          fi
 
           encoded_since="$(node -e 'console.log(encodeURIComponent(process.env.INPUT_SINCE_KST || ""))')"
           curl -fsS "https://ittemmall.com/${reader}?token=${token}&date=${INPUT_DATE}&since=${encoded_since}" > live-track-report.json
