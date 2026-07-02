@@ -114,6 +114,36 @@
   - `NpayPurchaseClick_tennis_bracelet`: `stored:true`, `notification.sent:true`
   - 테스트 로그 삭제: 8건 삭제 완료
 
+## Meta 광고 관리자 실행 기록
+
+- 확인 시각: 2026-07-02 20:21 KST
+- 상태: 초안 저장 완료, 실제 게시 보류
+- 캠페인: `잇템몰_아이템검증`
+- 광고 세트: `테니스팔찌_KR_F25-54_데일리주얼리_9980`
+- 광고 세트 설정:
+  - 지역: 대한민국
+  - 성별: 여성
+  - 연령: 25-54
+  - 예산: 총 예산 9,980원 기준
+- 광고 초안:
+  - 광고명: `아쿠아글로우테니스팔찌_착용컷_49900`
+  - 현재 Meta UI에서는 단일 광고 안에 사용자 제공 착용컷과 제품 단독컷 2개를 함께 선택한 상태로 저장했다.
+  - 선택 미디어:
+    - `tennis-bracelet-meta-ad-v3-product.png`
+    - `tennis-bracelet-meta-ad-v2.png`
+  - Primary text: `테니스 팔찌를 데일리룩에 부담 없이 더해보세요. 3mm 실버톤 라인과 맑은 지르코니아 반짝임으로 시계 옆 레이어드나 선물용으로 고르기 좋습니다.`
+  - Headline: `테니스 팔찌 49,900원`
+  - Description: `3mm 슬림 라인 · 실버톤 · 사이즈 선택`
+  - CTA: `구매하기`
+  - 랜딩 URL: `https://ittemmall.com/tennis-bracelet/?utm_source=meta&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}&utm_term={{adset.name}}`
+- 게시 보류 이유:
+  - 검토 화면에서 Facebook 페이지가 `Autorator`로 표시된다.
+  - 페이지 선택 드롭다운에서 확인 가능한 선택지는 `Autorator`, `MICORE, 미코어`, `staysia_place`였고, `잇템몰` 페이지는 보이지 않았다.
+  - 잇템몰 Meta 광고는 `잇템몰 비즈니스 계정/페이지` 기준으로 집행해야 하므로, `Autorator` 상태로는 게시하지 않는다.
+- 재개 조건:
+  - Meta 광고 관리자에서 `잇템몰` Facebook 페이지 또는 잇템몰 비즈니스 계정 권한이 보이게 만든 뒤, 같은 초안에서 Facebook 페이지를 잇템몰로 변경하고 검토 후 게시한다.
+  - 이미지별 성과를 더 엄밀히 나누려면 계정 문제가 해결된 뒤 같은 광고 세트 안에서 착용컷 광고와 제품컷 광고를 별도 광고로 복제해 운영한다.
+
 ## 출처
 
 - 네이버 쇼핑 검색 URL: https://search.shopping.naver.com/search/all?query=%ED%85%8C%EB%8B%88%EC%8A%A4%20%ED%8C%94%EC%B0%8C
