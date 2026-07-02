@@ -42,11 +42,11 @@
 - 광고 소재 방향:
   - 손목 착용컷 1장 중심
   - 민트 아쿠아 배경의 선물형 무드
-  - 짧은 카피 1개 + 가격 49,900원
-- 생성 방식:
-  - Codex 내부 `image_gen` 도구로 생성
-  - 1차 상품/착용 이미지 톤을 기준으로 2차 최종 광고 이미지에 `테니스 팔찌`와 `49,900원`만 넣음
-  - 최종 후보 파일: `assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v2.png`
+  - 이번 광고 이미지는 이미지 안에 글씨를 넣지 않고, Meta 광고 문구/헤드라인에서 키워드와 가격을 처리한다.
+- 최종 소재 방식:
+  - 사용자가 선택/첨부한 글씨 없는 착용컷과 제품 단독컷 2개로 진행
+  - 착용컷 파일: `assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v2.png`
+  - 제품 단독컷 파일: `assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v3-product.png`
 
 ## Meta 광고 세팅 초안
 
@@ -56,8 +56,10 @@
 - 예산: 9,980원. Meta UI 운영 편의상 10,000원으로 반올림 가능하되, 기준 공식은 판매가 49,900원 x 20%.
 - 목표 CPC: 약 200원
 - 랜딩 URL: `https://ittemmall.com/tennis-bracelet/?utm_source=meta&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}&utm_term={{adset.name}}`
-- 광고명: `아쿠아글로우테니스팔찌_착용컷_49900`
-- 광고 이미지: `assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v2.png`
+- 광고명 A: `아쿠아글로우테니스팔찌_착용컷_49900`
+- 광고명 B: `아쿠아글로우테니스팔찌_제품컷_49900`
+- 광고 이미지 A: `assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v2.png`
+- 광고 이미지 B: `assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v3-product.png`
 - Primary text: `테니스 팔찌를 데일리룩에 부담 없이 더해보세요. 3mm 실버톤 라인과 맑은 지르코니아 반짝임으로 시계 옆 레이어드나 선물용으로 고르기 좋습니다.`
 - Headline: `테니스 팔찌 49,900원`
 - Description: `3mm 슬림 라인 · 실버톤 · 사이즈 선택`
@@ -92,7 +94,8 @@
 
 - GitHub Actions 배포: `Deploy to Hostinger` 성공
 - 운영 상품 URL: `https://ittemmall.com/tennis-bracelet/`
-- 운영 광고 이미지 URL: `https://ittemmall.com/assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v2.png`
+- 운영 광고 이미지 URL A: `https://ittemmall.com/assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v2.png`
+- 운영 광고 이미지 URL B: `https://ittemmall.com/assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v3-product.png`
 - 운영 렌더 확인:
   - 상품명 `아쿠아글로우 테니스 브레이슬릿` 노출
   - 가격 `49,900원` 노출
