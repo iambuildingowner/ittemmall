@@ -5,8 +5,10 @@ on:
 
 jobs:
   purge:
+    name: Purge monitor probe event
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     steps:
       - name: Validate FTP secrets
         env:
@@ -17,83 +19,132 @@ jobs:
         run: |
           missing=0
           for name in HOSTINGER_FTP_SERVER HOSTINGER_FTP_USERNAME HOSTINGER_FTP_PASSWORD HOSTINGER_FTP_TARGET_DIR; do
-            if [ -z "${!name}" ]; then echo "::error::Missing GitHub secret: $name"; missing=1; fi
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing GitHub secret: $name"
+              missing=1
+            fi
           done
           exit "$missing"
-      - name: Install tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lftp jq
-      - name: Upload purge script
+
+      - name: Prepare self deleting purge script
         env:
-          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
-          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
-          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-          HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
           RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
+          mkdir -p tmp-upload
           token="$(openssl rand -hex 24)"
           script="__codex_purge_monitor_probe_${RUN_ID}.php"
-          export TOKEN="$token" SCRIPT="$script"
+          export TOKEN="$token"
+          export SCRIPT="$script"
           echo "TOKEN=$token" >> "$GITHUB_ENV"
           echo "SCRIPT=$script" >> "$GITHUB_ENV"
-          cat > "$script" <<'PHP'
+          cat > "tmp-upload/$script" <<'PHP'
           <?php
           declare(strict_types=1);
           header('Content-Type: application/json; charset=utf-8');
           header('Cache-Control: no-store');
+          register_shutdown_function(static function (): void { @unlink(__FILE__); });
+
           $expected = '__TOKEN__';
-          if (!hash_equals($expected, (string)($_GET['token'] ?? ''))) {
+          if ($expected === '' || !hash_equals($expected, (string)($_GET['token'] ?? ''))) {
               http_response_code(403);
-              echo json_encode(['ok'=>false,'error'=>'FORBIDDEN']);
+              echo json_encode(['ok' => false, 'error' => 'FORBIDDEN']);
               exit;
           }
+
           require_once __DIR__ . '/payment/server-config-lib.php';
-          $dirs = array_values(array_unique([dirname(ittemmallEffectiveTrackLogPath()), __DIR__ . '/data/pixel-events']));
-          $result = ['ok'=>true,'files_seen'=>0,'files_rewritten'=>0,'files_deleted'=>0,'records_deleted'=>0,'records_kept'=>0,'dirs'=>[]];
+          $dirs = array_values(array_unique(array_filter([
+              dirname(ittemmallEffectiveTrackLogPath()),
+              __DIR__ . '/data/pixel-events',
+          ])));
+
+          $result = [
+              'ok' => true,
+              'files_seen' => 0,
+              'files_rewritten' => 0,
+              'files_deleted' => 0,
+              'records_deleted' => 0,
+              'records_kept' => 0,
+              'dirs' => [],
+          ];
+
           foreach ($dirs as $dir) {
-              $dirResult = ['dir'=>$dir,'exists'=>is_dir($dir),'files'=>[]];
-              if (!is_dir($dir)) { $result['dirs'][]=$dirResult; continue; }
-              foreach ((glob(rtrim($dir,'/') . '/*.ndjson') ?: []) as $file) {
+              $dirResult = ['dir' => $dir, 'exists' => is_dir($dir), 'files' => []];
+              if (!is_dir($dir)) {
+                  $result['dirs'][] = $dirResult;
+                  continue;
+              }
+              foreach ((glob(rtrim($dir, '/') . '/*.ndjson') ?: []) as $file) {
                   $result['files_seen']++;
                   $lines = file($file, FILE_IGNORE_NEW_LINES);
-                  if ($lines === false) { $dirResult['files'][]=['file'=>basename($file),'error'=>'READ_FAILED']; continue; }
-                  $kept=[]; $deleted=0;
+                  if ($lines === false) {
+                      $dirResult['files'][] = ['file' => basename($file), 'error' => 'READ_FAILED'];
+                      continue;
+                  }
+                  $kept = [];
+                  $deleted = 0;
                   foreach ($lines as $line) {
-                      if (trim($line)==='') continue;
-                      $entry=json_decode($line,true);
-                      $event=is_array($entry)?(string)($entry['event']??''):'';
-                      $payload=is_array($entry)&&is_array($entry['payload']??null)?$entry['payload']:[];
-                      $source=(string)($payload['source']??'');
-                      if ($event==='__monitor_probe__' || $source==='heartbeat_readiness_probe') { $deleted++; continue; }
-                      $kept[]=$line;
+                      if (trim($line) === '') {
+                          continue;
+                      }
+                      $entry = json_decode($line, true);
+                      $event = is_array($entry) ? (string)($entry['event'] ?? '') : '';
+                      $payload = is_array($entry) && is_array($entry['payload'] ?? null) ? $entry['payload'] : [];
+                      $source = (string)($payload['source'] ?? '');
+                      if ($event === '__monitor_probe__' || $source === 'heartbeat_readiness_probe') {
+                          $deleted++;
+                          continue;
+                      }
+                      $kept[] = $line;
                   }
                   $result['records_deleted'] += $deleted;
                   $result['records_kept'] += count($kept);
-                  if ($deleted === 0) { $dirResult['files'][]=['file'=>basename($file),'deleted_records'=>0,'kept_records'=>count($kept),'action'=>'unchanged']; continue; }
-                  if (count($kept) === 0) {
-                      if (@unlink($file)) { $result['files_deleted']++; $dirResult['files'][]=['file'=>basename($file),'deleted_records'=>$deleted,'kept_records'=>0,'action'=>'deleted_file']; }
-                      else { $dirResult['files'][]=['file'=>basename($file),'error'=>'DELETE_FAILED']; }
+                  if ($deleted === 0) {
+                      $dirResult['files'][] = ['file' => basename($file), 'deleted_records' => 0, 'kept_records' => count($kept), 'action' => 'unchanged'];
                       continue;
                   }
-                  $tmp=$file.'.codex-tmp';
-                  if (file_put_contents($tmp, implode(PHP_EOL,$kept).PHP_EOL, LOCK_EX)===false || !rename($tmp,$file)) { @unlink($tmp); $dirResult['files'][]=['file'=>basename($file),'error'=>'REWRITE_FAILED']; continue; }
-                  @chmod($file,0600);
+                  if (count($kept) === 0) {
+                      if (@unlink($file)) {
+                          $result['files_deleted']++;
+                          $dirResult['files'][] = ['file' => basename($file), 'deleted_records' => $deleted, 'kept_records' => 0, 'action' => 'deleted_file'];
+                      } else {
+                          $dirResult['files'][] = ['file' => basename($file), 'error' => 'DELETE_FAILED'];
+                      }
+                      continue;
+                  }
+                  $tmp = $file . '.codex-tmp';
+                  if (file_put_contents($tmp, implode(PHP_EOL, $kept) . PHP_EOL, LOCK_EX) === false || !rename($tmp, $file)) {
+                      @unlink($tmp);
+                      $dirResult['files'][] = ['file' => basename($file), 'error' => 'REWRITE_FAILED'];
+                      continue;
+                  }
+                  @chmod($file, 0600);
                   $result['files_rewritten']++;
-                  $dirResult['files'][]=['file'=>basename($file),'deleted_records'=>$deleted,'kept_records'=>count($kept),'action'=>'rewritten'];
+                  $dirResult['files'][] = ['file' => basename($file), 'deleted_records' => $deleted, 'kept_records' => count($kept), 'action' => 'rewritten'];
               }
-              $result['dirs'][]=$dirResult;
+              $result['dirs'][] = $dirResult;
           }
-          echo json_encode($result, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+
+          echo json_encode($result, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
           PHP
-          python3 - <<'PY'
+          python3 - <<'PYCODE'
           import os
           from pathlib import Path
-          p=Path(os.environ['SCRIPT'])
+          p = Path('tmp-upload') / os.environ['SCRIPT']
           p.write_text(p.read_text().replace('__TOKEN__', os.environ['TOKEN']))
-          PY
-          lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; cd \"$HOSTINGER_FTP_TARGET_DIR\"; put \"$script\" -o \"$script\"; bye"
+          PYCODE
+
+      - name: Upload purge script
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          local-dir: ./tmp-upload/
+          server-dir: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
+          dangerous-clean-slate: false
+          log-level: minimal
+
       - name: Run purge script
         env:
           TOKEN: ${{ env.TOKEN }}
@@ -104,15 +155,3 @@ jobs:
           echo "$response"
           echo "$response" > purge-result.json
           test "$(jq -r '.ok' purge-result.json)" = "true"
-      - name: Remove purge script
-        if: always()
-        env:
-          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
-          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
-          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-          HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
-          SCRIPT: ${{ env.SCRIPT }}
-        run: |
-          if [ -n "${SCRIPT:-}" ]; then
-            lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; cd \"$HOSTINGER_FTP_TARGET_DIR\"; rm -f \"$SCRIPT\"; bye" || true
-          fi
