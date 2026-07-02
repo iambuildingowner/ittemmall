@@ -1,0 +1,225 @@
+name: Read Server Tracking Counts
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: KST date to read, YYYY-MM-DD. Defaults to today.
+        required: false
+        type: string
+      since_kst:
+        description: Optional KST lower bound, e.g. 2026-05-21T21:11:00+09:00.
+        required: false
+        type: string
+
+jobs:
+  read-counts:
+    name: Count Hostinger tracking events
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Validate FTP secrets
+        env:
+          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
+        run: |
+          missing=0
+          for name in HOSTINGER_FTP_SERVER HOSTINGER_FTP_USERNAME HOSTINGER_FTP_PASSWORD HOSTINGER_FTP_TARGET_DIR; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing GitHub secret: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Install FTP reader
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
+      - name: Download tracking logs
+        env:
+          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
+          INPUT_DATE: ${{ inputs.date }}
+          INPUT_SINCE_KST: ${{ inputs.since_kst }}
+        run: |
+          set -euo pipefail
+          report_date="${INPUT_DATE:-$(TZ=Asia/Seoul date +%F)}"
+          target_dir="${HOSTINGER_FTP_TARGET_DIR%/}"
+          target_parent="$(dirname "$target_dir")"
+          old_public_path="${target_dir}/data/pixel-events/${report_date}.ndjson"
+          private_sibling_path="${target_parent}/ittemmall-private/data/pixel-events/${report_date}.ndjson"
+          private_relative_path="${target_dir}/../ittemmall-private/data/pixel-events/${report_date}.ndjson"
+          root_private_path="/ittemmall-private/data/pixel-events/${report_date}.ndjson"
+
+          echo "REPORT_DATE=${report_date}" >> "$GITHUB_ENV"
+          echo "SINCE_KST=${INPUT_SINCE_KST}" >> "$GITHUB_ENV"
+          : > server-events.ndjson
+          : > read-paths.txt
+
+          read_remote() {
+            local label="$1"
+            local path="$2"
+            local out="candidate-${label}.ndjson"
+            set +e
+            lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
+              -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; cat \"$path\"; bye" \
+              > "$out"
+            local status=$?
+            set -e
+            local rows
+            rows="$(grep -cve '^[[:space:]]*$' "$out" || true)"
+            if [ "$status" -eq 0 ] && [ "$rows" -gt 0 ]; then
+              echo "${label}:FOUND:${rows}" >> read-paths.txt
+              cat "$out" >> server-events.ndjson
+            else
+              echo "${label}:MISS:${rows}" >> read-paths.txt
+            fi
+          }
+
+          read_remote public "$old_public_path"
+          read_remote private_sibling "$private_sibling_path"
+          read_remote private_relative "$private_relative_path"
+          read_remote root_private "$root_private_path"
+
+      - name: Count events
+        run: |
+          node <<'NODE'
+          const fs = require("fs");
+          const raw = fs.existsSync("server-events.ndjson") ? fs.readFileSync("server-events.ndjson", "utf8") : "";
+          const lines = raw.split(/\r?\n/).filter(Boolean);
+          const counts = new Map();
+          const byHour = new Map();
+          const byProduct = new Map();
+          const byPath = new Map();
+          const visitors = new Set();
+          const recent = [];
+          const buttonRows = [];
+          const seen = new Set();
+          const since = process.env.SINCE_KST ? Date.parse(process.env.SINCE_KST) : null;
+          let parsed = 0;
+          let included = 0;
+
+          function clean(value, max = 240) {
+            return String(value ?? "").replace(/\s+/g, " ").slice(0, max);
+          }
+
+          function isButtonEvent(name) {
+            return name === "NpayPurchaseClick" ||
+              name === "PurchaseCtaClick" ||
+              name.startsWith("NpayPurchaseClick_") ||
+              name.startsWith("PurchaseCtaClick_");
+          }
+
+          for (const line of lines) {
+            try {
+              const entry = JSON.parse(line);
+              const key = JSON.stringify([entry.createdAt, entry.event, entry.ipHash, entry.url]);
+              if (seen.has(key)) continue;
+              seen.add(key);
+              const name = String(entry.event || "");
+              if (!name) continue;
+              parsed += 1;
+              const eventTime = Date.parse(entry.server_time_kst || entry.server_time_utc || "");
+              if (since && (!Number.isFinite(eventTime) || eventTime < since)) continue;
+              included += 1;
+              counts.set(name, (counts.get(name) || 0) + 1);
+              const hour = String(entry.server_time_kst || "").slice(0, 13).replace("T", " ");
+              if (hour) byHour.set(hour, (byHour.get(hour) || 0) + 1);
+              const product = entry.product_focus || entry.payload?.productSlug || entry.payload?.product_id || entry.payload?.content_name || "(unknown)";
+              byProduct.set(product, (byProduct.get(product) || 0) + 1);
+              let path = entry.path || "";
+              if (!path && entry.url) {
+                try {
+                  const url = new URL(entry.url);
+                  path = `${url.pathname}${url.hash || ""}`;
+                } catch {
+                  path = String(entry.url).slice(0, 120);
+                }
+              }
+              if (!path) path = "(unknown)";
+              byPath.set(path, (byPath.get(path) || 0) + 1);
+              const ipHash = entry.request?.ip_hash || entry.ipHash;
+              if (ipHash) visitors.add(ipHash);
+              recent.push({
+                time: String(entry.server_time_kst || "").replace("T", " ").slice(0, 19),
+                event: name,
+                product,
+                path
+              });
+              if (isButtonEvent(name)) {
+                const payload = entry.payload || {};
+                const attribution = payload.attribution || entry.attribution || {};
+                buttonRows.push({
+                  time: String(entry.server_time_kst || "").replace("T", " ").slice(0, 19),
+                  event: name,
+                  product,
+                  productName: clean(payload.productName || payload.content_name || ""),
+                  options: clean(JSON.stringify(payload.selectedOptions || {}), 220),
+                  testId: clean(payload.testRunId || payload.test_run_id || "-"),
+                  source: clean(attribution.utm_source || attribution.source || payload.source || ""),
+                  campaign: clean(attribution.utm_campaign || ""),
+                  content: clean(attribution.utm_content || ""),
+                  term: clean(attribution.utm_term || ""),
+                  url: clean(entry.url || "", 260),
+                  visitor: clean(String(ipHash || "").slice(0, 12))
+                });
+              }
+            } catch {}
+          }
+
+          const rows = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+          const sortCount = (map) => [...map.entries()].sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])));
+          const latestRows = recent.slice(-20).reverse().map((row) => [row.time, row.event, row.product, row.path]);
+          const buttonTable = buttonRows.map((row) => [
+            row.time,
+            row.event,
+            row.product,
+            row.productName,
+            row.testId,
+            row.source,
+            row.campaign,
+            row.content,
+            row.term,
+            row.visitor,
+            row.url
+          ]);
+
+          function printTable(title, headers, bodyRows) {
+            console.log("");
+            console.log(title);
+            console.log(`| ${headers.join(" | ")} |`);
+            console.log(`| ${headers.map(() => "---").join(" | ")} |`);
+            for (const row of bodyRows) console.log(`| ${row.join(" | ")} |`);
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `\n\n${title}\n\n`);
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `| ${headers.join(" | ")} |\n`);
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `| ${headers.map(() => "---").join(" | ")} |\n`);
+            for (const row of bodyRows) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `| ${row.join(" | ")} |\n`);
+          }
+
+          console.log(`Server tracking report date: ${process.env.REPORT_DATE}`);
+          console.log(`Since KST: ${process.env.SINCE_KST || "(none)"}`);
+          console.log("Read paths:");
+          console.log(fs.existsSync("read-paths.txt") ? fs.readFileSync("read-paths.txt", "utf8").trim() : "(none)");
+          console.log(`Parsed server log rows: ${parsed}`);
+          console.log(`Included rows: ${included}`);
+          console.log(`Unique visitor hashes: ${visitors.size}`);
+          console.log(`Button rows: ${buttonRows.length}`);
+
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Server tracking report: ${process.env.REPORT_DATE}\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Since KST: ${process.env.SINCE_KST || "(none)"}\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Read paths:\n\n\`\`\`\n${fs.existsSync("read-paths.txt") ? fs.readFileSync("read-paths.txt", "utf8").trim() : "(none)"}\n\`\`\`\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Parsed server log rows: ${parsed}\n\nIncluded rows: ${included}\n\nUnique visitor hashes: ${visitors.size}\n\nButton rows: ${buttonRows.length}\n`);
+
+          printTable("### Button events", ["Time KST", "Event", "Product", "Product name", "Test ID", "Source", "Campaign", "Content", "Term", "Visitor", "URL"], buttonTable);
+          printTable("### Event counts", ["Event", "Count"], rows.map(([name, count]) => [name, String(count)]));
+          printTable("### Product counts", ["Product", "Count"], sortCount(byProduct).slice(0, 20).map(([product, count]) => [product, String(count)]));
+          printTable("### Path counts", ["Path", "Count"], sortCount(byPath).slice(0, 20).map(([path, count]) => [path, String(count)]));
+          printTable("### Latest included events", ["Time KST", "Event", "Product", "Path"], latestRows);
+          NODE
