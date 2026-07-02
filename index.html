@@ -2433,8 +2433,14 @@
           const isTest = isTrackingTestMode();
           const params = new URLSearchParams(location.search);
           const testRunId = params.get("test_run_id") || params.get("testRunId") || "";
+          const notifyTest = params.get("notify_test") === "1" || params.get("email_test") === "1";
           const trackedPayload = isTest
-            ? { ...(payload || {}), __test: true, ...(testRunId ? { testRunId } : {}) }
+            ? {
+                ...(payload || {}),
+                __test: true,
+                ...(testRunId ? { testRunId } : {}),
+                ...(notifyTest ? { notifyTest: true } : {}),
+              }
             : payload;
           const event = {
             id: `PX-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
@@ -2546,7 +2552,7 @@
 
         function copyTrackingTestParams(url) {
           const params = new URLSearchParams(location.search);
-          ["test", "codex_test", "pixel_test", "test_run_id", "testRunId"].forEach((key) => {
+          ["test", "codex_test", "pixel_test", "notify_test", "email_test", "test_run_id", "testRunId"].forEach((key) => {
             if (params.get(key) === "1") url.searchParams.set(key, "1");
             if ((key === "test_run_id" || key === "testRunId") && params.get(key)) {
               url.searchParams.set(key, params.get(key));

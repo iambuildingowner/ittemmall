@@ -138,7 +138,10 @@ function ittemmallTrackNotificationEnabled(): bool
 function ittemmallTrackIsPurchaseNotificationEvent(string $eventName, array $payload): bool
 {
     if (($payload['__test'] ?? false) === true) {
-        return false;
+        $allowsTestNotification = ($payload['notifyTest'] ?? false) === true && ittemmallTrackTestRunId($payload) !== '';
+        if (!$allowsTestNotification) {
+            return false;
+        }
     }
     return str_starts_with($eventName, 'NpayPurchaseClick_') || str_starts_with($eventName, 'PurchaseCtaClick_');
 }
@@ -186,7 +189,14 @@ function ittemmallTrackSendPurchaseNotification(array $event): array
     $selectedOptions = $payload['selectedOptions'] ?? [];
     $attribution = $payload['attribution'] ?? ($event['attribution'] ?? []);
 
-    $subject = sprintf('[잇템몰 클릭] %s / %s', $eventLabel, $productName);
+    $isTest = ($payload['__test'] ?? false) === true;
+    $testRunId = ittemmallTrackTestRunId($payload);
+    $subject = sprintf(
+        '[잇템몰 클릭%s] %s / %s',
+        $isTest ? ' 테스트' : '',
+        $eventLabel,
+        $productName
+    );
     $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
     $body = implode("\n", [
         '잇템몰 상품 클릭 로그가 들어왔습니다.',
@@ -203,6 +213,7 @@ function ittemmallTrackSendPurchaseNotification(array $event): array
         'URL: ' . ($url !== '' ? $url : '-'),
         '유입값: ' . (is_array($attribution) && $attribution !== [] ? ittemmallTrackJsonLine($attribution) : '-'),
         '서버 시간: ' . ($kstTime !== '' ? $kstTime : '-'),
+        '테스트 ID: ' . ($testRunId !== '' ? $testRunId : '-'),
     ]) . "\n";
 
     $headers = implode("\r\n", [
