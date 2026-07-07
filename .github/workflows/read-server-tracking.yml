@@ -94,6 +94,36 @@ jobs:
           read_remote private_relative "$private_relative_path"
           read_remote root_private "$root_private_path"
 
+          discover_remote() {
+            local root="$1"
+            local safe_root
+            safe_root="$(printf '%s' "$root" | tr -c 'A-Za-z0-9._-' '_')"
+            local listing="discover-${safe_root}.txt"
+            set +e
+            lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
+              -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 1; set ftp:passive-mode true; find \"$root\"; bye" \
+              > "$listing"
+            local status=$?
+            set -e
+            if [ "$status" -ne 0 ]; then
+              echo "discover:${root}:MISS" >> read-paths.txt
+              return
+            fi
+            grep -E "(^|/)${report_date}[.]ndjson$" "$listing" | head -n 20 | while IFS= read -r discovered_path; do
+              [ -z "$discovered_path" ] && continue
+              local label_hash
+              label_hash="$(printf '%s' "$discovered_path" | sha1sum | cut -c1-10)"
+              read_remote "discovered_${label_hash}" "$discovered_path"
+            done
+          }
+
+          known_found_rows="$(awk -F: '$2 == "FOUND" {sum += $3} END {print sum + 0}' read-paths.txt)"
+          if [ "$known_found_rows" -eq 0 ]; then
+            discover_remote "$target_parent"
+            discover_remote "."
+            discover_remote "/"
+          fi
+
           found_rows="$(awk -F: '$2 == "FOUND" {sum += $3} END {print sum + 0}' read-paths.txt)"
           echo "FOUND_LOG_ROWS=${found_rows}" >> "$GITHUB_ENV"
           if [ "$found_rows" -eq 0 ]; then
