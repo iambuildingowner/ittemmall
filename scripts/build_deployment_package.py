@@ -36,6 +36,7 @@ FILES = [
     "payment/order-lookup.php",
     "payment/return.html",
     "payment/healthcheck.php",
+    "payment/tracking-report.php",
     "payment/admin-orders.php",
     "payment/order-store.php",
     "payment/order-store-lib.php",

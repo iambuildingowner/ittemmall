@@ -94,12 +94,20 @@ jobs:
           read_remote private_relative "$private_relative_path"
           read_remote root_private "$root_private_path"
 
+          found_rows="$(awk -F: '$2 == "FOUND" {sum += $3} END {print sum + 0}' read-paths.txt)"
+          echo "FOUND_LOG_ROWS=${found_rows}" >> "$GITHUB_ENV"
+          if [ "$found_rows" -eq 0 ]; then
+            echo "::warning::No readable server tracking log was found at the known FTP paths. Do not interpret this report as zero purchase intent."
+          fi
+
       - name: Count events
         run: |
           node <<'NODE'
           const fs = require("fs");
           const raw = fs.existsSync("server-events.ndjson") ? fs.readFileSync("server-events.ndjson", "utf8") : "";
           const lines = raw.split(/\r?\n/).filter(Boolean);
+          const foundLogRows = Number(process.env.FOUND_LOG_ROWS || "0");
+          const logReadStatus = foundLogRows > 0 ? "LOG_READ_OK" : "LOG_PATH_NOT_FOUND";
           const counts = new Map();
           const byHour = new Map();
           const byProduct = new Map();
@@ -265,6 +273,7 @@ jobs:
           console.log(`Server tracking report date: ${process.env.REPORT_DATE}`);
           console.log(`Since KST: ${process.env.SINCE_KST || "(none)"}`);
           console.log(`Until KST: ${process.env.UNTIL_KST || "(none)"}`);
+          console.log(`Log read status: ${logReadStatus}`);
           console.log("Read paths:");
           console.log(fs.existsSync("read-paths.txt") ? fs.readFileSync("read-paths.txt", "utf8").trim() : "(none)");
           console.log(`Parsed server log rows: ${parsed}`);
@@ -275,7 +284,11 @@ jobs:
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Server tracking report: ${process.env.REPORT_DATE}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Since KST: ${process.env.SINCE_KST || "(none)"}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Until KST: ${process.env.UNTIL_KST || "(none)"}\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Log read status: ${logReadStatus}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Read paths:\n\n\`\`\`\n${fs.existsSync("read-paths.txt") ? fs.readFileSync("read-paths.txt", "utf8").trim() : "(none)"}\n\`\`\`\n\n`);
+          if (logReadStatus === "LOG_PATH_NOT_FOUND") {
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `> 서버 로그 경로를 찾지 못했습니다. 이 결과는 구매의사 0건으로 해석하면 안 됩니다.\n\n`);
+          }
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Parsed server log rows: ${parsed}\n\nIncluded rows: ${included}\n\nUnique visitor hashes: ${visitors.size}\n\nButton rows: ${buttonRows.length}\n`);
 
           printTable("### Windcool intent summary", ["Metric", "Value"], [
