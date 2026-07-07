@@ -1,0 +1,306 @@
+{
+  "ok": true,
+  "generated_at_utc": "2026-07-07T23:49:49.681220+00:00",
+  "product": {
+    "slug": "windcool-vest",
+    "id": "product-003",
+    "name": "윈드쿨 에어 선풍기 조끼"
+  },
+  "window": {
+    "since_utc": "2026-07-07T19:09:17+0000",
+    "until_utc": "2026-07-07T23:49:32+0000"
+  },
+  "meta": {
+    "ok": true,
+    "ad_insights": {
+      "ok": true,
+      "spend": 16996,
+      "impressions": 3972,
+      "clicks": 78,
+      "inline_link_clicks": 73,
+      "unique_clicks": 73,
+      "unique_inline_link_clicks": 72,
+      "landing_page_views": 68,
+      "raw_date_start": "2026-07-08",
+      "raw_date_stop": "2026-07-08"
+    },
+    "pixel_stats": {
+      "NpayPurchaseClick_windcool_vest": {
+        "ok": true,
+        "count": 3,
+        "error": null
+      },
+      "NpayPurchaseClick": {
+        "ok": true,
+        "count": 3,
+        "error": null
+      },
+      "PurchaseCtaClick_windcool_vest": {
+        "ok": true,
+        "count": 0,
+        "error": null
+      },
+      "PurchaseCtaClick": {
+        "ok": true,
+        "count": 0,
+        "error": null
+      }
+    }
+  },
+  "server": {
+    "healthcheck": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "ok": true,
+        "site": "ITTEMMALL",
+        "php": {
+          "version": "8.3.30",
+          "curl": true,
+          "json": true,
+          "mail": true
+        },
+        "serverConfig": {
+          "privateConfigFileLoaded": false
+        },
+        "serverOrderStore": {
+          "configured": false,
+          "directoryExists": false,
+          "directoryWritable": false,
+          "fileExists": false,
+          "fileReadable": false,
+          "fileValidJson": null,
+          "orderCount": 0,
+          "latestUpdatedAt": "",
+          "backupExists": false,
+          "backupReadable": false,
+          "backupValidJson": null,
+          "backupOrderCount": 0,
+          "backupLatestUpdatedAt": "",
+          "lockFileExists": false,
+          "lockWritable": false
+        },
+        "naverPay": {
+          "mode": "development",
+          "clientIdConfigured": false,
+          "clientSecretConfigured": false,
+          "chainIdConfigured": false,
+          "approveUrlOverrideConfigured": false,
+          "approveUrlLooksHttps": true,
+          "approvalEnabled": false,
+          "cancelUrlOverrideConfigured": false,
+          "cancelUrlLooksHttps": true,
+          "cancelEnabled": false
+        },
+        "publicNaverPay": {
+          "configFileExists": true,
+          "mode": "development",
+          "modeConfigured": true,
+          "clientIdConfigured": false,
+          "chainIdConfigured": false,
+          "clientSecretExposed": false,
+          "modeMatchesServer": true,
+          "clientIdMatchesServer": false,
+          "chainIdMatchesServer": false
+        },
+        "tracking": {
+          "logPathConfigured": false,
+          "saltConfigured": false,
+          "autoPrivateLogEnabled": true,
+          "effectiveLogReady": true,
+          "effectiveSaltReady": true,
+          "directoryExists": true,
+          "directoryWritable": true,
+          "saltFileExists": true,
+          "saltFileReadable": true
+        },
+        "rateLimit": {
+          "configured": true,
+          "derivedFromPrivatePath": true,
+          "directoryExists": true,
+          "directoryWritable": true,
+          "fileExists": true,
+          "fileReadable": true,
+          "fileValidJson": true,
+          "entryCount": 2,
+          "lockFileExists": true,
+          "lockWritable": true
+        },
+        "admin": {
+          "adminTokenConfigured": false
+        },
+        "notification": {
+          "enabled": false,
+          "recipientConfigured": false,
+          "recipientLooksValid": false,
+          "fromConfigured": true,
+          "fromLooksValid": true,
+          "mailFunctionAvailable": true
+        },
+        "readiness": {
+          "readyToEnableNaverPayApproval": false,
+          "readyForOrderOperations": false,
+          "missingForApproval": [
+            "ITTEMMALL_ORDER_STORE_PATH",
+            "serverOrderStore.directoryWritable",
+            "NAVER_PAY_CLIENT_ID",
+            "NAVER_PAY_CLIENT_SECRET",
+            "NAVER_PAY_CHAIN_ID",
+            "publicNaverPay.clientId",
+            "publicNaverPay.chainId"
+          ],
+          "missingForOperations": [
+            "ITTEMMALL_ORDER_STORE_PATH",
+            "serverOrderStore.directoryWritable",
+            "NAVER_PAY_CLIENT_ID",
+            "NAVER_PAY_CLIENT_SECRET",
+            "NAVER_PAY_CHAIN_ID",
+            "publicNaverPay.clientId",
+            "publicNaverPay.chainId",
+            "ITTEMMALL_ADMIN_TOKEN"
+          ]
+        }
+      }
+    },
+    "tracking_report": {
+      "ok": false,
+      "status": "ADMIN_TOKEN_MISSING"
+    },
+    "server_click_test": {
+      "test_run_id": "preflight-dedupe-windcool-20260708-0849",
+      "store_results": [
+        {
+          "ok": true,
+          "status": 200,
+          "data": {
+            "ok": true,
+            "stored": true,
+            "test": true,
+            "event": "NpayPurchaseClick_windcool_vest",
+            "serverRecordId": "SRV-20260708-8AF9A517",
+            "eventId": "preflight-pixel-preflight-dedupe-windcool-20260708-0849-1",
+            "visitorId": "preflight-visitor-same-preflight-dedupe-windcool-20260708-0849",
+            "visitId": "preflight-visit-preflight-visitor-same-preflight-dedupe-windcool-20260708-0849",
+            "clickId": "preflight-click-preflight-dedupe-windcool-20260708-0849-1",
+            "notification": {
+              "attempted": false,
+              "sent": false
+            }
+          }
+        },
+        {
+          "ok": true,
+          "status": 200,
+          "data": {
+            "ok": true,
+            "stored": true,
+            "test": true,
+            "event": "NpayPurchaseClick_windcool_vest",
+            "serverRecordId": "SRV-20260708-E3ED694A",
+            "eventId": "preflight-pixel-preflight-dedupe-windcool-20260708-0849-2",
+            "visitorId": "preflight-visitor-same-preflight-dedupe-windcool-20260708-0849",
+            "visitId": "preflight-visit-preflight-visitor-same-preflight-dedupe-windcool-20260708-0849",
+            "clickId": "preflight-click-preflight-dedupe-windcool-20260708-0849-2",
+            "notification": {
+              "attempted": false,
+              "sent": false
+            }
+          }
+        },
+        {
+          "ok": true,
+          "status": 200,
+          "data": {
+            "ok": true,
+            "stored": true,
+            "test": true,
+            "event": "PurchaseCtaClick_windcool_vest",
+            "serverRecordId": "SRV-20260708-EDC63308",
+            "eventId": "preflight-pixel-preflight-dedupe-windcool-20260708-0849-3",
+            "visitorId": "preflight-visitor-other-preflight-dedupe-windcool-20260708-0849",
+            "visitId": "preflight-visit-preflight-visitor-other-preflight-dedupe-windcool-20260708-0849",
+            "clickId": "preflight-click-preflight-dedupe-windcool-20260708-0849-3",
+            "notification": {
+              "attempted": false,
+              "sent": false
+            }
+          }
+        }
+      ],
+      "cleanup": {
+        "ok": true,
+        "status": 200,
+        "data": {
+          "ok": true,
+          "cleanup": true,
+          "testRunId": "preflight-dedupe-windcool-20260708-0849",
+          "removed": 3,
+          "events": {
+            "NpayPurchaseClick_windcool_vest": 2,
+            "PurchaseCtaClick_windcool_vest": 1
+          },
+          "dedupe": {
+            "uniqueRows": 2,
+            "uniqueButtonIntents": 2,
+            "order": "visitorId -> visitId -> clickId -> eventId/pixelEventId -> serverRecordId -> ipHash"
+          },
+          "samples": [
+            {
+              "event": "NpayPurchaseClick_windcool_vest",
+              "product": "windcool-vest",
+              "visitorId": "preflight-visitor-same-preflight-dedupe-windcool-20260708-0849",
+              "visitId": "preflight-visit-preflight-visitor-same-preflight-dedupe-windcool-20260708-0849",
+              "clickId": "preflight-click-preflight-dedupe-windcool-20260708-0849-1",
+              "eventId": "preflight-pixel-preflight-dedupe-windcool-20260708-0849-1",
+              "serverRecordId": "SRV-20260708-8AF9A517",
+              "dedupeKey": "preflight-visitor-same-preflight-dedupe-windcool-20260708-0849"
+            },
+            {
+              "event": "NpayPurchaseClick_windcool_vest",
+              "product": "windcool-vest",
+              "visitorId": "preflight-visitor-same-preflight-dedupe-windcool-20260708-0849",
+              "visitId": "preflight-visit-preflight-visitor-same-preflight-dedupe-windcool-20260708-0849",
+              "clickId": "preflight-click-preflight-dedupe-windcool-20260708-0849-2",
+              "eventId": "preflight-pixel-preflight-dedupe-windcool-20260708-0849-2",
+              "serverRecordId": "SRV-20260708-E3ED694A",
+              "dedupeKey": "preflight-visitor-same-preflight-dedupe-windcool-20260708-0849"
+            },
+            {
+              "event": "PurchaseCtaClick_windcool_vest",
+              "product": "windcool-vest",
+              "visitorId": "preflight-visitor-other-preflight-dedupe-windcool-20260708-0849",
+              "visitId": "preflight-visit-preflight-visitor-other-preflight-dedupe-windcool-20260708-0849",
+              "clickId": "preflight-click-preflight-dedupe-windcool-20260708-0849-3",
+              "eventId": "preflight-pixel-preflight-dedupe-windcool-20260708-0849-3",
+              "serverRecordId": "SRV-20260708-EDC63308",
+              "dedupeKey": "preflight-visitor-other-preflight-dedupe-windcool-20260708-0849"
+            }
+          ]
+        }
+      },
+      "stored_true": true,
+      "cleanup_removed": 3,
+      "dedupe_proof": {
+        "expected": {
+          "stored_events": 3,
+          "unique_button_intents": 2,
+          "npay_clicks": 2,
+          "purchase_cta_clicks": 1
+        },
+        "actual": {
+          "stored_events": 3,
+          "unique_button_intents": 2,
+          "npay_clicks": 2,
+          "purchase_cta_clicks": 1
+        },
+        "passed": true,
+        "meaning": "Two N pay clicks from the same visitor should count as one buyer intent, and one direct-buy click from another visitor should count as the second buyer intent."
+      }
+    }
+  },
+  "notes": [
+    "Meta Pixel custom event count is event count, not server deduped visitors.",
+    "If server tracking report is unavailable, do not call server purchase intent zero.",
+    "When server-click-test is used, the tool sends two N pay clicks from the same visitor and one direct-buy click from another visitor, then cleanup must prove 3 clicks become 2 unique buyer intents."
+  ]
+}
