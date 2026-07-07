@@ -20,7 +20,7 @@ const staticLocal = args.get("--static-local") === "true";
 const requiredTexts = {
   desktopHome: ["ITTEMMALL", "MARCE", "테스트 상품 보기"],
   productDetail: ["MARCE 스위트 피클볼 패들", "바로 구매하기", "USAPA"],
-  windcoolDetail: ["윈드쿨 에어 팬 베스트", "₩ 48,900", "N pay 구매", "보조배터리"],
+  windcoolDetail: ["윈드쿨 에어 선풍기 조끼", "₩ 48,900", "N pay 구매", "보조배터리 10,000mAh 추가 (+9,900원)"],
   paymentFlow: ["토스페이먼츠 안내 요청", "토스 결제창 열기", "주문 수정"],
   tossCheckout: ["토스페이먼츠 결제", "토스 결제하기", "주문 요약"],
   admin: ["Orders Admin", "주문 관리"],
@@ -51,7 +51,7 @@ const visits = [
     texts: requiredTexts.windcoolDetail,
     setup: async (page) => {
       await page.waitForFunction(() => location.hash === "#/product/windcool-vest", null, { timeout: 10000 });
-      await page.waitForFunction(() => document.body.innerText.includes("윈드쿨 에어 팬 베스트"), null, {
+      await page.waitForFunction(() => document.body.innerText.includes("윈드쿨 에어 선풍기 조끼"), null, {
         timeout: 10000,
       });
       const oldPriceVisible = await page.evaluate(() => {

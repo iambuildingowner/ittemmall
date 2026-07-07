@@ -64,6 +64,10 @@ ASSET_SOURCE_FILES = [
     "payment/naverpay-config.js",
 ]
 
+EXTRA_PUBLIC_ASSETS = [
+    "assets/ittemmall/fan-vest/windcool-vest-meta-ad-senior-charcoal-blue-air-v1.png",
+]
+
 FORBIDDEN_PARTS = {
     "notes",
     "output",
@@ -157,6 +161,9 @@ def verify_package() -> list[str]:
     for relative_path in referenced_assets():
         if not (PUBLIC_ROOT / relative_path).is_file():
             problems.append(f"referenced asset missing: {relative_path}")
+    for relative_path in EXTRA_PUBLIC_ASSETS:
+        if not (PUBLIC_ROOT / relative_path).is_file():
+            problems.append(f"extra public asset missing: {relative_path}")
     return problems
 
 
@@ -200,7 +207,7 @@ def main() -> None:
     clean_public_root()
     for relative_path in FILES:
         copy_file(relative_path)
-    for relative_path in referenced_assets():
+    for relative_path in sorted(set(referenced_assets()) | set(EXTRA_PUBLIC_ASSETS)):
         copy_file(relative_path)
 
     included_files = sorted(relative_posix(path) for path in PUBLIC_ROOT.rglob("*") if path.is_file())

@@ -11,6 +11,10 @@ on:
         description: Optional KST lower bound, e.g. 2026-05-21T21:11:00+09:00.
         required: false
         type: string
+      until_kst:
+        description: Optional KST upper bound, e.g. 2026-05-21T21:41:00+09:00.
+        required: false
+        type: string
 
 jobs:
   read-counts:
@@ -48,6 +52,7 @@ jobs:
           HOSTINGER_FTP_TARGET_DIR: ${{ secrets.HOSTINGER_FTP_TARGET_DIR }}
           INPUT_DATE: ${{ inputs.date }}
           INPUT_SINCE_KST: ${{ inputs.since_kst }}
+          INPUT_UNTIL_KST: ${{ inputs.until_kst }}
         run: |
           set -euo pipefail
           report_date="${INPUT_DATE:-$(TZ=Asia/Seoul date +%F)}"
@@ -60,6 +65,7 @@ jobs:
 
           echo "REPORT_DATE=${report_date}" >> "$GITHUB_ENV"
           echo "SINCE_KST=${INPUT_SINCE_KST}" >> "$GITHUB_ENV"
+          echo "UNTIL_KST=${INPUT_UNTIL_KST}" >> "$GITHUB_ENV"
           : > server-events.ndjson
           : > read-paths.txt
 
@@ -103,6 +109,15 @@ jobs:
           const buttonRows = [];
           const seen = new Set();
           const since = process.env.SINCE_KST ? Date.parse(process.env.SINCE_KST) : null;
+          const until = process.env.UNTIL_KST ? Date.parse(process.env.UNTIL_KST) : null;
+          const windcoolIntentVisitors = new Set();
+          const windcoolCounts = {
+            total: 0,
+            npay: 0,
+            purchase: 0,
+            battery: 0,
+            vestOnly: 0
+          };
           let parsed = 0;
           let included = 0;
 
@@ -117,6 +132,15 @@ jobs:
               name.startsWith("PurchaseCtaClick_");
           }
 
+          function isTestEntry(entry, payload) {
+            const url = String(entry.url || "");
+            return payload.__test === true ||
+              payload.testRunId ||
+              payload.test_run_id ||
+              url.includes("pixel_test=1") ||
+              url.includes("test_run_id=");
+          }
+
           for (const line of lines) {
             try {
               const entry = JSON.parse(line);
@@ -125,9 +149,12 @@ jobs:
               seen.add(key);
               const name = String(entry.event || "");
               if (!name) continue;
+              const payload = entry.payload || {};
+              if (isTestEntry(entry, payload)) continue;
               parsed += 1;
               const eventTime = Date.parse(entry.server_time_kst || entry.server_time_utc || "");
               if (since && (!Number.isFinite(eventTime) || eventTime < since)) continue;
+              if (until && (!Number.isFinite(eventTime) || eventTime > until)) continue;
               included += 1;
               counts.set(name, (counts.get(name) || 0) + 1);
               const hour = String(entry.server_time_kst || "").slice(0, 13).replace("T", " ");
@@ -146,7 +173,13 @@ jobs:
               if (!path) path = "(unknown)";
               byPath.set(path, (byPath.get(path) || 0) + 1);
               const ipHash = entry.request?.ip_hash || entry.ipHash;
-              if (ipHash) visitors.add(ipHash);
+              const visitorId = entry.visitor_id || payload.visitorId || "";
+              const visitId = entry.visit_id || payload.visitId || "";
+              const clickId = entry.click_id || payload.clickId || "";
+              const eventId = entry.event_id || payload.pixelEventId || "";
+              const serverRecordId = entry.server_record_id || "";
+              const visitorKey = visitorId || ipHash;
+              if (visitorKey) visitors.add(visitorKey);
               recent.push({
                 time: String(entry.server_time_kst || "").replace("T", " ").slice(0, 19),
                 event: name,
@@ -154,7 +187,6 @@ jobs:
                 path
               });
               if (isButtonEvent(name)) {
-                const payload = entry.payload || {};
                 const attribution = payload.attribution || entry.attribution || {};
                 buttonRows.push({
                   time: String(entry.server_time_kst || "").replace("T", " ").slice(0, 19),
@@ -168,8 +200,28 @@ jobs:
                   content: clean(attribution.utm_content || ""),
                   term: clean(attribution.utm_term || ""),
                   url: clean(entry.url || "", 260),
-                  visitor: clean(String(ipHash || "").slice(0, 12))
+                  visitor: clean(String(visitorId || ipHash || "").slice(0, 36)),
+                  visitId: clean(visitId),
+                  clickId: clean(clickId),
+                  eventId: clean(eventId),
+                  serverRecordId: clean(serverRecordId),
+                  metaPixelId: clean(entry.meta_pixel_id || payload.metaPixelId || ""),
+                  fbclid: clean(attribution.fbclid || "", 80)
                 });
+
+                if (product === "windcool-vest" || product === "product-003") {
+                  const optionText = JSON.stringify(payload.selectedOptions || {});
+                  const dedupeKey = visitorId || visitId || clickId || eventId || serverRecordId || ipHash || `${name}:${buttonRows.length}`;
+                  windcoolCounts.total += 1;
+                  if (name.startsWith("NpayPurchaseClick")) windcoolCounts.npay += 1;
+                  if (name.startsWith("PurchaseCtaClick")) windcoolCounts.purchase += 1;
+                  if (optionText.includes("보조배터리 10,000mAh 추가")) {
+                    windcoolCounts.battery += 1;
+                  } else {
+                    windcoolCounts.vestOnly += 1;
+                  }
+                  windcoolIntentVisitors.add(dedupeKey);
+                }
               }
             } catch {}
           }
@@ -182,12 +234,19 @@ jobs:
             row.event,
             row.product,
             row.productName,
+            row.options,
             row.testId,
             row.source,
             row.campaign,
             row.content,
             row.term,
             row.visitor,
+            row.visitId,
+            row.clickId,
+            row.eventId,
+            row.serverRecordId,
+            row.metaPixelId,
+            row.fbclid,
             row.url
           ]);
 
@@ -205,6 +264,7 @@ jobs:
 
           console.log(`Server tracking report date: ${process.env.REPORT_DATE}`);
           console.log(`Since KST: ${process.env.SINCE_KST || "(none)"}`);
+          console.log(`Until KST: ${process.env.UNTIL_KST || "(none)"}`);
           console.log("Read paths:");
           console.log(fs.existsSync("read-paths.txt") ? fs.readFileSync("read-paths.txt", "utf8").trim() : "(none)");
           console.log(`Parsed server log rows: ${parsed}`);
@@ -214,10 +274,19 @@ jobs:
 
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Server tracking report: ${process.env.REPORT_DATE}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Since KST: ${process.env.SINCE_KST || "(none)"}\n\n`);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Until KST: ${process.env.UNTIL_KST || "(none)"}\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Read paths:\n\n\`\`\`\n${fs.existsSync("read-paths.txt") ? fs.readFileSync("read-paths.txt", "utf8").trim() : "(none)"}\n\`\`\`\n\n`);
           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Parsed server log rows: ${parsed}\n\nIncluded rows: ${included}\n\nUnique visitor hashes: ${visitors.size}\n\nButton rows: ${buttonRows.length}\n`);
 
-          printTable("### Button events", ["Time KST", "Event", "Product", "Product name", "Test ID", "Source", "Campaign", "Content", "Term", "Visitor", "URL"], buttonTable);
+          printTable("### Windcool intent summary", ["Metric", "Value"], [
+            ["Total button clicks", String(windcoolCounts.total)],
+            ["Unique order intents", String(windcoolIntentVisitors.size)],
+            ["N pay clicks", String(windcoolCounts.npay)],
+            ["Direct buy clicks", String(windcoolCounts.purchase)],
+            ["Battery add-on selected", String(windcoolCounts.battery)],
+            ["Vest only selected", String(windcoolCounts.vestOnly)]
+          ]);
+          printTable("### Button events", ["Time KST", "Event", "Product", "Product name", "Options", "Test ID", "Source", "Campaign", "Content", "Term", "Visitor", "Visit ID", "Click ID", "Event ID", "Server ID", "Meta Pixel", "fbclid", "URL"], buttonTable);
           printTable("### Event counts", ["Event", "Count"], rows.map(([name, count]) => [name, String(count)]));
           printTable("### Product counts", ["Product", "Count"], sortCount(byProduct).slice(0, 20).map(([product, count]) => [product, String(count)]));
           printTable("### Path counts", ["Path", "Count"], sortCount(byPath).slice(0, 20).map(([path, count]) => [path, String(count)]));

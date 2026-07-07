@@ -168,6 +168,85 @@ function ittemmallTrackJsonLine(mixed $value): string
     return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
+function ittemmallTrackCreateId(string $prefix, DateTimeImmutable $utcNow): string
+{
+    $kstDate = $utcNow->setTimezone(new DateTimeZone('Asia/Seoul'))->format('Ymd');
+    return sprintf('%s-%s-%s', $prefix, $kstDate, strtoupper(bin2hex(random_bytes(4))));
+}
+
+function ittemmallTrackReadableTime(string $timestamp): string
+{
+    if ($timestamp === '') {
+        return '-';
+    }
+    $time = strtotime($timestamp);
+    if ($time === false) {
+        return str_replace('T', ' ', substr($timestamp, 0, 19));
+    }
+    return (new DateTimeImmutable('@' . $time))
+        ->setTimezone(new DateTimeZone('Asia/Seoul'))
+        ->format('Y-m-d H:i:s');
+}
+
+function ittemmallTrackOptionLabel(mixed $selectedOptions): string
+{
+    if (!is_array($selectedOptions) || $selectedOptions === []) {
+        return '-';
+    }
+    $labels = [];
+    foreach ($selectedOptions as $label => $value) {
+        $labelText = ittemmallTrackCleanString((string)$label, 40);
+        $valueText = ittemmallTrackCleanString((string)$value, 120);
+        if ($valueText !== '') {
+            $labels[] = $labelText . ': ' . $valueText;
+        }
+    }
+    return $labels === [] ? '-' : implode(' / ', $labels);
+}
+
+function ittemmallTrackOptionSubject(mixed $selectedOptions): string
+{
+    if (!is_array($selectedOptions) || $selectedOptions === []) {
+        return '';
+    }
+    $color = ittemmallTrackCleanString((string)($selectedOptions['색상'] ?? $selectedOptions['color'] ?? ''), 40);
+    $size = ittemmallTrackCleanString((string)($selectedOptions['사이즈'] ?? $selectedOptions['size'] ?? ''), 40);
+    return trim($color . ' ' . $size);
+}
+
+function ittemmallTrackShortValue(mixed $value, int $front = 18, int $back = 10): string
+{
+    $text = ittemmallTrackCleanString((string)$value, 1000);
+    if ($text === '') {
+        return '-';
+    }
+    if (function_exists('mb_strlen') && mb_strlen($text, 'UTF-8') > ($front + $back + 3)) {
+        return mb_substr($text, 0, $front, 'UTF-8') . '...' . mb_substr($text, -$back, null, 'UTF-8');
+    }
+    if (!function_exists('mb_strlen') && strlen($text) > ($front + $back + 3)) {
+        return substr($text, 0, $front) . '...' . substr($text, -$back);
+    }
+    return $text;
+}
+
+function ittemmallTrackAttributionValue(array $payload, array $event, string $key): string
+{
+    $payloadAttribution = is_array($payload['attribution'] ?? null) ? $payload['attribution'] : [];
+    $eventAttribution = is_array($event['attribution'] ?? null) ? $event['attribution'] : [];
+    return ittemmallTrackCleanString((string)($payloadAttribution[$key] ?? $eventAttribution[$key] ?? ''), 240);
+}
+
+function ittemmallTrackFirstNonEmpty(mixed ...$values): string
+{
+    foreach ($values as $value) {
+        $text = ittemmallTrackCleanString((string)$value, 240);
+        if ($text !== '') {
+            return $text;
+        }
+    }
+    return '';
+}
+
 function ittemmallTrackSendPurchaseNotification(array $event): array
 {
     $eventName = (string)($event['event'] ?? '');
@@ -187,33 +266,74 @@ function ittemmallTrackSendPurchaseNotification(array $event): array
     $url = ittemmallTrackCleanString((string)($event['url'] ?? ''), 1000);
     $kstTime = ittemmallTrackCleanString((string)($event['server_time_kst'] ?? ''), 80);
     $selectedOptions = $payload['selectedOptions'] ?? [];
-    $attribution = $payload['attribution'] ?? ($event['attribution'] ?? []);
+    $attribution = is_array($payload['attribution'] ?? null) ? $payload['attribution'] : (is_array($event['attribution'] ?? null) ? $event['attribution'] : []);
+    $metaBrowserIds = is_array($payload['metaBrowserIds'] ?? null) ? $payload['metaBrowserIds'] : (is_array($event['meta_browser_ids'] ?? null) ? $event['meta_browser_ids'] : []);
+    $visitorId = ittemmallTrackFirstNonEmpty($payload['visitorId'] ?? '', $event['visitor_id'] ?? '');
+    $visitId = ittemmallTrackFirstNonEmpty($payload['visitId'] ?? '', $event['visit_id'] ?? '');
+    $clickId = ittemmallTrackFirstNonEmpty($payload['clickId'] ?? '', $event['click_id'] ?? '');
+    $pixelEventId = ittemmallTrackFirstNonEmpty($payload['pixelEventId'] ?? '', $event['event_id'] ?? '');
+    $serverRecordId = ittemmallTrackCleanString((string)($event['server_record_id'] ?? ''), 80);
+    $metaPixelId = ittemmallTrackFirstNonEmpty($payload['metaPixelId'] ?? '', $event['meta_pixel_id'] ?? '');
+    $utmSource = ittemmallTrackAttributionValue($payload, $event, 'utm_source');
+    $utmCampaign = ittemmallTrackAttributionValue($payload, $event, 'utm_campaign');
+    $utmContent = ittemmallTrackAttributionValue($payload, $event, 'utm_content');
+    $utmTerm = ittemmallTrackAttributionValue($payload, $event, 'utm_term');
+    $fbclid = ittemmallTrackAttributionValue($payload, $event, 'fbclid');
+    $fbp = ittemmallTrackCleanString((string)($metaBrowserIds['fbp'] ?? ''), 180);
+    $fbc = ittemmallTrackCleanString((string)($metaBrowserIds['fbc'] ?? ''), 240);
 
     $isTest = ($payload['__test'] ?? false) === true;
     $testRunId = ittemmallTrackTestRunId($payload);
+    $optionLabel = ittemmallTrackOptionLabel($selectedOptions);
+    $subjectOption = ittemmallTrackOptionSubject($selectedOptions);
+    $shortOption = $subjectOption !== '' ? ' / ' . $subjectOption : '';
     $subject = sprintf(
-        '[잇템몰 클릭%s] %s / %s',
+        '[잇템몰%s] %s / %s%s',
         $isTest ? ' 테스트' : '',
         $eventLabel,
-        $productName
+        $productName,
+        $shortOption
     );
     $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
     $body = implode("\n", [
-        '잇템몰 상품 클릭 로그가 들어왔습니다.',
+        '잇템몰 구매 관련 버튼이 눌렸습니다.',
         '',
-        '종류: ' . $eventLabel,
-        '이벤트: ' . $eventName,
+        '[바로 볼 내용]',
+        '상태: 결제 완료가 아니라 구매 버튼 클릭입니다.',
+        '버튼: ' . $eventLabel,
         '상품명: ' . $productName,
+        '옵션: ' . $optionLabel,
+        '수량: ' . $quantity,
+        '계산 금액: ' . $amount,
+        '시간: ' . ittemmallTrackReadableTime($kstTime),
+        '유입: ' . ($utmSource !== '' ? $utmSource : '미확인'),
+        '',
+        '[같은 사람/같은 클릭 확인용]',
+        '방문번호: ' . ($visitorId !== '' ? $visitorId : '-'),
+        '이번 방문번호: ' . ($visitId !== '' ? $visitId : '-'),
+        '클릭번호: ' . ($clickId !== '' ? $clickId : '-'),
+        '픽셀 이벤트번호: ' . ($pixelEventId !== '' ? $pixelEventId : '-'),
+        '서버 기록번호: ' . ($serverRecordId !== '' ? $serverRecordId : '-'),
+        '',
+        '[메타 광고/픽셀]',
+        '메타 픽셀 ID: ' . ($metaPixelId !== '' ? $metaPixelId : '-'),
+        '광고 클릭값 fbclid: ' . ittemmallTrackShortValue($fbclid, 24, 16),
+        '브라우저값 _fbp: ' . ($fbp !== '' ? $fbp : '-'),
+        '브라우저값 _fbc: ' . ittemmallTrackShortValue($fbc, 24, 16),
+        '캠페인: ' . ($utmCampaign !== '' ? $utmCampaign : '-'),
+        '소재: ' . ($utmContent !== '' ? $utmContent : '-'),
+        '타깃/키워드: ' . ($utmTerm !== '' ? $utmTerm : '-'),
+        '',
+        '[상품 원본값]',
+        '이벤트명: ' . $eventName,
         '상품 slug: ' . ($productSlug !== '' ? $productSlug : '-'),
         '상품 ID: ' . ittemmallTrackCleanString((string)($payload['productId'] ?? '-'), 80),
         '가격: ' . $price,
-        '수량: ' . $quantity,
-        '계산 금액: ' . $amount,
-        '선택 옵션: ' . (is_array($selectedOptions) && $selectedOptions !== [] ? ittemmallTrackJsonLine($selectedOptions) : '-'),
-        'URL: ' . ($url !== '' ? $url : '-'),
-        '유입값: ' . (is_array($attribution) && $attribution !== [] ? ittemmallTrackJsonLine($attribution) : '-'),
-        '서버 시간: ' . ($kstTime !== '' ? $kstTime : '-'),
         '테스트 ID: ' . ($testRunId !== '' ? $testRunId : '-'),
+        '',
+        '[상세 원본]',
+        'URL: ' . ($url !== '' ? $url : '-'),
+        '유입 원본: ' . ($attribution !== [] ? ittemmallTrackJsonLine($attribution) : '-'),
     ]) . "\n";
 
     $headers = implode("\r\n", [
@@ -296,10 +416,24 @@ $productFocus = ittemmallTrackCleanString(
     (string)($body['product_focus'] ?? $payload['productSlug'] ?? $payload['productId'] ?? 'ittemmall'),
     160
 );
+$serverRecordId = ittemmallTrackCreateId('SRV', $utcNow);
+$eventId = ittemmallTrackFirstNonEmpty($body['event_id'] ?? '', $payload['pixelEventId'] ?? '', ittemmallTrackCreateId('EVT', $utcNow));
+$visitorId = ittemmallTrackFirstNonEmpty($body['visitor_id'] ?? '', $payload['visitorId'] ?? '');
+$visitId = ittemmallTrackFirstNonEmpty($body['visit_id'] ?? '', $payload['visitId'] ?? '');
+$clickId = ittemmallTrackFirstNonEmpty($body['click_id'] ?? '', $payload['clickId'] ?? '');
+$metaPixelId = ittemmallTrackFirstNonEmpty($body['meta_pixel_id'] ?? '', $payload['metaPixelId'] ?? '');
+$metaBrowserIds = ittemmallTrackCleanPayload($body['meta_browser_ids'] ?? ($payload['metaBrowserIds'] ?? []));
 
 $event = [
     'event' => $eventName,
     'payload' => $payload,
+    'server_record_id' => $serverRecordId,
+    'event_id' => $eventId,
+    'visitor_id' => $visitorId,
+    'visit_id' => $visitId,
+    'click_id' => $clickId,
+    'meta_pixel_id' => $metaPixelId,
+    'meta_browser_ids' => is_array($metaBrowserIds) ? $metaBrowserIds : [],
     'brand' => ittemmallTrackCleanString((string)($body['brand'] ?? 'ITTEMMALL'), 80),
     'product_focus' => $productFocus,
     'path' => ittemmallTrackCleanString((string)($body['path'] ?? ''), 500),
@@ -336,6 +470,11 @@ ittemmallTrackResponse(200, [
     'stored' => true,
     'test' => ($payload['__test'] ?? false) === true,
     'event' => $eventName,
+    'serverRecordId' => $serverRecordId,
+    'eventId' => $eventId,
+    'visitorId' => $visitorId,
+    'visitId' => $visitId,
+    'clickId' => $clickId,
     'notification' => [
         'attempted' => $notification['attempted'],
         'sent' => $notification['sent'],

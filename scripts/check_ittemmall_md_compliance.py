@@ -112,6 +112,15 @@ def run_checks(args: argparse.Namespace) -> list[Check]:
 
     add(checks, "상품 정보 중복 방지", "hideStandaloneInfo: true" in block, "사이즈/상품 정보 단일 블록 사용")
     add(checks, "사이즈/상품 정보 제목", 'specTitle: "사이즈 / 상품 정보"' in block, "중복 섹션 대신 단일 제목")
+    add(
+        checks,
+        "보조배터리 추가상품",
+        'label: "추가상품"' in block
+        and "보조배터리 10,000mAh 추가 (+9,900원)" in block
+        and "optionAddOnPrices" in block
+        and "9900" in block,
+        "기본 구성 미포함 / 추가상품 9,900원",
+    )
 
     if args.ad_image:
         ad_path = ROOT / args.ad_image

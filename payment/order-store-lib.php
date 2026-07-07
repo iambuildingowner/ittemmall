@@ -72,8 +72,27 @@ function ittemmallProductCatalog(): array
         'product-003' => [
             'name' => '윈드쿨 에어 선풍기 조끼',
             'price' => 48900,
+            'optionAddOnPrices' => [
+                '추가상품' => [
+                    '보조배터리 10,000mAh 추가 (+9,900원)' => 9900,
+                ],
+            ],
         ],
     ];
+}
+
+function ittemmallSelectedAddOnUnitTotal(array $product, array $selectedOptions): int
+{
+    $priceMap = is_array($product['optionAddOnPrices'] ?? null) ? $product['optionAddOnPrices'] : [];
+    $total = 0;
+    foreach ($priceMap as $label => $values) {
+        if (!is_array($values)) {
+            continue;
+        }
+        $selectedValue = (string)($selectedOptions[(string)$label] ?? '');
+        $total += (int)($values[$selectedValue] ?? 0);
+    }
+    return max(0, $total);
 }
 
 function ittemmallCleanString(string $value, int $maxLength = 500): string
@@ -182,14 +201,15 @@ function ittemmallNormalizeOrder(array $input, ?array $existing = null): array
         $paymentMethod = 'standard';
     }
 
-    $product = $catalog[$productId];
-    $now = gmdate('c');
-    $amount = (int)$product['price'] * $quantity;
-    $customer = is_array($input['customer'] ?? null) ? ittemmallCleanCustomer($input['customer']) : ittemmallCleanCustomer([]);
-    ittemmallValidateCustomer($customer);
     $selectedOptions = is_array($input['selectedOptions'] ?? null)
         ? ittemmallCleanMap($input['selectedOptions'])
         : [];
+    $product = $catalog[$productId];
+    $addOnUnitTotal = ittemmallSelectedAddOnUnitTotal($product, $selectedOptions);
+    $now = gmdate('c');
+    $amount = ((int)$product['price'] + $addOnUnitTotal) * $quantity;
+    $customer = is_array($input['customer'] ?? null) ? ittemmallCleanCustomer($input['customer']) : ittemmallCleanCustomer([]);
+    ittemmallValidateCustomer($customer);
     $origin = is_array($input['origin'] ?? null) ? ittemmallCleanMap($input['origin'], 10, 300) : [];
 
     $normalized = [
@@ -199,6 +219,9 @@ function ittemmallNormalizeOrder(array $input, ?array $existing = null): array
         'selectedOptions' => $selectedOptions,
         'quantity' => $quantity,
         'price' => (int)$product['price'],
+        'unitPrice' => (int)$product['price'] + $addOnUnitTotal,
+        'addOnUnitTotal' => $addOnUnitTotal,
+        'addOnTotal' => $addOnUnitTotal * $quantity,
         'amount' => $amount,
         'currency' => 'KRW',
         'customer' => $customer,
@@ -512,12 +535,17 @@ function ittemmallMailSubject(string $subject): string
 function ittemmallOrderNotificationBody(array $order): string
 {
     $customer = is_array($order['customer'] ?? null) ? $order['customer'] : [];
+    $selectedOptions = is_array($order['selectedOptions'] ?? null)
+        ? json_encode($order['selectedOptions'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        : '{}';
     return implode("\n", [
         'ITTEMMALL 새 주문이 접수되었습니다.',
         '',
         '주문번호: ' . (string)($order['id'] ?? ''),
         '상품: ' . (string)($order['productName'] ?? ''),
+        '옵션: ' . (string)$selectedOptions,
         '수량: ' . (string)($order['quantity'] ?? ''),
+        '추가상품 금액: ' . number_format((int)($order['addOnTotal'] ?? 0)) . ' KRW',
         '금액: ' . number_format((int)($order['amount'] ?? 0)) . ' KRW',
         '결제수단: ' . (string)($order['paymentMethod'] ?? ''),
         '결제상태: ' . (string)($order['paymentStatus'] ?? ''),
