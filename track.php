@@ -63,11 +63,43 @@ function ittemmallTrackTestRunId(array $payload): string
     return $testRunId;
 }
 
+function ittemmallTrackDedupeKey(array $entry, array $payload, int $fallbackIndex): string
+{
+    $values = [
+        $entry['visitor_id'] ?? null,
+        $payload['visitorId'] ?? null,
+        $entry['visit_id'] ?? null,
+        $payload['visitId'] ?? null,
+        $entry['click_id'] ?? null,
+        $payload['clickId'] ?? null,
+        $entry['event_id'] ?? null,
+        $payload['pixelEventId'] ?? null,
+        $entry['server_record_id'] ?? null,
+        $entry['request']['ip_hash'] ?? null,
+        $entry['ipHash'] ?? null,
+    ];
+    foreach ($values as $value) {
+        $text = ittemmallTrackCleanString((string)($value ?? ''), 120);
+        if ($text !== '') {
+            return $text;
+        }
+    }
+    return 'fallback-' . (string)$fallbackIndex;
+}
+
+function ittemmallTrackIsButtonEventName(string $eventName): bool
+{
+    return $eventName === 'NpayPurchaseClick'
+        || $eventName === 'PurchaseCtaClick'
+        || str_starts_with($eventName, 'NpayPurchaseClick_')
+        || str_starts_with($eventName, 'PurchaseCtaClick_');
+}
+
 function ittemmallTrackCleanupTestEvents(string $testRunId): array
 {
     $logPath = ittemmallEffectiveTrackLogPath();
     if (!is_file($logPath)) {
-        return ['removed' => 0, 'events' => []];
+        return ['removed' => 0, 'events' => [], 'dedupe' => ['uniqueRows' => 0, 'uniqueButtonIntents' => 0], 'samples' => []];
     }
 
     $lines = file($logPath, FILE_IGNORE_NEW_LINES);
@@ -78,7 +110,12 @@ function ittemmallTrackCleanupTestEvents(string $testRunId): array
     $kept = [];
     $removed = 0;
     $events = [];
+    $dedupeKeys = [];
+    $buttonDedupeKeys = [];
+    $samples = [];
+    $lineIndex = 0;
     foreach ($lines as $line) {
+        $lineIndex++;
         if (trim($line) === '') {
             continue;
         }
@@ -91,6 +128,23 @@ function ittemmallTrackCleanupTestEvents(string $testRunId): array
             $eventName = (string)($entry['event'] ?? '');
             if ($eventName !== '') {
                 $events[$eventName] = ($events[$eventName] ?? 0) + 1;
+            }
+            $dedupeKey = is_array($entry) ? ittemmallTrackDedupeKey($entry, $payload, $lineIndex) : 'fallback-' . (string)$lineIndex;
+            $dedupeKeys[$dedupeKey] = true;
+            if (ittemmallTrackIsButtonEventName($eventName)) {
+                $buttonDedupeKeys[$dedupeKey] = true;
+            }
+            if (is_array($entry) && count($samples) < 10) {
+                $samples[] = [
+                    'event' => $eventName,
+                    'product' => ittemmallTrackCleanString((string)($entry['product_focus'] ?? $payload['productSlug'] ?? $payload['productId'] ?? ''), 120),
+                    'visitorId' => ittemmallTrackCleanString((string)($entry['visitor_id'] ?? $payload['visitorId'] ?? ''), 120),
+                    'visitId' => ittemmallTrackCleanString((string)($entry['visit_id'] ?? $payload['visitId'] ?? ''), 120),
+                    'clickId' => ittemmallTrackCleanString((string)($entry['click_id'] ?? $payload['clickId'] ?? ''), 120),
+                    'eventId' => ittemmallTrackCleanString((string)($entry['event_id'] ?? $payload['pixelEventId'] ?? ''), 120),
+                    'serverRecordId' => ittemmallTrackCleanString((string)($entry['server_record_id'] ?? ''), 120),
+                    'dedupeKey' => $dedupeKey,
+                ];
             }
             continue;
         }
@@ -109,7 +163,16 @@ function ittemmallTrackCleanupTestEvents(string $testRunId): array
     }
     @chmod($logPath, 0600);
     ksort($events);
-    return ['removed' => $removed, 'events' => $events];
+    return [
+        'removed' => $removed,
+        'events' => $events,
+        'dedupe' => [
+            'uniqueRows' => count($dedupeKeys),
+            'uniqueButtonIntents' => count($buttonDedupeKeys),
+            'order' => 'visitorId -> visitId -> clickId -> eventId/pixelEventId -> serverRecordId -> ipHash',
+        ],
+        'samples' => $samples,
+    ];
 }
 
 function ittemmallTrackIsDisabledValue(string $value): bool
@@ -402,6 +465,8 @@ if ($eventName === '__cleanup_test_events') {
         'testRunId' => $testRunId,
         'removed' => $cleanup['removed'],
         'events' => $cleanup['events'],
+        'dedupe' => $cleanup['dedupe'],
+        'samples' => $cleanup['samples'],
     ]);
 }
 

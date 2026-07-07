@@ -246,46 +246,85 @@ def meta_checks(args: argparse.Namespace, token: str) -> dict[str, Any]:
 def server_click_test(args: argparse.Namespace) -> dict[str, Any]:
     event_suffix = args.product_slug.replace("-", "_")
     test_run_id = args.test_run_id or f"preflight-{args.product_slug}-{kst_now_id()}"
-    payload = {
-        "event": f"NpayPurchaseClick_{event_suffix}",
-        "product_focus": args.product_slug,
-        "path": f"#/product/{args.product_slug}",
-        "url": (
-            f"{args.base_url}/?pixel_test=1"
-            f"&test_run_id={urllib.parse.quote(test_run_id)}#/product/{args.product_slug}"
-        ),
-        "payload": {
-            "__test": True,
-            "notifyTest": bool(args.notify_test),
-            "testRunId": test_run_id,
-            "productSlug": args.product_slug,
-            "productId": args.product_id,
-            "productName": args.product_name,
-            "price": args.price,
-            "value": args.price,
-            "amount": args.price,
-            "quantity": 1,
-            "selectedOptions": args.selected_options,
-            "visitorId": f"preflight-visitor-{test_run_id}",
-            "visitId": f"preflight-visit-{test_run_id}",
-            "clickId": f"preflight-click-{test_run_id}",
-            "pixelEventId": f"preflight-pixel-{test_run_id}",
-            "metaPixelId": args.pixel_id,
-            "attribution": {"utm_source": "preflight", "utm_campaign": args.campaign_id},
-        },
-    }
-    store = request_json("POST", f"{args.base_url.rstrip('/')}/track.php", payload=payload)
+    base_url = (
+        f"{args.base_url}/?pixel_test=1"
+        f"&test_run_id={urllib.parse.quote(test_run_id)}#/product/{args.product_slug}"
+    )
+    same_visitor = f"preflight-visitor-same-{test_run_id}"
+    other_visitor = f"preflight-visitor-other-{test_run_id}"
+
+    def build_payload(event_name: str, visitor_id: str, index: int) -> dict[str, Any]:
+        return {
+            "event": event_name,
+            "product_focus": args.product_slug,
+            "path": f"#/product/{args.product_slug}",
+            "url": base_url,
+            "payload": {
+                "__test": True,
+                "notifyTest": bool(args.notify_test),
+                "testRunId": test_run_id,
+                "productSlug": args.product_slug,
+                "productId": args.product_id,
+                "productName": args.product_name,
+                "price": args.price,
+                "value": args.price,
+                "amount": args.price,
+                "quantity": 1,
+                "selectedOptions": args.selected_options,
+                "visitorId": visitor_id,
+                "visitId": f"preflight-visit-{visitor_id}",
+                "clickId": f"preflight-click-{test_run_id}-{index}",
+                "pixelEventId": f"preflight-pixel-{test_run_id}-{index}",
+                "metaPixelId": args.pixel_id,
+                "attribution": {"utm_source": "preflight", "utm_campaign": args.campaign_id},
+            },
+        }
+
+    test_events = [
+        build_payload(f"NpayPurchaseClick_{event_suffix}", same_visitor, 1),
+        build_payload(f"NpayPurchaseClick_{event_suffix}", same_visitor, 2),
+        build_payload(f"PurchaseCtaClick_{event_suffix}", other_visitor, 3),
+    ]
+    store_results = [
+        request_json("POST", f"{args.base_url.rstrip('/')}/track.php", payload=payload)
+        for payload in test_events
+    ]
     cleanup = request_json(
         "POST",
         f"{args.base_url.rstrip('/')}/track.php",
         payload={"event": "__cleanup_test_events", "payload": {"__test": True, "testRunId": test_run_id}},
     )
+    cleanup_data = cleanup.get("data", {}) if isinstance(cleanup.get("data"), dict) else {}
+    dedupe = cleanup_data.get("dedupe", {}) if isinstance(cleanup_data.get("dedupe"), dict) else {}
+    expected = {
+        "stored_events": 3,
+        "unique_button_intents": 2,
+        "npay_clicks": 2,
+        "purchase_cta_clicks": 1,
+    }
+    actual_events = cleanup_data.get("events", {}) if isinstance(cleanup_data.get("events"), dict) else {}
+    actual = {
+        "stored_events": cleanup_data.get("removed"),
+        "unique_button_intents": dedupe.get("uniqueButtonIntents"),
+        "npay_clicks": actual_events.get(f"NpayPurchaseClick_{event_suffix}", 0),
+        "purchase_cta_clicks": actual_events.get(f"PurchaseCtaClick_{event_suffix}", 0),
+    }
     return {
         "test_run_id": test_run_id,
-        "store": store,
+        "store_results": store_results,
         "cleanup": cleanup,
-        "stored_true": store.get("data", {}).get("stored") is True if isinstance(store.get("data"), dict) else False,
-        "cleanup_removed": cleanup.get("data", {}).get("removed") if isinstance(cleanup.get("data"), dict) else None,
+        "stored_true": len(store_results) == 3
+        and all(
+            isinstance(result.get("data"), dict) and result.get("data", {}).get("stored") is True
+            for result in store_results
+        ),
+        "cleanup_removed": cleanup_data.get("removed"),
+        "dedupe_proof": {
+            "expected": expected,
+            "actual": actual,
+            "passed": expected == actual,
+            "meaning": "Two N pay clicks from the same visitor should count as one buyer intent, and one direct-buy click from another visitor should count as the second buyer intent.",
+        },
     }
 
 
@@ -368,7 +407,7 @@ def main() -> int:
         "notes": [
             "Meta Pixel custom event count is event count, not server deduped visitors.",
             "If server tracking report is unavailable, do not call server purchase intent zero.",
-            "Test rows are marked with __test/testRunId and removed by cleanup when server-click-test is used.",
+            "When server-click-test is used, the tool sends two N pay clicks from the same visitor and one direct-buy click from another visitor, then cleanup must prove 3 clicks become 2 unique buyer intents.",
         ],
     }
 
