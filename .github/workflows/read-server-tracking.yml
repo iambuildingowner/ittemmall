@@ -109,7 +109,8 @@ jobs:
               echo "discover:${root}:MISS" >> read-paths.txt
               return
             fi
-            grep -E "(^|/)${report_date}[.]ndjson$" "$listing" | head -n 20 | while IFS= read -r discovered_path; do
+            matches="$(grep -E "(^|/)${report_date}[.]ndjson$" "$listing" | head -n 20 || true)"
+            printf '%s\n' "$matches" | while IFS= read -r discovered_path; do
               [ -z "$discovered_path" ] && continue
               local label_hash
               label_hash="$(printf '%s' "$discovered_path" | sha1sum | cut -c1-10)"
