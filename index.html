@@ -987,6 +987,14 @@
         line-height: 1.7;
       }
 
+      .detail-notice {
+        margin: 8px 0 0;
+        color: #dc2626;
+        font-size: 12.5px;
+        line-height: 1.55;
+        font-weight: 700;
+      }
+
       .divider-section {
         border-top: 1px solid var(--line);
         padding: 20px 16px;
@@ -2296,7 +2304,9 @@
             cardTitle: "윈드쿨 선풍기 조끼",
             shortDescription: "듀얼 팬으로 조끼 안쪽 공기 순환을 돕는 여름 야외활동용 선풍기 조끼",
             longDescription:
-              "작업, 낚시, 캠핑처럼 더운 날 오래 밖에 있어야 할 때 입는 선풍기 조끼입니다. 보조배터리를 연결해 듀얼 팬이 조끼 안쪽 공기 순환을 돕고, 메쉬 원단과 다중 포켓으로 실용성을 더했습니다. 기본 구성에는 보조배터리가 포함되지 않으며, 필요 시 추가상품으로 선택할 수 있습니다.",
+              "작업, 낚시, 캠핑처럼 더운 날 오래 밖에 있어야 할 때 입는 선풍기 조끼입니다. 보조배터리를 연결해 듀얼 팬이 조끼 안쪽 공기 순환을 돕고, 메쉬 원단과 다중 포켓으로 실용성을 더했습니다.",
+            detailNotice:
+              "* 기본 구성에는 보조배터리가 포함되지 않으며, 필요 시 추가상품으로 선택할 수 있습니다.",
             categoryId: "seasonal",
             categoryLabel: "시즌",
             statusLabel: "시즌 상품",
@@ -4339,6 +4349,7 @@
                 <p class="eyebrow">PRODUCT DETAIL</p>
                 <h1 class="detail-title">${escapeHtml(product.name)}</h1>
                 <p class="detail-copy">${escapeHtml(product.longDescription)}</p>
+                ${product.detailNotice ? `<p class="detail-notice">${escapeHtml(product.detailNotice)}</p>` : ""}
                 <div class="price-row">
                   <p class="price" style="font-size:25px">₩ ${formatPrice(product.price)}</p>
                   ${
