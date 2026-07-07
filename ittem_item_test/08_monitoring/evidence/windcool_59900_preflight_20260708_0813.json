@@ -1,0 +1,175 @@
+{
+  "ok": true,
+  "generated_at_utc": "2026-07-07T23:15:23.993408+00:00",
+  "product": {
+    "slug": "windcool-vest",
+    "id": "product-003",
+    "name": "윈드쿨 에어 선풍기 조끼"
+  },
+  "window": {
+    "since_utc": "2026-07-07T19:09:17+0000",
+    "until_utc": "2026-07-07T23:13:19+0000"
+  },
+  "meta": {
+    "ok": true,
+    "ad_insights": {
+      "ok": true,
+      "spend": 14753,
+      "impressions": 3442,
+      "clicks": 69,
+      "inline_link_clicks": 59,
+      "unique_clicks": 58,
+      "unique_inline_link_clicks": 58,
+      "landing_page_views": 52,
+      "raw_date_start": "2026-07-08",
+      "raw_date_stop": "2026-07-08"
+    },
+    "pixel_stats": {
+      "NpayPurchaseClick_windcool_vest": {
+        "ok": true,
+        "count": 3,
+        "error": null
+      },
+      "NpayPurchaseClick": {
+        "ok": true,
+        "count": 3,
+        "error": null
+      },
+      "PurchaseCtaClick_windcool_vest": {
+        "ok": true,
+        "count": 0,
+        "error": null
+      },
+      "PurchaseCtaClick": {
+        "ok": true,
+        "count": 0,
+        "error": null
+      }
+    }
+  },
+  "server": {
+    "healthcheck": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "ok": true,
+        "site": "ITTEMMALL",
+        "php": {
+          "version": "8.3.30",
+          "curl": true,
+          "json": true,
+          "mail": true
+        },
+        "serverConfig": {
+          "privateConfigFileLoaded": false
+        },
+        "serverOrderStore": {
+          "configured": false,
+          "directoryExists": false,
+          "directoryWritable": false,
+          "fileExists": false,
+          "fileReadable": false,
+          "fileValidJson": null,
+          "orderCount": 0,
+          "latestUpdatedAt": "",
+          "backupExists": false,
+          "backupReadable": false,
+          "backupValidJson": null,
+          "backupOrderCount": 0,
+          "backupLatestUpdatedAt": "",
+          "lockFileExists": false,
+          "lockWritable": false
+        },
+        "naverPay": {
+          "mode": "development",
+          "clientIdConfigured": false,
+          "clientSecretConfigured": false,
+          "chainIdConfigured": false,
+          "approveUrlOverrideConfigured": false,
+          "approveUrlLooksHttps": true,
+          "approvalEnabled": false,
+          "cancelUrlOverrideConfigured": false,
+          "cancelUrlLooksHttps": true,
+          "cancelEnabled": false
+        },
+        "publicNaverPay": {
+          "configFileExists": true,
+          "mode": "development",
+          "modeConfigured": true,
+          "clientIdConfigured": false,
+          "chainIdConfigured": false,
+          "clientSecretExposed": false,
+          "modeMatchesServer": true,
+          "clientIdMatchesServer": false,
+          "chainIdMatchesServer": false
+        },
+        "tracking": {
+          "logPathConfigured": false,
+          "saltConfigured": false,
+          "autoPrivateLogEnabled": true,
+          "effectiveLogReady": true,
+          "effectiveSaltReady": true,
+          "directoryExists": true,
+          "directoryWritable": true,
+          "saltFileExists": true,
+          "saltFileReadable": true
+        },
+        "rateLimit": {
+          "configured": true,
+          "derivedFromPrivatePath": true,
+          "directoryExists": true,
+          "directoryWritable": true,
+          "fileExists": true,
+          "fileReadable": true,
+          "fileValidJson": true,
+          "entryCount": 8,
+          "lockFileExists": true,
+          "lockWritable": true
+        },
+        "admin": {
+          "adminTokenConfigured": false
+        },
+        "notification": {
+          "enabled": false,
+          "recipientConfigured": false,
+          "recipientLooksValid": false,
+          "fromConfigured": true,
+          "fromLooksValid": true,
+          "mailFunctionAvailable": true
+        },
+        "readiness": {
+          "readyToEnableNaverPayApproval": false,
+          "readyForOrderOperations": false,
+          "missingForApproval": [
+            "ITTEMMALL_ORDER_STORE_PATH",
+            "serverOrderStore.directoryWritable",
+            "NAVER_PAY_CLIENT_ID",
+            "NAVER_PAY_CLIENT_SECRET",
+            "NAVER_PAY_CHAIN_ID",
+            "publicNaverPay.clientId",
+            "publicNaverPay.chainId"
+          ],
+          "missingForOperations": [
+            "ITTEMMALL_ORDER_STORE_PATH",
+            "serverOrderStore.directoryWritable",
+            "NAVER_PAY_CLIENT_ID",
+            "NAVER_PAY_CLIENT_SECRET",
+            "NAVER_PAY_CHAIN_ID",
+            "publicNaverPay.clientId",
+            "publicNaverPay.chainId",
+            "ITTEMMALL_ADMIN_TOKEN"
+          ]
+        }
+      }
+    },
+    "tracking_report": {
+      "ok": false,
+      "status": "ADMIN_TOKEN_MISSING"
+    }
+  },
+  "notes": [
+    "Meta Pixel custom event count is event count, not server deduped visitors.",
+    "If server tracking report is unavailable, do not call server purchase intent zero.",
+    "Test rows are marked with __test/testRunId and removed by cleanup when server-click-test is used."
+  ]
+}

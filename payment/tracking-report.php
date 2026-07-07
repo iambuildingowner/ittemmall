@@ -44,6 +44,57 @@ function reportAttribution(array $entry, array $payload, string $key): string
     return reportClean($payloadAttribution[$key] ?? $entryAttribution[$key] ?? '', 200);
 }
 
+function reportIsTruthyParam(string $value): bool
+{
+    return in_array(strtolower(trim($value)), ['1', 'true', 'yes', 'on'], true);
+}
+
+function reportIsTestEntry(array $entry, array $payload): bool
+{
+    $url = (string)($entry['url'] ?? '');
+    return ($payload['__test'] ?? false) === true
+        || ($payload['testRunId'] ?? '') !== ''
+        || ($payload['test_run_id'] ?? '') !== ''
+        || str_contains($url, 'pixel_test=1')
+        || str_contains($url, 'test_run_id=');
+}
+
+function reportDedupeKey(array $entry, array $payload, int $fallbackIndex): string
+{
+    $values = [
+        $entry['visitor_id'] ?? null,
+        $payload['visitorId'] ?? null,
+        $entry['visit_id'] ?? null,
+        $payload['visitId'] ?? null,
+        $entry['click_id'] ?? null,
+        $payload['clickId'] ?? null,
+        $entry['event_id'] ?? null,
+        $payload['pixelEventId'] ?? null,
+        $entry['server_record_id'] ?? null,
+        $entry['request']['ip_hash'] ?? null,
+        $entry['ipHash'] ?? null,
+    ];
+    foreach ($values as $value) {
+        $text = reportClean($value ?? '', 120);
+        if ($text !== '') {
+            return $text;
+        }
+    }
+    return 'fallback-' . (string)$fallbackIndex;
+}
+
+function reportMatchesTargetProduct(string $eventName, string $product, array $payload, string $targetSlug, string $targetId): bool
+{
+    $targetSuffix = str_replace('-', '_', $targetSlug);
+    $payloadSlug = reportClean($payload['productSlug'] ?? '', 160);
+    $payloadId = reportClean($payload['productId'] ?? $payload['product_id'] ?? '', 160);
+    return $product === $targetSlug
+        || $product === $targetId
+        || $payloadSlug === $targetSlug
+        || $payloadId === $targetId
+        || str_ends_with($eventName, '_' . $targetSuffix);
+}
+
 $adminToken = ittemmallConfigValue('ITTEMMALL_ADMIN_TOKEN');
 $givenToken = (string)($_GET['token'] ?? ($_SERVER['HTTP_X_ITTEMMALL_ADMIN_TOKEN'] ?? ''));
 if ($adminToken === '' || !hash_equals($adminToken, $givenToken)) {
@@ -57,17 +108,36 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
 
 $sinceRaw = (string)($_GET['since'] ?? '');
 $sinceTs = $sinceRaw !== '' ? strtotime($sinceRaw) : false;
+$untilRaw = (string)($_GET['until'] ?? '');
+$untilTs = $untilRaw !== '' ? strtotime($untilRaw) : false;
+$includeTest = reportIsTruthyParam((string)($_GET['include_test'] ?? ''));
+$targetSlug = reportClean((string)($_GET['product_slug'] ?? 'windcool-vest'), 160);
+$targetId = reportClean((string)($_GET['product_id'] ?? 'product-003'), 160);
 $logPath = ittemmallEffectiveTrackLogPath($date);
 $result = [
     'ok' => true,
     'date' => $date,
     'since_kst' => $sinceRaw,
+    'until_kst' => $untilRaw,
+    'include_test' => $includeTest,
+    'target_product_slug' => $targetSlug,
+    'target_product_id' => $targetId,
     'log_exists' => is_file($logPath),
     'log_readable' => is_readable($logPath),
+    'log_read_status' => is_file($logPath) && is_readable($logPath) ? 'LOG_READ_OK' : 'LOG_PATH_NOT_FOUND',
     'rows_total' => 0,
+    'rows_excluded_test' => 0,
     'rows_included' => 0,
     'unique_visitors' => 0,
     'button_rows_count' => 0,
+    'target_intent_summary' => [
+        'total_button_clicks' => 0,
+        'unique_order_intents' => 0,
+        'npay_clicks' => 0,
+        'purchase_cta_clicks' => 0,
+        'battery_add_on_selected' => 0,
+        'vest_only_selected' => 0,
+    ],
     'event_counts' => [],
     'product_counts' => [],
     'path_counts' => [],
@@ -81,7 +151,10 @@ if (!is_file($logPath) || !is_readable($logPath)) {
 
 $lines = file($logPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 $visitors = [];
+$targetIntentKeys = [];
+$lineIndex = 0;
 foreach ($lines === false ? [] : $lines as $line) {
+    $lineIndex++;
     $entry = json_decode($line, true);
     if (!is_array($entry)) {
         continue;
@@ -92,13 +165,21 @@ foreach ($lines === false ? [] : $lines as $line) {
     }
 
     $result['rows_total']++;
+    $payload = is_array($entry['payload'] ?? null) ? $entry['payload'] : [];
+    if (!$includeTest && reportIsTestEntry($entry, $payload)) {
+        $result['rows_excluded_test']++;
+        continue;
+    }
+
     $timeKst = reportClean($entry['server_time_kst'] ?? '', 80);
     $timeTs = $timeKst !== '' ? strtotime($timeKst) : false;
     if ($sinceTs !== false && ($timeTs === false || $timeTs < $sinceTs)) {
         continue;
     }
+    if ($untilTs !== false && ($timeTs === false || $timeTs > $untilTs)) {
+        continue;
+    }
 
-    $payload = is_array($entry['payload'] ?? null) ? $entry['payload'] : [];
     $product = reportClean($entry['product_focus'] ?? $payload['productSlug'] ?? $payload['productId'] ?? $payload['content_name'] ?? '(unknown)', 160);
     $path = reportClean($entry['path'] ?? '', 260);
     if ($path === '' && !empty($entry['url'])) {
@@ -107,7 +188,7 @@ foreach ($lines === false ? [] : $lines as $line) {
     }
 
     $visitor = reportClean($entry['visitor_id'] ?? $payload['visitorId'] ?? '', 80);
-    $visitorKey = $visitor !== '' ? $visitor : reportClean(substr((string)($entry['request']['ip_hash'] ?? $entry['ipHash'] ?? ''), 0, 12), 20);
+    $visitorKey = reportDedupeKey($entry, $payload, $lineIndex);
     if ($visitorKey !== '') {
         $visitors[$visitorKey] = true;
     }
@@ -144,6 +225,22 @@ foreach ($lines === false ? [] : $lines as $line) {
         $result['button_rows'][] = $row + [
             'options' => reportClean(json_encode($payload['selectedOptions'] ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), 240),
         ];
+        if (reportMatchesTargetProduct($eventName, $product, $payload, $targetSlug, $targetId)) {
+            $optionText = json_encode($payload['selectedOptions'] ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            $result['target_intent_summary']['total_button_clicks']++;
+            if (str_starts_with($eventName, 'NpayPurchaseClick')) {
+                $result['target_intent_summary']['npay_clicks']++;
+            }
+            if (str_starts_with($eventName, 'PurchaseCtaClick')) {
+                $result['target_intent_summary']['purchase_cta_clicks']++;
+            }
+            if (is_string($optionText) && str_contains($optionText, '보조배터리 10,000mAh 추가')) {
+                $result['target_intent_summary']['battery_add_on_selected']++;
+            } else {
+                $result['target_intent_summary']['vest_only_selected']++;
+            }
+            $targetIntentKeys[reportDedupeKey($entry, $payload, $lineIndex)] = true;
+        }
     }
 }
 
@@ -152,5 +249,6 @@ arsort($result['product_counts']);
 arsort($result['path_counts']);
 $result['unique_visitors'] = count($visitors);
 $result['button_rows_count'] = count($result['button_rows']);
+$result['target_intent_summary']['unique_order_intents'] = count($targetIntentKeys);
 $result['button_rows'] = array_slice($result['button_rows'], -100);
 reportResponse(200, $result);
