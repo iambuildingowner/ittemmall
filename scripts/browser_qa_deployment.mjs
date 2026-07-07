@@ -20,7 +20,7 @@ const staticLocal = args.get("--static-local") === "true";
 const requiredTexts = {
   desktopHome: ["ITTEMMALL", "MARCE", "테스트 상품 보기"],
   productDetail: ["MARCE 스위트 피클볼 패들", "바로 구매하기", "USAPA"],
-  windcoolDetail: ["윈드쿨 에어 선풍기 조끼", "₩ 48,900", "N pay 구매", "보조배터리 10,000mAh 추가 (+9,900원)"],
+  windcoolDetail: ["윈드쿨 에어 선풍기 조끼", "₩ 59,900", "N pay 구매", "보조배터리 10,000mAh 추가 (+9,900원)"],
   paymentFlow: ["토스페이먼츠 안내 요청", "토스 결제창 열기", "주문 수정"],
   tossCheckout: ["토스페이먼츠 결제", "토스 결제하기", "주문 요약"],
   admin: ["Orders Admin", "주문 관리"],
@@ -65,6 +65,12 @@ const visits = [
       if (npayButtons < 1) {
         throw new Error("windcool detail is missing N pay tracking button");
       }
+      await page
+        .locator(
+          'button[data-action="select-option"][data-option-label="추가상품"][data-option-value="보조배터리 10,000mAh 추가 (+9,900원)"]',
+        )
+        .click();
+      await page.waitForFunction(() => document.body.innerText.includes("₩ 69,800"), null, { timeout: 5000 });
     },
   },
   {

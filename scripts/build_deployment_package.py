@@ -67,6 +67,7 @@ ASSET_SOURCE_FILES = [
 EXTRA_PUBLIC_ASSETS = [
     "assets/ittemmall/fan-vest/windcool-vest-meta-ad-senior-charcoal-blue-air-v1.png",
     "assets/ittemmall/fan-vest/windcool-vest-meta-ad-young-blue-air-v1.png",
+    "assets/ittemmall/fan-vest/windcool-vest-meta-ad-young-blue-air-59900-v1.png",
 ]
 
 FORBIDDEN_PARTS = {

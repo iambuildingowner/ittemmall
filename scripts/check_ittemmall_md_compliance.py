@@ -89,7 +89,7 @@ def run_checks(args: argparse.Namespace) -> list[Check]:
     if not block:
         return checks
 
-    add(checks, "가격 48,900원", "price: 48900" in block, "index.html product.price 확인")
+    add(checks, "가격 59,900원", "price: 59900" in block, "index.html product.price 확인")
     add(checks, "정상가/할인율 없음", "originalPrice: 0" in block and "discountRate: 0" in block, "old price/discount 노출 방지")
     add(checks, "N pay 버튼", 'data-checkout-source="npay"' in source and "NpayPurchaseClick" in source, "버튼 클릭 의향 측정 구조 확인")
     add(

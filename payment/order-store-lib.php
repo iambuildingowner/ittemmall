@@ -71,7 +71,7 @@ function ittemmallProductCatalog(): array
         ],
         'product-003' => [
             'name' => '윈드쿨 에어 선풍기 조끼',
-            'price' => 48900,
+            'price' => 59900,
             'optionAddOnPrices' => [
                 '추가상품' => [
                     '보조배터리 10,000mAh 추가 (+9,900원)' => 9900,

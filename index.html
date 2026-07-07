@@ -81,7 +81,7 @@
                   "image": "https://ittemmall.com/assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
                   "offers": {
                     "@type": "Offer",
-                    "price": "48900",
+                    "price": "59900",
                     "priceCurrency": "KRW",
                     "availability": "https://schema.org/InStock",
                     "url": "https://ittemmall.com/#/product/windcool-vest"
@@ -2311,7 +2311,7 @@
             categoryId: "seasonal",
             categoryLabel: "시즌",
             statusLabel: "시즌 상품",
-            price: 48900,
+            price: 59900,
             originalPrice: 0,
             discountRate: 0,
             extraFeeLabel: "추가 비용",
@@ -4369,6 +4369,10 @@
               <section class="divider-section form-grid">
                 <div class="option-group-grid">
                   ${product.options.map(renderOptionSelect).join("")}
+                </div>
+                <div class="summary-card" style="margin-top:14px">
+                  <p class="summary-meta">선택 총액</p>
+                  <p class="summary-price">₩ ${formatPrice(getOrderTotal(product, state.quantity))}</p>
                 </div>
                 <div>
                   <p class="field-label">수량</p>
