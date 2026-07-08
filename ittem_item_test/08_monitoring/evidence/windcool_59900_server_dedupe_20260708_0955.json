@@ -1,0 +1,27 @@
+{
+  "timestamp_kst": "2026-07-08T09:55:26+09:00",
+  "automation_id": "59900-3",
+  "source": "payment/tracking-report.php via GitHub Actions Read Server Tracking Counts",
+  "workflow_run": "https://github.com/iambuildingowner/ittemmall/actions/runs/28909474610",
+  "window": {
+    "date": "2026-07-08",
+    "since_kst": "2026-07-08T04:09:17+09:00",
+    "until_kst": ""
+  },
+  "product": {
+    "slug": "windcool-vest",
+    "id": "product-003",
+    "name": "윈드쿨 에어 선풍기 조끼"
+  },
+  "server_report": {
+    "log_read_status": "PROTECTED_REPORT_OK",
+    "protected_report": "FOUND",
+    "total_button_clicks": 16,
+    "unique_order_intents": 7,
+    "npay_clicks": 14,
+    "purchase_cta_clicks": 2,
+    "battery_add_on_selected": 0,
+    "vest_only_selected": 16
+  },
+  "meaning": "서버 리포트가 실제 광고 유입의 상품별 버튼 클릭을 읽었고, 중복 제거 기준으로 구매의사자는 7명이다."
+}
