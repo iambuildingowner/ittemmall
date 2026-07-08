@@ -6,6 +6,27 @@ function ittemmallServerConfigDefaultPath(): string
     return dirname(__DIR__, 2) . '/ittemmall-private/ittemmall-server-config.php';
 }
 
+function ittemmallServerConfigCandidatePaths(): array
+{
+    $paths = [];
+    $envPath = getenv('ITTEMMALL_SERVER_CONFIG_PATH');
+    if ($envPath !== false && trim((string)$envPath) !== '') {
+        $paths[] = trim((string)$envPath);
+    }
+
+    $paths[] = ittemmallServerConfigDefaultPath();
+    $paths[] = dirname(__DIR__) . '/ittemmall-private/ittemmall-server-config.php';
+
+    $documentRoot = $_SERVER['DOCUMENT_ROOT'] ?? '';
+    if (is_string($documentRoot) && trim($documentRoot) !== '') {
+        $root = rtrim(trim($documentRoot), '/');
+        $paths[] = $root . '/../ittemmall-private/ittemmall-server-config.php';
+        $paths[] = $root . '/ittemmall-private/ittemmall-server-config.php';
+    }
+
+    return array_values(array_unique($paths));
+}
+
 function ittemmallDefaultPrivateDir(): string
 {
     return dirname(__DIR__, 2) . '/ittemmall-private';
@@ -67,9 +88,10 @@ function ittemmallEffectiveTrackSalt(): string
 
 function ittemmallServerConfigPath(): string
 {
-    $path = getenv('ITTEMMALL_SERVER_CONFIG_PATH');
-    if ($path !== false && trim((string)$path) !== '') {
-        return trim((string)$path);
+    foreach (ittemmallServerConfigCandidatePaths() as $path) {
+        if (is_file($path)) {
+            return $path;
+        }
     }
     return ittemmallServerConfigDefaultPath();
 }

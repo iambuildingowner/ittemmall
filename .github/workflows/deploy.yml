@@ -102,6 +102,7 @@ jobs:
           candidates=(
             "${target_parent}/ittemmall-private"
             "${target_dir}/../ittemmall-private"
+            "${target_dir}/ittemmall-private"
             "/domains/ittemmall.com/ittemmall-private"
             "domains/ittemmall.com/ittemmall-private"
             "/ittemmall-private"
