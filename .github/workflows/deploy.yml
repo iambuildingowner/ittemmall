@@ -99,6 +99,51 @@ jobs:
           set -euo pipefail
           target_dir="${HOSTINGER_FTP_TARGET_DIR%/}"
           target_parent="$(dirname "$target_dir")"
-          private_dir="${target_parent}/ittemmall-private"
-          lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
-            -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; mkdir -p \"$private_dir\"; put build/ittemmall-private/ittemmall-server-config.php -o \"$private_dir/ittemmall-server-config.php\"; chmod 600 \"$private_dir/ittemmall-server-config.php\"; bye"
+          candidates=(
+            "${target_parent}/ittemmall-private"
+            "${target_dir}/../ittemmall-private"
+            "/domains/ittemmall.com/ittemmall-private"
+            "domains/ittemmall.com/ittemmall-private"
+            "/ittemmall-private"
+            "ittemmall-private"
+          )
+
+          check_loaded() {
+            python3 - <<'PY'
+          import json
+          import sys
+          import urllib.request
+
+          try:
+              with urllib.request.urlopen("https://ittemmall.com/payment/healthcheck.php?deploy_private_check=1", timeout=20) as response:
+                  data = json.load(response)
+          except Exception:
+              sys.exit(1)
+          loaded = data.get("serverConfig", {}).get("privateConfigFileLoaded") is True
+          admin = data.get("admin", {}).get("adminTokenConfigured") is True
+          sys.exit(0 if loaded and admin else 1)
+          PY
+          }
+
+          index=0
+          for private_dir in "${candidates[@]}"; do
+            index=$((index + 1))
+            echo "Trying private config candidate ${index}"
+            set +e
+            lftp -u "$HOSTINGER_FTP_USERNAME","$HOSTINGER_FTP_PASSWORD" "$HOSTINGER_FTP_SERVER" \
+              -e "set ftp:ssl-force true; set ssl:verify-certificate no; set net:timeout 20; set net:max-retries 2; set ftp:passive-mode true; mkdir -p \"$private_dir\"; put build/ittemmall-private/ittemmall-server-config.php -o \"$private_dir/ittemmall-server-config.php\"; chmod 600 \"$private_dir/ittemmall-server-config.php\"; bye"
+            upload_status=$?
+            set -e
+            if [ "$upload_status" -ne 0 ]; then
+              echo "Candidate ${index} upload failed; trying next candidate."
+              continue
+            fi
+            if check_loaded; then
+              echo "Private runtime config is loaded by production."
+              exit 0
+            fi
+            echo "Candidate ${index} uploaded, but production did not load it."
+          done
+
+          echo "::error::Private runtime config uploaded candidates, but production did not load any of them."
+          exit 1
