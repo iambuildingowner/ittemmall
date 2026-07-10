@@ -1,0 +1,5355 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light only" />
+    <meta name="darkreader-lock" />
+    <base href="/" />
+    <title>ITTEMMALL | 시즌 라이프스타일 셀렉트샵</title>
+    <meta
+      name="description"
+      content="ITTEMMALL은 러닝, 스포츠, 야외활동, 시즌 생활용품을 한곳에서 확인하고 주문할 수 있는 라이프스타일 셀렉트샵입니다."
+    />
+    <link rel="canonical" href="https://ittemmall.com/" />
+    <link rel="icon" type="image/svg+xml" href="assets/ittemmall/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
+    <meta name="robots" content="index, follow" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://ittemmall.com/#organization",
+            "name": "ITTEMMALL",
+            "url": "https://ittemmall.com/",
+            "email": "staysiaofficial@gmail.com",
+            "telephone": "+82-10-2400-3414",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "전북특별자치도 익산시 황등면 황금로 73",
+              "addressCountry": "KR"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://ittemmall.com/#website",
+            "name": "ITTEMMALL",
+            "url": "https://ittemmall.com/",
+            "publisher": {
+              "@id": "https://ittemmall.com/#organization"
+            }
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://ittemmall.com/#products",
+            "name": "ITTEMMALL 추천 상품",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@type": "Product",
+                  "name": "러너윈 테크니컬 헤드밴드",
+                  "brand": {
+                    "@type": "Brand",
+                    "name": "RUNNERWIN"
+                  },
+                  "image": "https://ittemmall.com/assets/images/runnerwin-wide-headband-main.png",
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "7900",
+                    "priceCurrency": "KRW",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://ittemmall.com/#/product/runnerwin-headband"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@type": "Product",
+                  "name": "윈드쿨 에어 선풍기 조끼",
+                  "brand": {
+                    "@type": "Brand",
+                    "name": "ITTEMMALL"
+                  },
+                  "image": "https://ittemmall.com/assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
+                  "offers": {
+                    "@type": "Offer",
+                    "price": "59900",
+                    "priceCurrency": "KRW",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://ittemmall.com/#/product/windcool-vest"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+    <!-- Meta Pixel Code -->
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var isTrackingTest =
+          params.get("test") === "1" ||
+          params.get("codex_test") === "1" ||
+          params.get("pixel_test") === "1";
+        window.__ittemmallTrackingTestMode = isTrackingTest;
+        if (isTrackingTest) return;
+
+        !(function (f, b, e, v, n, t, s) {
+          if (f.fbq) return;
+          n = f.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+          };
+          if (!f._fbq) f._fbq = n;
+          n.push = n;
+          n.loaded = !0;
+          n.version = "2.0";
+          n.queue = [];
+          t = b.createElement(e);
+          t.async = !0;
+          t.src = v;
+          s = b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t, s);
+        })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+        fbq("init", "1288524852852406");
+        fbq("track", "PageView");
+      })();
+    </script>
+    <!-- End Meta Pixel Code -->
+    <script src="payment/toss-config.js?v=20260617toss"></script>
+    <script src="https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" async></script>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --paper: #ffffff;
+        --ink: #111111;
+        --brand: #111111;
+        --brand-light: #d4d4d8;
+        --muted: #666666;
+        --line: #e4e4e7;
+        --soft: #f7f7f7;
+        --accent: var(--brand);
+        --accent-2: #525252;
+        --on-brand: #ffffff;
+        --header-bg: #ffffff;
+        --header-text: #111111;
+        --header-border: #e4e4e7;
+        --danger: #b91c1c;
+        --shadow: 0 24px 60px rgba(17, 17, 17, 0.14);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      .phone-shell {
+        width: min(100%, 430px);
+        min-height: 100vh;
+        margin: 0 auto;
+        background: var(--paper);
+        box-shadow: 0 0 0 1px rgba(17, 17, 17, 0.08);
+      }
+
+      .app-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 1px solid var(--header-border, var(--brand));
+        background: var(--header-bg, var(--brand));
+        color: var(--header-text, var(--on-brand));
+        backdrop-filter: blur(14px);
+      }
+
+      .header-inner {
+        display: flex;
+        height: 56px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+      }
+
+      .icon-button {
+        display: inline-flex;
+        position: relative;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: inherit;
+      }
+
+      .icon-button:active,
+      .icon-button:focus-visible {
+        background: rgba(255, 255, 255, 0.12);
+        outline: 2px solid transparent;
+      }
+
+      .brand-button {
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        text-align: center;
+      }
+
+      .brand-logo {
+        margin: 0;
+        color: var(--on-brand);
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: 0.39em;
+        line-height: 1;
+        text-indent: 0.39em;
+      }
+
+      .app-header .brand-logo {
+        color: inherit;
+      }
+
+      .page-title {
+        margin: 2px 0 0;
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .app-header .page-title {
+        color: rgba(255, 255, 255, 0.76);
+      }
+
+      main {
+        min-height: calc(100vh - 56px);
+      }
+
+      .section {
+        padding: 20px 16px;
+      }
+
+      .section-tight {
+        padding: 14px 16px;
+      }
+
+      .hero {
+        position: relative;
+        min-height: 340px;
+        overflow: hidden;
+        border: 1px solid var(--brand);
+        border-radius: 8px;
+        background: #101010;
+        color: white;
+      }
+
+      .hero img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.82;
+      }
+
+      .hero::after {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.72));
+        content: "";
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        min-height: 340px;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 26px;
+      }
+
+      .eyebrow {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.22em;
+        color: var(--muted);
+      }
+
+      .hero .eyebrow {
+        color: rgba(255, 255, 255, 0.72);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        overflow-wrap: break-word;
+      }
+
+      .hero h1 {
+        max-width: 100%;
+        margin: 14px 0 0;
+        font-size: 28px;
+        line-height: 1.18;
+        letter-spacing: 0;
+        word-break: keep-all;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.28);
+      }
+
+      .hero-copy {
+        max-width: 100%;
+        margin: 12px 0 0;
+        color: rgba(255, 255, 255, 0.84);
+        font-size: 14px;
+        line-height: 1.7;
+        word-break: keep-all;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.24);
+      }
+
+      .hero-actions,
+      .button-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .button-row.one {
+        grid-template-columns: 1fr;
+      }
+
+      .btn {
+        display: inline-flex;
+        min-height: 48px;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid var(--brand);
+        border-radius: 8px;
+        padding: 12px 14px;
+        background: var(--paper);
+        color: var(--brand);
+        font-size: 14px;
+        font-weight: 900;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      .btn.primary {
+        border-color: var(--brand);
+        background: var(--brand);
+        color: var(--on-brand);
+      }
+
+      .btn.accent {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: white;
+      }
+
+      .btn.ghost {
+        border-color: var(--line);
+        background: var(--soft);
+      }
+
+      .product-actions .btn.ghost {
+        border-color: var(--brand);
+        background: var(--brand);
+        color: var(--on-brand);
+      }
+
+      .btn.warning {
+        border-color: #fcd34d;
+        background: #fffbeb;
+        color: #854d0e;
+      }
+
+      .btn:disabled {
+        border-color: #d4d4d8;
+        background: #d4d4d8;
+        color: white;
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+
+      .section-heading h2 {
+        margin: 4px 0 0;
+        font-size: 21px;
+        line-height: 1.25;
+      }
+
+      .link-button {
+        border: 0;
+        background: transparent;
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .search-box {
+        margin-bottom: 12px;
+      }
+
+      .category-strip {
+        display: flex;
+        gap: 8px;
+        margin: 12px -16px 14px;
+        overflow-x: auto;
+        padding: 0 16px 2px;
+        scrollbar-width: none;
+      }
+
+      .category-strip::-webkit-scrollbar {
+        display: none;
+      }
+
+      .category-chip {
+        display: inline-flex;
+        min-height: 38px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: white;
+        color: #27272a;
+        padding: 0 13px;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .category-chip.is-active {
+        border-color: var(--brand);
+        background: var(--brand);
+        color: var(--on-brand);
+      }
+
+      .field-shell {
+        position: relative;
+      }
+
+      .field-shell svg {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+      }
+
+      .search-input,
+      .input,
+      .select,
+      .textarea {
+        width: 100%;
+        min-height: 48px;
+        border: 1px solid #d4d4d8;
+        border-radius: 8px;
+        background: white;
+        color: var(--ink);
+        outline: 0;
+      }
+
+      .search-input {
+        padding: 0 14px 0 44px;
+      }
+
+      .input,
+      .select {
+        padding: 0 14px;
+      }
+
+      .textarea {
+        min-height: 78px;
+        resize: vertical;
+        padding: 13px 14px;
+      }
+
+      .input:focus,
+      .select:focus,
+      .textarea:focus,
+      .search-input:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.12);
+      }
+
+      .input[readonly] {
+        background: #f4f4f5;
+        color: #3f3f46;
+      }
+
+      .postcode-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 132px;
+        gap: 8px;
+      }
+
+      .address-stack {
+        display: grid;
+        gap: 10px;
+      }
+
+      .recent-address-list {
+        display: grid;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .recent-address-button {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #f8fafc;
+        padding: 11px 12px;
+        color: inherit;
+        text-align: left;
+      }
+
+      .recent-address-button strong {
+        display: block;
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
+      .recent-address-button span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      .payment-method-grid {
+        display: grid;
+        gap: 9px;
+        margin-top: 10px;
+      }
+
+      .payment-method-option {
+        display: grid;
+        grid-template-columns: 20px minmax(0, 1fr);
+        gap: 10px;
+        align-items: flex-start;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+        padding: 13px;
+      }
+
+      .payment-method-option:has(input:checked) {
+        border-color: var(--brand);
+        background: #f4f4f5;
+        box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+      }
+
+      .payment-method-option input {
+        width: 18px;
+        height: 18px;
+        margin: 1px 0 0;
+        accent-color: var(--brand);
+      }
+
+      .payment-method-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .payment-method-copy {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .method-badge {
+        flex: 0 0 auto;
+        border-radius: 999px;
+        background: #111827;
+        padding: 3px 7px;
+        color: white;
+        font-size: 10px;
+        font-weight: 900;
+      }
+
+      .payment-status-card {
+        display: grid;
+        gap: 13px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+        padding: 16px;
+      }
+
+      .payment-status-card h1 {
+        margin: 0;
+        font-size: 22px;
+        line-height: 1.25;
+      }
+
+      .payment-status-card p {
+        margin: 0;
+        color: #3f3f46;
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .owner-gate-list {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .owner-gate-list li {
+        border-left: 3px solid var(--brand-light);
+        padding-left: 10px;
+        color: #3f3f46;
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.5;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .history-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .product-card,
+      .summary-card,
+      .notice-card,
+      .state-card,
+      .submission-card,
+      .origin-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+      }
+
+      .product-card {
+        overflow: hidden;
+      }
+
+      .product-card .btn {
+        min-height: 40px;
+        padding: 10px 8px;
+        font-size: 12px;
+      }
+
+      .product-card-main,
+      .submission-card button {
+        display: block;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        text-align: left;
+      }
+
+      .product-media {
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        background: white;
+      }
+
+      .product-card.is-portrait .product-media {
+        aspect-ratio: 4 / 5;
+      }
+
+      .product-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: white;
+      }
+
+      .product-body {
+        padding: 12px;
+      }
+
+      .product-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .product-kicker,
+      .status-chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 4px 7px;
+        font-size: 10px;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .product-kicker {
+        background: #f4f4f5;
+        color: #27272a;
+      }
+
+      .status-chip {
+        border: 1px solid #d4d4d8;
+        background: white;
+        color: #52525b;
+      }
+
+      .product-actions {
+        display: grid;
+        gap: 8px;
+        padding: 0 14px 14px;
+      }
+
+      .product-actions .btn {
+        width: 100%;
+        min-height: 44px;
+      }
+
+      .product-title {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1.35;
+      }
+
+      .product-desc {
+        display: -webkit-box;
+        margin: 5px 0 0;
+        overflow: hidden;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.45;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+
+      .price-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        gap: 7px;
+        margin-top: 10px;
+      }
+
+      .price {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 900;
+      }
+
+      .original-price {
+        margin: 0;
+        color: #a1a1aa;
+        font-size: 12px;
+        text-decoration: line-through;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 4px 8px;
+        background: var(--accent);
+        color: white;
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .trust-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        background: white;
+      }
+
+      .trust-item {
+        padding: 15px 8px;
+        text-align: center;
+      }
+
+      .trust-item + .trust-item {
+        border-left: 1px solid var(--line);
+      }
+
+      .trust-item svg {
+        margin-bottom: 6px;
+      }
+
+      .trust-title {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .trust-desc {
+        margin: 2px 0 0;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.35;
+      }
+
+      .footer {
+        margin-top: 8px;
+        padding: 28px 16px 34px;
+        background: var(--brand);
+        color: rgba(255, 255, 255, 0.74);
+        font-size: 11px;
+        line-height: 1.55;
+        text-align: left;
+      }
+
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        color: white;
+        font-weight: 700;
+      }
+
+      .footer-links a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .check-label a {
+        color: var(--brand);
+        font-weight: 950;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      .footer-business {
+        display: grid;
+        gap: 2px;
+        margin: 16px auto 0;
+        max-width: 360px;
+      }
+
+      .footer-business p {
+        margin: 0;
+      }
+
+      .footer-copy {
+        margin: 16px 0 0;
+        text-align: center;
+      }
+
+      .image-stage {
+        padding: 16px;
+      }
+
+      .main-image {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        border-radius: 8px;
+        background: white;
+        cursor: grab;
+        touch-action: pan-y;
+        user-select: none;
+        --drag-offset: 0px;
+      }
+
+      .main-image.portrait {
+        width: min(94%, 360px);
+        margin: 0 auto;
+        aspect-ratio: 4 / 5;
+      }
+
+      .main-image.is-dragging {
+        cursor: grabbing;
+      }
+
+      .gallery-track {
+        display: flex;
+        width: 300%;
+        height: 100%;
+        transform: translateX(calc(-33.333333% + var(--drag-offset)));
+        transition: transform 180ms ease;
+        will-change: transform;
+      }
+
+      .main-image.is-dragging .gallery-track {
+        transition: none;
+      }
+
+      .gallery-slide {
+        flex: 0 0 33.333333%;
+        height: 100%;
+        background: white;
+      }
+
+      .main-image img,
+      .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: white;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .thumb-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .thumb {
+        aspect-ratio: 1;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+        padding: 0;
+        cursor: pointer;
+      }
+
+      .thumb.active {
+        border-color: var(--brand);
+        border-width: 2px;
+      }
+
+      .detail-title {
+        margin: 8px 0 0;
+        font-size: 25px;
+        line-height: 1.25;
+      }
+
+      .detail-copy {
+        margin: 10px 0 0;
+        color: #52525b;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .detail-notice {
+        margin: 8px 0 0;
+        color: #111111;
+        font-size: 12.5px;
+        line-height: 1.55;
+        font-weight: 600;
+        white-space: pre-line;
+      }
+
+      .divider-section {
+        border-top: 1px solid var(--line);
+        padding: 20px 16px;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .option-group-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .option-field {
+        min-width: 0;
+      }
+
+      .field-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #71717a;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .select-shell {
+        position: relative;
+      }
+
+      .select {
+        appearance: none;
+        padding-right: 42px;
+        font-weight: 700;
+      }
+
+      .select-shell svg {
+        pointer-events: none;
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+      }
+
+      .option-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .option-button {
+        position: relative;
+        display: inline-flex;
+        width: 100%;
+        min-height: 48px;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid #e4e4e7;
+        border-radius: 999px;
+        background: white;
+        color: #3f3f46;
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0;
+      }
+
+      .option-button.is-selected {
+        border-color: var(--brand);
+        background: var(--brand);
+        color: var(--on-brand);
+      }
+
+      .option-button.tone-black {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: white;
+      }
+
+      .option-button.tone-white {
+        background: white;
+        color: #3f3f46;
+      }
+
+      .option-button.tone-gray {
+        background: #e4e4e7;
+        color: #27272a;
+      }
+
+      .option-button.tone-pink {
+        background: #f7e8eb;
+        color: #5f464b;
+      }
+
+      .option-button.tone-pink.is-selected {
+        border-color: var(--brand);
+        background: var(--brand);
+        color: white;
+      }
+
+      .color-swatch-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .color-swatch-button {
+        display: inline-flex;
+        width: 32px;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #d6c5c8;
+        border-radius: 8px;
+        background: var(--swatch-color, #e5bcc0);
+        box-shadow:
+          inset 0 0 0 1px rgba(255, 255, 255, 0.36),
+          0 8px 18px rgba(17, 17, 17, 0.06);
+      }
+
+      .color-swatch-button.is-selected {
+        border-color: var(--brand);
+        box-shadow:
+          inset 0 0 0 2px white,
+          0 0 0 1px var(--brand),
+          0 10px 22px rgba(17, 17, 17, 0.08);
+      }
+
+      .color-swatch-name {
+        color: #3f3f46;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .type-value {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e4e4e7;
+        color: #18181b;
+        font-size: 14px;
+        font-weight: 900;
+        line-height: 1.4;
+      }
+
+      .option-check {
+        display: inline-flex;
+        width: 20px;
+        height: 20px;
+        align-items: center;
+        justify-content: center;
+        border: 1.5px solid currentColor;
+        border-radius: 999px;
+        letter-spacing: 0;
+      }
+
+      .quantity-control {
+        display: inline-grid;
+        grid-template-columns: 44px 52px 44px;
+        height: 44px;
+        overflow: hidden;
+        border: 1px solid #d4d4d8;
+        border-radius: 8px;
+      }
+
+      .quantity-control button {
+        border: 0;
+        background: white;
+        font-size: 20px;
+        font-weight: 900;
+      }
+
+      .quantity-value {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-right: 1px solid #d4d4d8;
+        border-left: 1px solid #d4d4d8;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .detail-purchase-actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+        width: 100%;
+      }
+
+      .detail-purchase-actions .btn {
+        min-height: 54px;
+      }
+
+      .npay-button {
+        display: inline-flex;
+        width: 100%;
+        min-height: 54px;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border: 1px solid #45c852;
+        border-radius: 8px;
+        background: #5fdb63;
+        color: #050505;
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .npay-mark {
+        display: inline-flex;
+        width: 24px;
+        height: 24px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: #050505;
+        color: #5fdb63;
+        font-size: 16px;
+        font-weight: 950;
+        line-height: 1;
+      }
+
+      .info-list {
+        display: grid;
+        gap: 12px;
+        margin: 15px 0 0;
+        font-size: 14px;
+      }
+
+      .info-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .info-line dt {
+        flex: 0 0 auto;
+        color: var(--muted);
+      }
+
+      .info-line dd {
+        margin: 0;
+        font-weight: 800;
+        text-align: right;
+      }
+
+      .story-stack {
+        display: grid;
+        gap: 0;
+        background: white;
+      }
+
+      .story-image {
+        overflow: hidden;
+        border-radius: 8px;
+        background: white;
+        margin: 0 0 18px;
+      }
+
+      .story-image img {
+        width: 100%;
+        height: auto;
+      }
+
+      .story-feature-image {
+        margin: 8px 0 22px;
+        border: 1px solid var(--line);
+        box-shadow: 0 18px 44px rgba(17, 17, 17, 0.08);
+      }
+
+      .certification-card {
+        display: grid;
+        justify-items: center;
+        gap: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        margin: 2px 0 24px;
+        padding: 24px 18px;
+        background: white;
+        text-align: center;
+      }
+
+      .certification-card img {
+        width: min(190px, 70%);
+      }
+
+      .story-heading {
+        margin: 0;
+        font-size: 23px;
+        line-height: 1.24;
+      }
+
+      .story-copy {
+        margin: 10px 0 0;
+        color: #3f3f46;
+        font-size: 14px;
+        line-height: 1.8;
+      }
+
+      .story-block {
+        padding: 24px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .story-block:first-child {
+        border-top: 0;
+      }
+
+      .why-block {
+        margin-top: 2px;
+        border: 0;
+        border-radius: 8px;
+        padding: 24px 18px;
+        background: var(--brand);
+        color: var(--on-brand);
+      }
+
+      .why-block .eyebrow,
+      .why-block .story-copy {
+        color: var(--on-brand);
+      }
+
+      .why-block .highlight-list li {
+        border-left-color: var(--on-brand);
+        color: var(--on-brand);
+      }
+
+      .phone-shell.is-white-theme .why-block {
+        border: 1px solid var(--line);
+        background: #ffffff;
+        color: var(--ink);
+      }
+
+      .phone-shell.is-white-theme .why-block .eyebrow {
+        color: var(--accent);
+      }
+
+      .phone-shell.is-white-theme .why-block .story-copy {
+        color: #3f3f46;
+      }
+
+      .phone-shell.is-white-theme .why-block .highlight-list li {
+        border-left-color: var(--accent-2, var(--brand-light));
+        color: var(--ink);
+      }
+
+      .highlight-list,
+      .plain-list {
+        display: grid;
+        gap: 10px;
+        margin: 16px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .highlight-list li,
+      .plain-list li {
+        border-left: 3px solid var(--brand-light);
+        padding-left: 12px;
+        color: #27272a;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.55;
+      }
+
+      .copy-lines {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .copy-line {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 13px 14px;
+        background: var(--soft);
+        font-size: 14px;
+        font-weight: 900;
+        line-height: 1.45;
+      }
+
+      .spec-list {
+        display: grid;
+        gap: 0;
+        margin: 16px 0 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .spec-line {
+        display: grid;
+        grid-template-columns: 104px 1fr;
+        gap: 12px;
+        border-bottom: 1px solid var(--line);
+        padding: 12px 0;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .spec-line dt {
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      .spec-line dd {
+        margin: 0;
+        color: var(--ink);
+        font-weight: 900;
+        text-align: right;
+      }
+
+      .size-guide-block {
+        display: grid;
+        gap: 16px;
+      }
+
+      .size-guide-image {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        margin: 14px 0 0;
+        background: white;
+      }
+
+      .size-guide-image img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .size-table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+      }
+
+      .size-table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .size-table th,
+      .size-table td {
+        border-bottom: 1px solid var(--line);
+        padding: 11px 6px;
+        text-align: center;
+        overflow-wrap: anywhere;
+        word-break: keep-all;
+      }
+
+      .size-table th {
+        background: var(--soft);
+        color: var(--ink);
+        font-weight: 900;
+      }
+
+      .size-table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .size-notes {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .size-notes li {
+        color: #52525b;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.55;
+      }
+
+      .bottom-bar {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 40;
+        border-top: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.96);
+        padding: 12px 16px max(12px, env(safe-area-inset-bottom));
+        backdrop-filter: blur(14px);
+      }
+
+      .bottom-inner {
+        width: min(100%, 398px);
+        margin: 0 auto;
+      }
+
+      .has-bottom {
+        padding-bottom: 92px;
+      }
+
+      .has-detail-bottom {
+        padding-bottom: 104px;
+      }
+
+      .detail-bottom-actions {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      .detail-bottom-actions .btn,
+      .detail-bottom-actions .npay-button {
+        min-height: 52px;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      .detail-bottom-actions .npay-mark {
+        width: 22px;
+        height: 22px;
+        font-size: 15px;
+      }
+
+      .origin-card {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 14px;
+        padding: 13px;
+        background: #f7f7f7;
+        border-color: #d4d4d8;
+      }
+
+      .origin-card p {
+        margin: 0;
+        color: #3f3f46;
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.45;
+      }
+
+      .image-stage .origin-card {
+        margin-top: 14px;
+      }
+
+      .summary-card {
+        padding: 12px;
+      }
+
+      .summary-flex {
+        display: flex;
+        gap: 12px;
+      }
+
+      .summary-image {
+        width: 96px;
+        height: 96px;
+        flex: 0 0 auto;
+        overflow: hidden;
+        border-radius: 8px;
+        background: white;
+      }
+
+      .summary-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: white;
+      }
+
+      .summary-title {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .summary-meta {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.55;
+      }
+
+      .summary-price {
+        margin: 8px 0 0;
+        font-size: 16px;
+        font-weight: 900;
+        text-align: right;
+      }
+
+      .notice-card {
+        margin-top: 20px;
+        border-color: var(--brand);
+        background: var(--brand);
+        padding: 16px;
+        color: var(--on-brand);
+      }
+
+      .notice-card h3 {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .notice-card ul {
+        margin: 12px 0 0;
+        padding-left: 18px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 12px;
+        line-height: 1.65;
+      }
+
+      .check-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .check-label {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .check-label input {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        accent-color: var(--accent);
+      }
+
+      .complete-wrap {
+        display: flex;
+        min-height: calc(100vh - 56px);
+        flex-direction: column;
+        justify-content: center;
+        padding: 32px 16px;
+      }
+
+      .complete-icon {
+        display: flex;
+        width: 80px;
+        height: 80px;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        border-radius: 999px;
+        background: var(--accent);
+        color: white;
+      }
+
+      .complete-text {
+        margin: 22px 0 0;
+        text-align: center;
+      }
+
+      .complete-text h1 {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.3;
+      }
+
+      .complete-text p {
+        margin: 10px 0 0;
+        color: #52525b;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .submission-card {
+        overflow: hidden;
+      }
+
+      .submission-card button {
+        padding: 14px;
+      }
+
+      .submission-top {
+        display: flex;
+        gap: 12px;
+      }
+
+      .submission-thumb {
+        width: 72px;
+        height: 72px;
+        flex: 0 0 auto;
+        overflow: hidden;
+        border-radius: 8px;
+        background: white;
+      }
+
+      .submission-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: white;
+      }
+
+      .submission-name {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .submission-meta {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        margin-top: 8px;
+        border-radius: 999px;
+        padding: 4px 8px;
+        background: #fffbeb;
+        color: #854d0e;
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .state-card {
+        padding: 22px 16px;
+        text-align: center;
+      }
+
+      .state-card h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .state-card p {
+        margin: 8px 0 18px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .skeleton {
+        display: grid;
+        gap: 10px;
+      }
+
+      .skeleton-line {
+        height: 13px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #f4f4f5, #e4e4e7, #f4f4f5);
+        background-size: 200% 100%;
+        animation: shimmer 1.2s infinite linear;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: 100% 0;
+        }
+        100% {
+          background-position: -100% 0;
+        }
+      }
+
+      .detail-dl {
+        display: grid;
+        grid-template-columns: 86px 1fr;
+        gap: 9px 14px;
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .detail-dl dt {
+        color: var(--muted);
+      }
+
+      .detail-dl dd {
+        margin: 0;
+        font-weight: 800;
+        text-align: right;
+      }
+
+      .menu-panel {
+        position: absolute;
+        top: 56px;
+        right: 0;
+        left: 0;
+        z-index: 1;
+        border-top: 1px solid var(--line);
+        background: white;
+        padding: 12px 16px 16px;
+        box-shadow: 0 18px 34px rgba(24, 24, 27, 0.12);
+      }
+
+      .menu-kicker {
+        margin: 0 0 10px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+      }
+
+      .menu-grid {
+        display: grid;
+        gap: 8px;
+      }
+
+      .menu-item {
+        display: flex;
+        width: 100%;
+        min-height: 50px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--soft);
+        padding: 12px 14px;
+        color: var(--ink);
+        text-align: left;
+        text-decoration: none;
+      }
+
+      .menu-item strong {
+        display: block;
+        color: var(--ink);
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .menu-item > span > span {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      .support-button {
+        display: inline-flex;
+        min-width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: inherit;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .support-button:active,
+      .support-button:focus-visible {
+        background: rgba(255, 255, 255, 0.12);
+        outline: 2px solid transparent;
+      }
+
+      .info-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        display: flex;
+        align-items: flex-end;
+        background: rgba(17, 17, 17, 0.5);
+        padding: 12px;
+      }
+
+      .info-sheet {
+        width: min(100%, 430px);
+        margin: 0 auto;
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+        padding: 20px;
+      }
+
+      .info-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .info-icon {
+        display: flex;
+        width: 42px;
+        height: 42px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: var(--brand);
+        color: var(--on-brand);
+      }
+
+      .info-title {
+        margin: 12px 0 0;
+        font-size: 21px;
+        line-height: 1.25;
+      }
+
+      .info-list {
+        display: grid;
+        gap: 12px;
+        margin: 18px 0 0;
+        padding: 0;
+        color: #3f3f46;
+        font-size: 14px;
+        line-height: 1.65;
+        list-style: none;
+      }
+
+      .info-list li {
+        display: flex;
+        gap: 9px;
+      }
+
+      .info-list li::before {
+        width: 6px;
+        height: 6px;
+        flex: 0 0 auto;
+        margin-top: 9px;
+        border-radius: 999px;
+        background: var(--brand);
+        content: "";
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 360px) {
+        .hero h1 {
+          font-size: 25px;
+        }
+
+        .hero-actions,
+        .button-row {
+          grid-template-columns: 1fr;
+        }
+
+        .product-grid {
+          gap: 8px;
+        }
+
+        .product-title {
+          font-size: 12px;
+        }
+
+        .summary-flex,
+        .submission-top {
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <img
+        height="1"
+        width="1"
+        style="display: none"
+        src="https://www.facebook.com/tr?id=1288524852852406&ev=PageView&noscript=1"
+      />
+    </noscript>
+    <div id="app"></div>
+    <noscript>이 사이트를 보려면 브라우저에서 JavaScript를 켜주세요.</noscript>
+
+    <script>
+      (() => {
+        const siteConfig = {
+          brandName: "ITTEMMALL",
+          logoText: "ITTEMMALL",
+          mainHeadline: "지금 필요한 데일리 아이템을\n가볍게 준비하세요",
+          mainSubcopy:
+            "러닝 헤드밴드, 선풍기 조끼처럼 지금 필요한 상품을 한곳에서 확인하고 바로 주문할 수 있습니다.",
+          heroEyebrow: "ITTEMMALL SELECT",
+          heroImage: "assets/ittemmall/ittemmall-brand-hero-final.png",
+          heroButtonText: "상품 보기",
+          productSectionTitle: "추천 상품",
+          footerLinks: ["고객센터", "사업자 정보", "이용약관", "개인정보처리방침"],
+          legalInfo: {
+            companyName: "공간",
+            representative: "안뜰에해듬",
+            businessRegistrationNumber: "221-31-17043",
+            ecommerceLicense: "제2022-전북익산-0083호",
+            businessAddress: "전북특별자치도 익산시 황등면 황금로 73",
+            customerCenter: "010-2400-3414",
+            email: "staysiaofficial@gmail.com",
+          },
+          fulfillmentTitle: "배송지 / 결제 정보",
+          fulfillmentPrimaryLabel: "배송지",
+          fulfillmentPrimaryPlaceholder: "우편번호 검색으로 주소를 입력해주세요",
+          requestLabel: "요청사항",
+          requestPlaceholder: "요청사항이 있으면 입력해주세요",
+          orderNoticeLines: [
+            "주문 접수 후 선택한 결제수단에 맞춰 결제 진행 상태를 안내드립니다.",
+            "토스페이먼츠 결제창에서 결제수단을 확인하고 결제 인증 흐름을 진행할 수 있습니다.",
+            "배송지는 최근 배송지로 저장되어 다음 주문서에서 바로 불러올 수 있습니다.",
+          ],
+          infoPanels: {
+            purchase: {
+              title: "구매 안내",
+              icon: "info",
+              lines: [
+                "상품 상세에서 옵션과 금액을 확인해주세요.",
+                "바로 구매하기 버튼을 누르면 주문서 작성으로 이동합니다.",
+                "주문서에서 배송지를 검색하고 결제수단을 선택할 수 있습니다.",
+              ],
+            },
+            policy: {
+              title: "주문 / 환불 안내",
+              icon: "refresh",
+              lines: [
+                "상품 또는 서비스 유형에 따라 제공 방식과 취소 기준이 달라질 수 있습니다.",
+                "작성한 주문 정보는 같은 브라우저에서 다시 확인할 수 있습니다.",
+                "토스페이먼츠 결제 인증 후 결제 결과 페이지에서 주문 정보를 다시 확인할 수 있습니다.",
+              ],
+            },
+            support: {
+              title: "고객센터",
+              icon: "headphones",
+              lines: [
+                "운영시간: 평일 10:00 - 18:00",
+                "이메일: staysiaofficial@gmail.com",
+                "고객센터: 010-2400-3414",
+                "문의 남겨주시면 순차적으로 안내드립니다.",
+              ],
+            },
+          },
+        };
+
+        const categories = [
+          { id: "all", label: "전체" },
+          { id: "fashion", label: "패션잡화" },
+          { id: "sports", label: "스포츠" },
+          { id: "living", label: "생활용품" },
+          { id: "digital", label: "디지털" },
+          { id: "seasonal", label: "시즌" },
+        ];
+
+        const products = [
+          {
+            id: "product-005",
+            slug: "tennis-bracelet",
+            name: "아쿠아글로우 테니스 브레이슬릿",
+            cardTitle: "아쿠아글로우 테니스 브레이슬릿",
+            shortDescription: "손목에 가볍게 반짝임을 더하는 3mm 지르코니아 테니스 팔찌",
+            longDescription:
+              "데일리룩과 선물용 모두에 맞춘 실버톤 테니스 브레이슬릿입니다. 5A 지르코니아 스톤의 맑은 반짝임과 얇은 3mm 라인으로 단독 착용과 시계 레이어드 모두 부담 없이 어울립니다.",
+            categoryId: "fashion",
+            categoryLabel: "패션잡화",
+            statusLabel: "신상품",
+            price: 49900,
+            originalPrice: 0,
+            discountRate: 0,
+            extraFeeLabel: "추가 비용",
+            extraFee: 0,
+            image: "assets/ittemmall/tennis-bracelet/tennis-bracelet-card-thumb.jpg",
+            adCreativeImage: "assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v2.png",
+            adCreativeImages: [
+              "assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v2.png",
+              "assets/ittemmall/tennis-bracelet/tennis-bracelet-meta-ad-v3-product.png",
+            ],
+            cardMediaClass: "portrait",
+            detailMediaClass: "",
+            hiddenFromMainSite: true,
+            standaloneStore: true,
+            hideStandaloneInfo: true,
+            theme: {
+              mode: "white",
+              brand: "#111111",
+              brandLight: "#E6F8FC",
+              accent: "#2A9EC2",
+              accent2: "#87CEEB",
+              soft: "#F7FDFF",
+              onBrand: "#FFFFFF",
+              headerBg: "#FFFFFF",
+              headerText: "#111111",
+              headerBorder: "#E5E7EB",
+            },
+            images: [
+              "assets/ittemmall/tennis-bracelet/tennis-bracelet-hero.jpg",
+              "assets/ittemmall/tennis-bracelet/tennis-bracelet-product.jpg",
+              "assets/ittemmall/tennis-bracelet/tennis-bracelet-clasp-detail.jpg",
+            ],
+            options: [
+              { label: "색상", values: ["실버"] },
+              { label: "사이즈", values: ["15cm", "16cm", "17cm", "18cm"] },
+              { label: "폭", values: ["3mm"] },
+            ],
+            infoItems: [
+              { label: "제품명", value: "아쿠아글로우 테니스 브레이슬릿" },
+              { label: "제품 유형", value: "테니스 팔찌 / 패션 주얼리" },
+              { label: "색상", value: "실버" },
+              { label: "사이즈", value: "15cm, 16cm, 17cm, 18cm" },
+              { label: "폭", value: "약 3mm" },
+              { label: "구성품", value: "팔찌 1개, 보관 파우치" },
+            ],
+            story: {
+              highlightEyebrow: "손목에 남는 작은 빛",
+              highlightCopy:
+                "얇은 셔츠 소매 아래로 가볍게 보이는 반짝임. 아쿠아글로우 테니스 브레이슬릿은 3mm 라인의 맑은 빛으로 출근길부터 저녁 약속까지 자연스럽게 이어집니다.",
+              brandImages: [
+                {
+                  src: "assets/ittemmall/tennis-bracelet/tennis-bracelet-hero.jpg",
+                  alt: "아쿠아글로우 테니스 브레이슬릿 착용 이미지",
+                },
+                {
+                  src: "assets/ittemmall/tennis-bracelet/tennis-bracelet-product.jpg",
+                  alt: "아쿠아글로우 테니스 브레이슬릿 제품 이미지",
+                },
+              ],
+              featureImage: {
+                src: "assets/ittemmall/tennis-bracelet/tennis-bracelet-clasp-detail.jpg",
+                alt: "아쿠아글로우 테니스 브레이슬릿 잠금 장식과 스톤 디테일",
+              },
+              highlights: [
+                "데일리 착용에 부담 없는 3mm 슬림 라인",
+                "맑은 반짝임을 주는 5A 지르코니아 스톤",
+                "시계, 얇은 팔찌와 레이어드하기 쉬운 실버톤",
+                "선물용으로 고르기 쉬운 15~18cm 사이즈 옵션",
+              ],
+              sections: [
+                {
+                  eyebrow: "01",
+                  title: "소매 끝에서 은은하게",
+                  paragraphs: [
+                    "큰 장식보다 정돈된 반짝임이 오래 갑니다.",
+                    "티셔츠, 셔츠, 원피스처럼 옷차림이 달라져도 손목에 가볍게 머무는 실버톤 팔찌입니다.",
+                  ],
+                },
+                {
+                  eyebrow: "02",
+                  title: "혼자 차도, 같이 차도",
+                  paragraphs: [
+                    "3mm 폭은 매일 차기에 부담이 적고, 손목 위에서 존재감은 충분합니다.",
+                    "시계 옆에 두거나 얇은 체인 팔찌와 함께해도 과하지 않습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "03",
+                  title: "선물하기 쉬운 네 가지 길이",
+                  paragraphs: [
+                    "15cm부터 18cm까지, 손목 둘레와 착용 취향에 맞춰 고를 수 있습니다.",
+                    "정확한 사이즈를 모르는 선물이라면 16~17cm를 먼저 떠올리면 됩니다.",
+                  ],
+                },
+              ],
+              recommendTitle: "이런 날에 잘 어울립니다",
+              recommendations: [
+                "매일 착용할 얇은 포인트 팔찌를 찾는 분",
+                "시계와 함께 레이어드할 실버톤 팔찌가 필요한 분",
+                "부담 없는 가격대의 선물용 주얼리를 고르는 분",
+                "과한 장식보다 깔끔한 반짝임을 선호하는 분",
+              ],
+              sizeGuide: {
+                title: "사이즈 선택 가이드",
+                copy: "얇은 끈이나 리본으로 손목 가장 얇은 부분을 한 바퀴 둘러 표시한 뒤, 펼쳐서 길이를 재고 1~1.5cm 여유를 더해 선택하세요.",
+                image: "assets/ittemmall/tennis-bracelet/tennis-bracelet-size-guide-ribbon.jpg",
+                alt: "테니스 팔찌 사이즈 선택을 위해 흰 끈으로 손목 둘레를 확인하는 이미지",
+              },
+              sizeColumns: [
+                { label: "사이즈", key: "size" },
+                { label: "권장 손목둘레(cm)", key: "wrist" },
+                { label: "팔찌 총길이(cm)", key: "length" },
+                { label: "권장 선택", key: "recommend" },
+              ],
+              sizeChart: [
+                { size: "15cm", wrist: "13.5~14.5", length: "15", recommend: "손목이 얇은 분 / 타이트 핏" },
+                { size: "16cm", wrist: "14.5~15.5", length: "16", recommend: "기본 추천 / 슬림 핏" },
+                { size: "17cm", wrist: "15.5~16.5", length: "17", recommend: "선물용 기본 / 편한 핏" },
+                { size: "18cm", wrist: "16.5~17.5", length: "18", recommend: "여유 착용 / 레이어드" },
+              ],
+              sizeNotes: [
+                "줄자가 없으면 종이띠로 손목을 감은 뒤 펼쳐 길이를 재면 됩니다.",
+                "선물용으로 정확한 손목둘레를 모르면 16~17cm를 우선 후보로 봅니다.",
+                "측정 방법과 생산 차수에 따라 0.5~1cm 오차가 있을 수 있습니다.",
+              ],
+              specTitle: "사이즈 / 상품 정보",
+              specs: [
+                { label: "제품명", value: "아쿠아글로우 테니스 브레이슬릿" },
+                { label: "제품 유형", value: "테니스 팔찌 / 패션 주얼리" },
+                { label: "색상", value: "실버" },
+                { label: "폭", value: "약 3mm" },
+                { label: "사이즈", value: "15cm, 16cm, 17cm, 18cm" },
+                { label: "스톤", value: "5A 지르코니아" },
+                { label: "소재", value: "스테인리스 스틸 베이스, 실버톤 도금" },
+                { label: "구성품", value: "팔찌 1개, 보관 파우치" },
+                { label: "주의", value: "알레르기에 민감한 피부는 장시간 착용 전 상태를 확인하세요." },
+              ],
+            },
+          },
+          {
+            id: "product-004",
+            slug: "runnerwin-headband",
+            name: "러너윈 테크니컬 헤드밴드",
+            cardTitle: "러너윈 테크니컬 헤드밴드",
+            shortDescription: "러닝 중 이마와 헤어라인을 넓게 감싸주는 와이드 스포츠 헤드밴드",
+            longDescription:
+              "운동 중 눈가로 흐르는 땀을 줄이고 머리카락을 정돈하기 좋은 와이드 헤드밴드입니다. 블랙과 화이트 컬러로 러닝, 헬스, 테니스, 일상 운동복에 가볍게 맞출 수 있습니다.",
+            categoryId: "fashion",
+            categoryLabel: "패션잡화",
+            statusLabel: "신상품",
+            price: 7900,
+            originalPrice: 0,
+            discountRate: 0,
+            extraFeeLabel: "추가 비용",
+            extraFee: 0,
+            image: "assets/images/runnerwin-wide-headband-card-thumb.jpg",
+            cardMediaClass: "portrait",
+            detailMediaClass: "",
+            images: [
+              "assets/images/runnerwin-wide-headband-main.png",
+              "assets/images/runnerwin-wide-headband-black-product.jpg",
+              "assets/images/runnerwin-wide-headband-white-product.jpg",
+              "assets/images/runnerwin-wide-headband-stretch.png",
+            ],
+            options: [
+              { label: "색상", values: ["블랙", "화이트"] },
+              { label: "사이즈", values: ["FREE"] },
+            ],
+            infoItems: [
+              { label: "제품명", value: "러너윈 테크니컬 헤드밴드" },
+              { label: "제품 유형", value: "와이드 스포츠 헤드밴드" },
+              { label: "색상", value: "블랙, 화이트" },
+              { label: "사이즈", value: "FREE" },
+              { label: "착용 상황", value: "러닝, 헬스, 테니스, 야외 운동" },
+            ],
+            story: {
+              highlightEyebrow: "왜 러너윈 헤드밴드인가",
+              highlightCopy:
+                "러닝 중 흐르는 땀과 흩어지는 머리카락은 집중력을 쉽게 떨어뜨립니다. 러너윈 테크니컬 헤드밴드는 이마와 헤어라인을 넓게 감싸 운동 중 깔끔한 착용감을 돕습니다.",
+              brandImages: [
+                {
+                  src: "assets/images/runnerwin-wide-headband-main.png",
+                  alt: "러너윈 테크니컬 헤드밴드 착용 이미지",
+                },
+                {
+                  src: "assets/images/runnerwin-wide-headband-black-product.jpg",
+                  alt: "러너윈 테크니컬 헤드밴드 블랙 제품 이미지",
+                },
+              ],
+              featureImage: {
+                src: "assets/images/runnerwin-wide-headband-stretch.png",
+                alt: "러너윈 테크니컬 헤드밴드 신축성 이미지",
+              },
+              showcaseImage: {
+                src: "assets/images/runnerwin-wide-headband-white-product.jpg",
+                alt: "러너윈 테크니컬 헤드밴드 화이트 제품 이미지",
+              },
+              highlights: [
+                "이마를 넓게 감싸는 와이드 핏",
+                "러닝과 실내 운동에 어울리는 가벼운 착용감",
+                "블랙/화이트 기본 컬러 구성",
+                "머리카락 정돈과 땀 흐름 완화에 도움",
+              ],
+              sections: [
+                {
+                  eyebrow: "포인트 01",
+                  title: "눈가로 흐르는 땀을 줄이는 와이드 디자인",
+                  paragraphs: [
+                    "좁은 밴드보다 이마를 넓게 감싸 운동 중 흐르는 땀을 한 번 더 잡아줍니다.",
+                    "러닝, 헬스, 테니스처럼 움직임이 많은 운동에서 얼굴 주변을 깔끔하게 유지하기 좋습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "포인트 02",
+                  title: "운동복에 맞추기 쉬운 기본 컬러",
+                  paragraphs: [
+                    "블랙과 화이트 두 가지 컬러로 운동복, 모자, 이어폰과 함께 매치하기 쉽습니다.",
+                    "가방에 넣어두고 운동 전후로 간편하게 착용할 수 있는 데일리 스포츠 액세서리입니다.",
+                  ],
+                },
+              ],
+              recommendTitle: "이런 분께 추천합니다",
+              recommendations: [
+                "러닝 중 눈가로 땀이 흐르는 게 불편한 분",
+                "운동할 때 머리카락을 깔끔하게 정돈하고 싶은 분",
+                "가볍게 쓰는 스포츠 액세서리를 찾는 분",
+                "블랙/화이트 기본 컬러 헤드밴드가 필요한 분",
+              ],
+              specs: [
+                { label: "제품명", value: "러너윈 테크니컬 헤드밴드" },
+                { label: "제품 유형", value: "와이드 스포츠 헤드밴드" },
+                { label: "색상", value: "블랙, 화이트" },
+                { label: "사이즈", value: "FREE" },
+                { label: "구성품", value: "헤드밴드 1개" },
+                { label: "관리 방법", value: "운동 후 가볍게 손세탁 후 그늘 건조 권장" },
+              ],
+            },
+          },
+          {
+            id: "product-003",
+            slug: "windcool-vest",
+            name: "윈드쿨 에어 선풍기 조끼",
+            cardTitle: "윈드쿨 선풍기 조끼",
+            shortDescription: "듀얼 팬으로 조끼 안쪽 공기 순환을 돕는 여름 야외활동용 선풍기 조끼",
+            longDescription:
+              "작업, 낚시, 캠핑처럼 더운 날 오래 밖에 있어야 할 때 입는 선풍기 조끼입니다. 보조배터리를 연결해 듀얼 팬이 조끼 안쪽 공기 순환을 돕고, 메쉬 원단과 다중 포켓으로 실용성을 더했습니다.",
+            detailNotice:
+              "* 기본 구성에는 보조배터리가 포함되지 않으며,\n필요 시 추가상품으로 선택할 수 있습니다.",
+            categoryId: "seasonal",
+            categoryLabel: "시즌",
+            statusLabel: "시즌 상품",
+            price: 59900,
+            originalPrice: 0,
+            discountRate: 0,
+            extraFeeLabel: "추가 비용",
+            extraFee: 0,
+            image: "assets/ittemmall/fan-vest/windcool-vest-card-thumb.jpg",
+            cardMediaClass: "portrait",
+            detailMediaClass: "",
+            hideStandaloneInfo: true,
+            images: [
+              "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
+              "assets/ittemmall/fan-vest/windcool-vest-back-fans.jpg",
+              "assets/ittemmall/fan-vest/windcool-vest-fan-detail.jpg",
+              "assets/ittemmall/fan-vest/windcool-vest-pocket-detail.jpg",
+            ],
+            options: [
+              { label: "색상", values: ["차콜"] },
+              { label: "사이즈", values: ["M", "L", "XL", "2XL", "3XL"] },
+              { label: "구성", values: ["조끼+팬+케이블 세트"] },
+              { label: "추가상품", values: ["추가 안 함", "보조배터리 10,000mAh 추가 (+9,900원)"] },
+            ],
+            optionAddOnPrices: {
+              추가상품: {
+                "보조배터리 10,000mAh 추가 (+9,900원)": 9900,
+              },
+            },
+            infoItems: [
+              { label: "제품명", value: "윈드쿨 에어 선풍기 조끼" },
+              { label: "제품 유형", value: "선풍기조끼 / 팬 베스트" },
+              { label: "색상", value: "차콜" },
+              { label: "사이즈", value: "M, L, XL, 2XL, 3XL" },
+              { label: "전원 방식", value: "USB 보조배터리 연결 방식" },
+              { label: "구성품", value: "조끼, 팬 2개, 연결 케이블" },
+              { label: "보조배터리", value: "기본 구성 미포함 / 추가상품 선택 시 +9,900원" },
+            ],
+            story: {
+              highlightEyebrow: "왜 윈드쿨 선풍기 조끼인가",
+              highlightCopy:
+                "한여름 야외활동에서는 시원함만큼 착용감과 실용성이 중요합니다. 윈드쿨 에어 선풍기 조끼는 조끼 안쪽으로 공기 흐름을 만들고, 메쉬 원단과 수납 포켓을 더해 작업과 레저 모두에 맞춘 시즌 아이템입니다.",
+              brandImages: [
+                {
+                  src: "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
+                  alt: "윈드쿨 에어 선풍기 조끼 착용 이미지",
+                },
+                {
+                  src: "assets/ittemmall/fan-vest/windcool-vest-back-fans.jpg",
+                  alt: "윈드쿨 에어 선풍기 조끼 후면 듀얼 팬 이미지",
+                },
+              ],
+              featureImage: {
+                src: "assets/ittemmall/fan-vest/windcool-vest-fan-detail.jpg",
+                alt: "윈드쿨 에어 선풍기 조끼 팬 디테일 이미지",
+              },
+              showcaseImage: {
+                src: "assets/ittemmall/fan-vest/windcool-vest-pocket-detail.jpg",
+                alt: "윈드쿨 에어 선풍기 조끼 포켓과 메쉬 디테일 이미지",
+              },
+              highlights: [
+                "듀얼 팬으로 조끼 안쪽 공기 순환 보조",
+                "작업, 낚시, 캠핑, 주말 농장에 맞춘 여름 아이템",
+                "메쉬 원단과 다중 포켓으로 더운 날 실용성 강화",
+                "기본 구성은 조끼와 팬 세트, 보조배터리는 추가상품으로 선택",
+                "여름철 외부 활동 전 준비하기 좋은 시즌 아이템",
+              ],
+              sections: [
+                {
+                  eyebrow: "포인트 01",
+                  title: "몸 안쪽으로 바람을 순환시키는 듀얼 팬",
+                  paragraphs: [
+                    "조끼 하단에 팬을 장착해 외부 공기를 안쪽으로 보내는 구조입니다.",
+                    "가만히 서 있어도 열기가 쌓이는 여름 현장, 낚시터, 캠핑장에서 착용 쾌적감을 돕습니다.",
+                    "강한 냉방 효과를 보장하는 제품이 아니라, 더운 환경에서 공기 흐름을 보조하는 선풍기 조끼입니다.",
+                  ],
+                },
+                {
+                  eyebrow: "포인트 02",
+                  title: "메쉬 원단과 넉넉한 수납 포켓",
+                  paragraphs: [
+                    "앞면 포켓에는 휴대폰, 장갑, 작은 공구나 소지품을 나눠 넣기 좋습니다.",
+                    "메쉬 원단 중심의 가벼운 착용감으로 티셔츠 위에 걸치기 편한 구성을 목표로 했습니다.",
+                    "기본 구성에는 보조배터리가 포함되지 않습니다. 보조배터리가 필요하면 추가상품에서 함께 선택할 수 있습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "포인트 03",
+                  title: "작업복처럼, 레저복처럼",
+                  paragraphs: [
+                    "건설 현장, 물류, 야외 판매, 주말 농장처럼 오래 밖에 있어야 하는 상황에 맞습니다.",
+                    "낚시, 캠핑, 등산 전후 대기 시간처럼 여름 레저에서도 부담 없이 입기 좋은 시즌 아이템입니다.",
+                  ],
+                },
+              ],
+              recommendTitle: "이런 분께 추천합니다",
+              recommendations: [
+                "한여름 야외 작업 시간이 긴 분",
+                "낚시, 캠핑, 주말 농장처럼 밖에 오래 머무는 분",
+                "시원한 조끼를 찾지만 펠티어 고가 제품은 부담스러운 분",
+                "보조배터리를 이미 가지고 있어 조끼와 팬 세트만 필요한 분",
+              ],
+              sizeGuide: {
+                title: "사이즈 선택 가이드",
+                copy: "조끼를 평평하게 펼친 상태에서 가슴둘레, 어깨너비, 총장을 기준으로 확인하세요.",
+                image: "assets/ittemmall/fan-vest/windcool-vest-size-guide-photo.jpg",
+                alt: "윈드쿨 선풍기 조끼를 펼쳐 줄자로 사이즈를 확인하는 사진",
+              },
+              sizeChart: [
+                { size: "M", chest: "104", shoulder: "42", length: "62", recommend: "95 전후 / 얇은 반팔 위 착용" },
+                { size: "L", chest: "108", shoulder: "44", length: "64", recommend: "100 전후 / 기본 추천" },
+                { size: "XL", chest: "112", shoulder: "46", length: "66", recommend: "105 전후 / 여유 착용" },
+                { size: "2XL", chest: "116", shoulder: "48", length: "68", recommend: "110 전후 / 작업복 위 착용" },
+                { size: "3XL", chest: "120", shoulder: "50", length: "70", recommend: "115 전후 / 두꺼운 이너 착용" },
+              ],
+              sizeNotes: [
+                "실측은 단면이 아니라 둘레 기준 안내값입니다.",
+                "작업복이나 두꺼운 티셔츠 위에 입을 경우 한 사이즈 크게 선택하는 것을 권장합니다.",
+                "측정 위치와 생산 차수에 따라 1~3cm 오차가 있을 수 있습니다.",
+              ],
+              specTitle: "사이즈 / 상품 정보",
+              specs: [
+                { label: "제품명", value: "윈드쿨 에어 선풍기 조끼" },
+                { label: "제품 유형", value: "선풍기조끼 / 팬 베스트" },
+                { label: "색상", value: "차콜" },
+                { label: "사이즈", value: "M, L, XL, 2XL, 3XL" },
+                { label: "구성품", value: "조끼, 팬 2개, USB 연결 케이블" },
+                { label: "전원", value: "USB 보조배터리 연결 방식" },
+                { label: "보조배터리", value: "기본 구성 미포함 / 추가상품 선택 시 +9,900원" },
+                { label: "세탁", value: "팬과 케이블을 분리한 뒤 손세탁 권장" },
+                { label: "확인 필요", value: "실제 원단, 팬 규격, KC 관련 고지, 수입원/제조원 정보" },
+              ],
+            },
+          },
+        ];
+
+        const visibleProducts = products.filter((product) => !product.retired);
+        const homeProducts = visibleProducts.filter((product) => !product.hiddenFromMainSite);
+
+        const paymentMethods = {
+          toss_pg: {
+            label: "토스페이먼츠",
+            badge: "결제창",
+            description: "토스페이먼츠 결제창에서 카드와 간편결제 선택 화면을 확인할 수 있습니다.",
+            guideItems: ["주문 내용을 확인합니다.", "토스페이먼츠 결제창에서 결제수단을 선택합니다.", "결제 인증 결과는 성공/실패 페이지에서 다시 확인합니다."],
+          },
+          card_pg: {
+            label: "일반결제",
+            badge: "카드/간편결제",
+            description: "카드 또는 간편결제를 원하시면 주문 접수 후 가능한 결제 방법을 안내드립니다.",
+            guideItems: ["주문 내용을 확인합니다.", "결제 방법과 배송 일정을 안내합니다.", "결제 완료 후 주문이 확정됩니다."],
+          },
+          manual: {
+            label: "수동 안내 결제",
+            badge: "상담 안내",
+            description: "주문 접수 후 고객센터가 결제 방법과 배송 가능 일정을 직접 안내드립니다.",
+            guideItems: ["주문 내용을 확인합니다.", "입력하신 연락처로 안내드립니다.", "상담 후 결제와 배송을 진행합니다."],
+          },
+        };
+
+        const emptyForm = {
+          name: "",
+          phone: "",
+          email: "",
+          fulfillmentPrimary: "",
+          postcode: "",
+          roadAddress: "",
+          jibunAddress: "",
+          detailAddress: "",
+          extraAddress: "",
+          request: "",
+          paymentMethod: "toss_pg",
+          agreeNotice: false,
+          agreeTermsPrivacy: false,
+          agreeContact: false,
+        };
+
+        const storageKeys = {
+          state: "ittemmallMobileMvp.state.v1",
+          submissions: "ittemmallMobileMvp.orders.v1",
+          recentAddresses: "ittemmallMobileMvp.recentAddresses.v1",
+          pixelEvents: "ittemmallMobileMvp.pixelEvents.v1",
+          visitorId: "ittemmallMobileMvp.visitorId.v1",
+          visitId: "ittemmallMobileMvp.visitId.v1",
+        };
+        const trackingConfig = {
+          metaPixelId: "1288524852852406",
+          serverEndpoint: "/track.php",
+          serverLoggedEvents: [
+            "ViewContent",
+            "ProductDetailClick",
+            "PurchaseCtaClick",
+            "NpayPurchaseClick",
+            "PaymentPageButtonClick",
+            "InitiateCheckout",
+            "CheckoutPageView",
+            "PaymentPageView",
+            "IttemmallPaymentPageView",
+          ],
+        };
+
+        const pageTitles = {
+          home: "메인페이지",
+          detail: "상품 상세페이지",
+          apply: "주문서 작성 페이지",
+          payment: "결제 페이지",
+          complete: "주문 접수 완료 페이지",
+          history: "주문 내역",
+          submissionDetail: "주문 상세",
+        };
+
+        let suppressHashChange = false;
+        let historyView = { status: "idle", items: [], error: "" };
+        let scrollTimer = 0;
+        let gallerySwipe = null;
+        let gallerySwipeCommitTimer = 0;
+        let lastTrackedViewKey = "";
+
+        const savedState = readJson(storageKeys.state, {});
+        const state = {
+          page: "home",
+          selectedProductId: homeProducts[0].id,
+          selectedImageIndex: 0,
+          selectedOptions: getInitialSelectedOptions(homeProducts[0]),
+          quantity: 1,
+          form: { ...emptyForm },
+          origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
+          editingSubmissionId: "",
+          draftSubmissionId: "",
+          completeMode: "create",
+          lastSubmissionId: "",
+          viewSubmissionId: "",
+          menuOpen: false,
+          infoPanelType: "",
+          searchQuery: "",
+          selectedCategory: "all",
+          scroll: {},
+          ...savedState,
+        };
+
+        state.form = { ...emptyForm, ...(savedState.form || {}) };
+        state.menuOpen = false;
+        state.infoPanelType = "";
+        if (!findProduct(state.selectedProductId)) {
+          state.selectedProductId = homeProducts[0].id;
+          state.selectedOptions = getInitialSelectedOptions(homeProducts[0]);
+        }
+
+        function productFromPathname() {
+          const path = location.pathname.replace(/^\/+|\/+$/g, "");
+          if (!path) return null;
+          return visibleProducts.find((product) => productRouteSlug(product) === path) || null;
+        }
+
+        const pathProduct = productFromPathname();
+        if (location.hash) {
+          applyHash(location.hash);
+        } else if (pathProduct) {
+          state.page = "detail";
+          state.selectedProductId = pathProduct.id;
+          state.selectedImageIndex = 0;
+          ensureOptionsForProduct();
+        } else {
+          state.page = "home";
+        }
+        if (state.page === "home" && currentProduct().hiddenFromMainSite) {
+          state.selectedProductId = homeProducts[0].id;
+          state.selectedOptions = getInitialSelectedOptions(homeProducts[0]);
+        }
+        if (state.page === "detail" && currentProduct().standaloneStore) {
+          setStandaloneProductUrl(currentProduct());
+        }
+
+        if (state.page === "history") {
+          loadHistory();
+        }
+
+        render();
+        requestAnimationFrame(restoreScroll);
+
+        document.addEventListener("click", handleClick);
+        document.addEventListener("input", handleInput);
+        document.addEventListener("change", handleChange);
+        document.addEventListener("pointerdown", handleGalleryPointerDown, { passive: true });
+        document.addEventListener("pointermove", handleGalleryPointerMove, { passive: true });
+        document.addEventListener("pointerup", handleGalleryPointerUp, { passive: true });
+        document.addEventListener("pointercancel", resetGallerySwipe, { passive: true });
+        window.addEventListener("hashchange", handleHashChange);
+        window.addEventListener(
+          "scroll",
+          () => {
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+              state.scroll[pageKey()] = window.scrollY;
+              persistState();
+            }, 180);
+          },
+          { passive: true },
+        );
+        window.addEventListener("beforeunload", () => {
+          state.scroll[pageKey()] = window.scrollY;
+          persistState();
+        });
+
+        window.__ittemmallToggleMenu = (event) => {
+          event?.preventDefault();
+          event?.stopPropagation();
+          state.menuOpen = !state.menuOpen;
+          persistState();
+          render();
+        };
+
+        function readJson(key, fallback) {
+          try {
+            const raw = localStorage.getItem(key);
+            return raw ? JSON.parse(raw) : fallback;
+          } catch {
+            return fallback;
+          }
+        }
+
+        function readSubmissionsStrict() {
+          const raw = localStorage.getItem(storageKeys.submissions);
+          if (!raw) return [];
+          const parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed)) {
+            throw new Error("저장된 주문 내역 형식이 올바르지 않습니다.");
+          }
+          return parsed;
+        }
+
+        function saveSubmissions(items) {
+          localStorage.setItem(storageKeys.submissions, JSON.stringify(items));
+        }
+
+        function savePixelEvent(event) {
+          const events = readJson(storageKeys.pixelEvents, []);
+          events.unshift(event);
+          localStorage.setItem(storageKeys.pixelEvents, JSON.stringify(events.slice(0, 100)));
+        }
+
+        function trackingDateToken(date = new Date()) {
+          const year = String(date.getFullYear());
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          return `${year}${month}${day}`;
+        }
+
+        function trackingRandomToken(length = 6) {
+          const bytes = new Uint8Array(length);
+          if (window.crypto?.getRandomValues) {
+            window.crypto.getRandomValues(bytes);
+            return Array.from(bytes, (byte) => (byte % 36).toString(36)).join("").toUpperCase();
+          }
+          return Math.random().toString(36).slice(2, 2 + length).toUpperCase();
+        }
+
+        function createTrackingId(prefix) {
+          return `${prefix}-${trackingDateToken()}-${Date.now().toString(36).toUpperCase()}-${trackingRandomToken(5)}`;
+        }
+
+        function getOrCreateVisitorId() {
+          const current = localStorage.getItem(storageKeys.visitorId);
+          if (current && /^V-\d{8}-/.test(current)) return current;
+          const next = createTrackingId("V");
+          localStorage.setItem(storageKeys.visitorId, next);
+          return next;
+        }
+
+        function getOrCreateVisitId() {
+          const current = sessionStorage.getItem(storageKeys.visitId);
+          if (current && /^S-\d{8}-/.test(current)) return current;
+          const next = createTrackingId("S");
+          sessionStorage.setItem(storageKeys.visitId, next);
+          return next;
+        }
+
+        function readCookieValue(name) {
+          return document.cookie
+            .split(";")
+            .map((item) => item.trim())
+            .find((item) => item.startsWith(`${name}=`))
+            ?.slice(name.length + 1) || "";
+        }
+
+        function readMetaBrowserIds() {
+          const attribution = readAttribution();
+          return {
+            fbp: readCookieValue("_fbp"),
+            fbc: readCookieValue("_fbc"),
+            fbclid: attribution.fbclid || "",
+          };
+        }
+
+        function trackPixelEvent(name, payload) {
+          const isTest = isTrackingTestMode();
+          const params = new URLSearchParams(location.search);
+          const testRunId = params.get("test_run_id") || params.get("testRunId") || "";
+          const notifyTest = params.get("notify_test") === "1" || params.get("email_test") === "1";
+          const pixelEventId = payload?.pixelEventId || createTrackingId("EVT");
+          const enrichedPayload = {
+            ...(payload || {}),
+            visitorId: payload?.visitorId || getOrCreateVisitorId(),
+            visitId: payload?.visitId || getOrCreateVisitId(),
+            pixelEventId,
+            metaPixelId: trackingConfig.metaPixelId,
+            metaBrowserIds: readMetaBrowserIds(),
+          };
+          const trackedPayload = isTest
+            ? {
+                ...enrichedPayload,
+                __test: true,
+                ...(testRunId ? { testRunId } : {}),
+                ...(notifyTest ? { notifyTest: true } : {}),
+              }
+            : enrichedPayload;
+          const event = {
+            id: pixelEventId,
+            name,
+            payload: trackedPayload,
+            createdAt: new Date().toISOString(),
+            path: location.hash || "/",
+          };
+
+          window.__ittemmallPixelEvents = window.__ittemmallPixelEvents || [];
+          window.__ittemmallPixelEvents.push(event);
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event: name, ...trackedPayload });
+
+          if (!isTest && typeof window.fbq === "function") {
+            const fbOptions = { eventID: pixelEventId };
+            if (name === "InitiateCheckout") {
+              window.fbq("track", "InitiateCheckout", trackedPayload, fbOptions);
+            } else {
+              window.fbq("trackCustom", name, trackedPayload, fbOptions);
+            }
+          }
+          if (!isTest && window.ttq && typeof window.ttq.track === "function") {
+            window.ttq.track(name, trackedPayload);
+          }
+          if (!isTest && window.kakaoPixel && typeof window.kakaoPixel === "function") {
+            try {
+              window.kakaoPixel().pageView();
+            } catch {
+              // Ignore missing pixel configuration in the static page.
+            }
+          }
+
+          savePixelEvent(event);
+          sendServerTrackingEvent(event);
+          return event;
+        }
+
+        function shouldSendServerTrackingEvent(eventName) {
+          return (
+            trackingConfig.serverLoggedEvents.includes(eventName) ||
+            eventName.startsWith("NpayPurchaseClick_") ||
+            eventName.startsWith("PurchaseCtaClick_")
+          );
+        }
+
+        function sendServerTrackingEvent(event) {
+          if (!shouldSendServerTrackingEvent(event.name)) return;
+          if (location.protocol === "file:") return;
+          const body = JSON.stringify({
+            event: event.name,
+            payload: event.payload || {},
+            event_id: event.id,
+            visitor_id: event.payload?.visitorId || "",
+            visit_id: event.payload?.visitId || "",
+            click_id: event.payload?.clickId || "",
+            meta_pixel_id: trackingConfig.metaPixelId,
+            meta_browser_ids: event.payload?.metaBrowserIds || readMetaBrowserIds(),
+            brand: "ITTEMMALL",
+            product_focus: event.payload?.productSlug || event.payload?.productId || "ittemmall",
+            path: `${location.pathname}${location.search}${location.hash || ""}`,
+            url: location.href,
+            referrer: document.referrer,
+            attribution: readAttribution(),
+          });
+
+          try {
+            const blob = new Blob([body], { type: "application/json" });
+            if (navigator.sendBeacon?.(trackingConfig.serverEndpoint, blob)) return;
+          } catch {}
+
+          fetch(trackingConfig.serverEndpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body,
+            keepalive: true,
+          }).catch(() => {
+            // Tracking should never block the purchase flow.
+          });
+        }
+
+        function readAttribution() {
+          const params = new URLSearchParams(location.search);
+          const fields = [
+            "utm_source",
+            "utm_medium",
+            "utm_campaign",
+            "utm_content",
+            "utm_term",
+            "utm_id",
+            "campaign_id",
+            "adset_id",
+            "ad_id",
+            "fbclid",
+            "product",
+            "test_run_id",
+            "testRunId",
+          ];
+          return fields.reduce((acc, key) => {
+            const value = params.get(key);
+            if (value) acc[key] = value;
+            return acc;
+          }, {});
+        }
+
+        function isTrackingTestMode() {
+          const params = new URLSearchParams(location.search);
+          return Boolean(
+            window.__ittemmallTrackingTestMode ||
+              params.get("test") === "1" ||
+              params.get("codex_test") === "1" ||
+              params.get("pixel_test") === "1",
+          );
+        }
+
+        function copyTrackingTestParams(url) {
+          const params = new URLSearchParams(location.search);
+          ["test", "codex_test", "pixel_test", "notify_test", "email_test", "test_run_id", "testRunId"].forEach((key) => {
+            if (params.get(key) === "1") url.searchParams.set(key, "1");
+            if ((key === "test_run_id" || key === "testRunId") && params.get(key)) {
+              url.searchParams.set(key, params.get(key));
+            }
+          });
+          return url;
+        }
+
+        function pixelEventToken(value) {
+          const token = String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "_")
+            .replace(/^_+|_+$/g, "");
+          return token || "product";
+        }
+
+        function productNpayEventName(product) {
+          const token = pixelEventToken(productRouteId(product.id) || product.id).slice(0, 32);
+          return `NpayPurchaseClick_${token}`;
+        }
+
+        function productPurchaseEventName(product) {
+          const token = pixelEventToken(productRouteId(product.id) || product.id).slice(0, 32);
+          return `PurchaseCtaClick_${token}`;
+        }
+
+        function buildCommercePayload(product, extra = {}) {
+          const quantity = Number(state.quantity || 1);
+          const amount = getOrderTotal(product, quantity);
+          const selectedAddOns = getSelectedAddOns(product);
+          const addOnUnitTotal = getSelectedAddOnUnitTotal(product);
+          const addOnTotal = addOnUnitTotal * quantity;
+          const productScopedNpayEventName = productNpayEventName(product);
+          const productScopedPurchaseEventName = productPurchaseEventName(product);
+          return {
+            productId: product.id,
+            productSlug: productRouteId(product.id),
+            productName: product.name,
+            productScopedNpayEventName,
+            productScopedPurchaseEventName,
+            content_ids: [product.id],
+            content_name: product.name,
+            content_type: "product",
+            currency: "KRW",
+            value: amount,
+            price: product.price,
+            unitPrice: product.price + addOnUnitTotal,
+            extraFee: Number(product.extraFee || 0),
+            addOnUnitTotal,
+            addOnTotal,
+            selectedAddOns,
+            quantity,
+            amount,
+            selectedOptions: { ...state.selectedOptions },
+            page: state.page,
+            route: hashForState(),
+            attribution: readAttribution(),
+            ...extra,
+          };
+        }
+
+        function trackCommerceEvent(name, extra = {}, product = currentProduct()) {
+          const clickId = extra.clickId || createTrackingId("CLK");
+          const payload = buildCommercePayload(product, { clickId, ...extra });
+          const event = trackPixelEvent(name, payload);
+          if (name === "NpayPurchaseClick") {
+            trackPixelEvent(payload.productScopedNpayEventName, {
+              ...payload,
+              baseEventName: name,
+              productScoped: true,
+              measurementUnit: "product_npay_click",
+            });
+          }
+          if (name === "PurchaseCtaClick") {
+            trackPixelEvent(payload.productScopedPurchaseEventName, {
+              ...payload,
+              baseEventName: name,
+              productScoped: true,
+              measurementUnit: "product_purchase_click",
+            });
+          }
+          return event;
+        }
+
+        function persistState() {
+          localStorage.setItem(
+            storageKeys.state,
+            JSON.stringify({ ...state, menuOpen: false, infoPanelType: "" }),
+          );
+        }
+
+        function escapeHtml(value) {
+          return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+        }
+
+        function formatPrice(value) {
+          return new Intl.NumberFormat("ko-KR").format(value || 0);
+        }
+
+        function getSelectedAddOns(product) {
+          const priceMap = product.optionAddOnPrices || {};
+          return Object.entries(priceMap)
+            .map(([label, values]) => {
+              const selectedValue = state.selectedOptions?.[label] || "";
+              const price = Number(values?.[selectedValue] || 0);
+              return { label, value: selectedValue, price };
+            })
+            .filter((item) => item.price > 0);
+        }
+
+        function getSelectedAddOnUnitTotal(product) {
+          return getSelectedAddOns(product).reduce((sum, item) => sum + item.price, 0);
+        }
+
+        function getOrderTotal(product, quantity) {
+          const count = Number(quantity || 1);
+          return (product.price + getSelectedAddOnUnitTotal(product)) * count + Number(product.extraFee || 0);
+        }
+
+        function formatDate(value) {
+          if (!value) return "-";
+          return new Intl.DateTimeFormat("ko-KR", {
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+          }).format(new Date(value));
+        }
+
+        function formatPaymentMethod(value) {
+          return paymentMethods[value]?.label || "결제수단 미정";
+        }
+
+        function formatSubmissionStatus(value) {
+          if (value === "order_received") return "주문 접수 완료";
+          if (value === "payment_pending") return "결제 안내 대기";
+          return "주문 확인 중";
+        }
+
+        function buildTossCheckoutUrl(submission) {
+          const params = new URLSearchParams({
+            orderId: submission.id,
+            amount: String(submission.amount || 0),
+            orderName: submission.productName || "ITTEMMALL 주문",
+            customerName: submission.customer?.name || "",
+            customerEmail: submission.customer?.email || "",
+            customerMobilePhone: String(submission.customer?.phone || "").replace(/\D/g, ""),
+            source: "ittemmall-payment-page",
+          });
+          return `/payment/toss-checkout.html?${params.toString()}`;
+        }
+
+        function maskPhone(value) {
+          const digits = String(value || "").replace(/\D/g, "");
+          if (digits.length >= 10) {
+            return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-****`;
+          }
+          return "010-****-****";
+        }
+
+        function getInitialSelectedOptions(product) {
+          return product.options.reduce((acc, option) => {
+            acc[option.label] = option.values[0];
+            return acc;
+          }, {});
+        }
+
+        function findProduct(id) {
+          return visibleProducts.find((product) => product.id === id);
+        }
+
+        function mainSiteProduct() {
+          return homeProducts[0] || visibleProducts[0];
+        }
+
+        function isStandaloneProduct(product = currentProduct()) {
+          return Boolean(product?.standaloneStore);
+        }
+
+        function representativeProduct() {
+          return isStandaloneProduct() ? currentProduct() : mainSiteProduct();
+        }
+
+        function productRouteSlug(product) {
+          if (product.slug) return product.slug;
+          const color = product.options
+            .find((option) => option.label === "색상")
+            ?.values[0];
+          if (color === "핑크") return "pink";
+          if (color === "블랙") return "black";
+          return product.id;
+        }
+
+        function productRouteId(productId) {
+          const product = findProduct(productId);
+          return product ? productRouteSlug(product) : productId;
+        }
+
+        function productFromRouteId(routeId) {
+          return (
+            visibleProducts.find((product) => productRouteSlug(product) === routeId) ||
+            findProduct(routeId)
+          );
+        }
+
+        function currentProduct() {
+          return findProduct(state.selectedProductId) || mainSiteProduct();
+        }
+
+        function hasDraft() {
+          return Object.entries(state.form).some(([key, value]) => {
+            if (key === "paymentMethod") return false;
+            if (key.startsWith("agree")) return Boolean(value);
+            return String(value || "").trim().length > 0;
+          });
+        }
+
+        function buildFulfillmentPrimary(form = state.form) {
+          const postcode = String(form.postcode || "").trim();
+          const baseAddress = String(form.roadAddress || form.jibunAddress || "").trim();
+          const detail = String(form.detailAddress || "").trim();
+          const extra = String(form.extraAddress || "").trim();
+          const parts = [];
+          if (postcode) parts.push(`[${postcode}]`);
+          if (baseAddress) parts.push(baseAddress);
+          if (detail) parts.push(detail);
+          if (extra) parts.push(extra);
+          return parts.join(" ").trim() || String(form.fulfillmentPrimary || "").trim();
+        }
+
+        function normalizeAddressRecord(form = state.form) {
+          const roadAddress = String(form.roadAddress || "").trim();
+          const jibunAddress = String(form.jibunAddress || "").trim();
+          const detailAddress = String(form.detailAddress || "").trim();
+          return {
+            postcode: String(form.postcode || "").trim(),
+            roadAddress,
+            jibunAddress,
+            detailAddress,
+            extraAddress: String(form.extraAddress || "").trim(),
+            fulfillmentPrimary: buildFulfillmentPrimary(form),
+            label: detailAddress || roadAddress || jibunAddress || "최근 배송지",
+            updatedAt: new Date().toISOString(),
+          };
+        }
+
+        function readRecentAddresses() {
+          const items = readJson(storageKeys.recentAddresses, []);
+          return Array.isArray(items) ? items : [];
+        }
+
+        function saveRecentAddressFromForm() {
+          const record = normalizeAddressRecord();
+          if (!record.fulfillmentPrimary) return;
+          const key = [
+            record.postcode,
+            record.roadAddress,
+            record.jibunAddress,
+            record.detailAddress,
+          ]
+            .join("|")
+            .toLowerCase();
+          const next = [
+            record,
+            ...readRecentAddresses().filter((item) => {
+              const itemKey = [
+                item.postcode,
+                item.roadAddress,
+                item.jibunAddress,
+                item.detailAddress,
+              ]
+                .join("|")
+                .toLowerCase();
+              return itemKey !== key;
+            }),
+          ].slice(0, 3);
+          localStorage.setItem(storageKeys.recentAddresses, JSON.stringify(next));
+        }
+
+        function applyRecentAddress(index) {
+          const record = readRecentAddresses()[Number(index)];
+          if (!record) return;
+          Object.assign(state.form, {
+            postcode: record.postcode || "",
+            roadAddress: record.roadAddress || "",
+            jibunAddress: record.jibunAddress || "",
+            detailAddress: record.detailAddress || "",
+            extraAddress: record.extraAddress || "",
+            fulfillmentPrimary: record.fulfillmentPrimary || "",
+          });
+          persistState();
+          render();
+          window.setTimeout(() => document.querySelector('[data-field="detailAddress"]')?.focus(), 40);
+        }
+
+        function clearRecentAddresses() {
+          localStorage.removeItem(storageKeys.recentAddresses);
+          render();
+        }
+
+        function isFormReady() {
+          const method = state.form.paymentMethod || "toss_pg";
+          return Boolean(
+            state.form.name.trim() &&
+              state.form.phone.trim() &&
+              state.form.email.trim() &&
+              buildFulfillmentPrimary().trim() &&
+              (state.form.roadAddress.trim() || state.form.fulfillmentPrimary.trim()) &&
+              state.form.detailAddress.trim() &&
+              paymentMethods[method] &&
+              (state.form.agreeTermsPrivacy || state.form.agreeNotice),
+          );
+        }
+
+        function pageKey() {
+          if (state.page === "detail") return `detail:${state.selectedProductId}`;
+          if (state.page === "submissionDetail") {
+            return `submission:${state.viewSubmissionId}`;
+          }
+          return state.page;
+        }
+
+        function saveScroll() {
+          state.scroll[pageKey()] = window.scrollY;
+          persistState();
+        }
+
+        function restoreScroll() {
+          const y = state.scroll[pageKey()] || 0;
+          window.scrollTo(0, y);
+        }
+
+        function hashForState() {
+          if (state.page === "detail") return `#/product/${productRouteId(state.selectedProductId)}`;
+          if (state.page === "apply") return "#/apply";
+          if (state.page === "payment") return "#/payment";
+          if (state.page === "complete") {
+            return state.lastSubmissionId
+              ? `#/complete/${state.lastSubmissionId}`
+              : "#/complete";
+          }
+          if (state.page === "history") return "#/history";
+          if (state.page === "submissionDetail") {
+            return `#/submission/${state.viewSubmissionId}`;
+          }
+          return "#/home";
+        }
+
+        function setHash(hash) {
+          if (location.hash !== hash) {
+            suppressHashChange = true;
+            location.hash = hash;
+          }
+        }
+
+        function setRootUrlForHome() {
+          if (location.pathname === "/" && !location.hash) return;
+          window.history.pushState(null, "", `/${location.search}`);
+        }
+
+        function setStandaloneProductUrl(product) {
+          if (!product || location.protocol === "file:") {
+            setHash(hashForState());
+            return;
+          }
+          const targetPath = `/${productRouteSlug(product)}/`;
+          const targetUrl = `${targetPath}${location.search}`;
+          if (location.pathname !== targetPath || location.hash) {
+            window.history.pushState(null, "", targetUrl);
+          }
+        }
+
+        function applyHash(hash) {
+          const parts = hash.replace(/^#\/?/, "").split("/");
+          const route = parts[0] || "home";
+          const id = parts[1] || "";
+          const pathProduct = productFromPathname();
+
+          function keepStandalonePageClosed() {
+            if (pathProduct?.standaloneStore && state.page === "home") {
+              state.page = "detail";
+              state.selectedProductId = pathProduct.id;
+              state.selectedImageIndex = 0;
+              ensureOptionsForProduct();
+            }
+          }
+
+          const routeProduct = productFromRouteId(id);
+          if (route === "product" && routeProduct) {
+            state.page = "detail";
+            if (state.selectedProductId !== routeProduct.id) {
+              state.selectedImageIndex = 0;
+            }
+            state.selectedProductId = routeProduct.id;
+            ensureOptionsForProduct();
+            return;
+          }
+
+          if (route === "apply") {
+            state.page = "apply";
+            ensureOptionsForProduct();
+            return;
+          }
+
+          if (route === "payment") {
+            state.page = "payment";
+            ensureOptionsForProduct();
+            return;
+          }
+
+          if (route === "complete") {
+            state.page = "complete";
+            state.lastSubmissionId = id || state.lastSubmissionId;
+            return;
+          }
+
+          if (route === "history") {
+            state.page = "history";
+            return;
+          }
+
+          if (route === "info" && siteConfig.infoPanels[id]) {
+            state.page = "home";
+            state.infoPanelType = id;
+            keepStandalonePageClosed();
+            return;
+          }
+
+          if (route === "submission" && id) {
+            state.page = "submissionDetail";
+            state.viewSubmissionId = id;
+            return;
+          }
+
+          state.page = "home";
+          keepStandalonePageClosed();
+        }
+
+        function handleHashChange() {
+          if (suppressHashChange) {
+            suppressHashChange = false;
+            return;
+          }
+          saveScroll();
+          state.menuOpen = false;
+          state.infoPanelType = "";
+          applyHash(location.hash);
+          if (state.page === "history") loadHistory();
+          persistState();
+          render();
+          requestAnimationFrame(restoreScroll);
+        }
+
+        function navigate(page, patch = {}) {
+          saveScroll();
+          Object.assign(state, patch, { page, menuOpen: false, infoPanelType: "" });
+          if (page === "history") loadHistory();
+          persistState();
+          if (page === "home") {
+            setRootUrlForHome();
+          } else if (page === "detail" && isStandaloneProduct()) {
+            setStandaloneProductUrl(currentProduct());
+          } else {
+            setHash(hashForState());
+          }
+          render();
+          requestAnimationFrame(restoreScroll);
+        }
+
+        function ensureOptionsForProduct() {
+          const product = currentProduct();
+          const optionMap = product.options.reduce((acc, option) => {
+            acc[option.label] = option.values;
+            return acc;
+          }, {});
+          const labels = Object.keys(optionMap).sort().join("|");
+          const stateLabels = Object.keys(state.selectedOptions || {})
+            .sort()
+            .join("|");
+          const hasInvalidValue = Object.entries(state.selectedOptions || {}).some(
+            ([label, value]) => !optionMap[label]?.includes(value),
+          );
+          if (labels !== stateLabels || hasInvalidValue) {
+            state.selectedOptions = getInitialSelectedOptions(product);
+          }
+        }
+
+        function selectProduct(id, origin = null) {
+          const product = findProduct(id);
+          if (!product) return;
+          navigate("detail", {
+            selectedProductId: product.id,
+            selectedImageIndex: 0,
+            selectedOptions: getInitialSelectedOptions(product),
+            quantity: 1,
+            form: { ...emptyForm },
+            editingSubmissionId: "",
+            draftSubmissionId: "",
+            origin:
+              origin ||
+              {
+                page: state.page,
+                label: originLabel(),
+                hash: hashForState(),
+              },
+          });
+        }
+
+        function originLabel() {
+          if (state.page === "history") return "주문 내역 확인";
+          if (state.page === "submissionDetail") return "주문 상세 확인";
+          if (state.page === "apply") return "주문서 작성";
+          return "메인 상품 탐색";
+        }
+
+        function loadHistory() {
+          historyView = { status: "loading", items: [], error: "" };
+          window.setTimeout(() => {
+            try {
+              const items = readSubmissionsStrict().sort(
+                (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
+              );
+              historyView = {
+                status: items.length ? "success" : "empty",
+                items,
+                error: "",
+              };
+            } catch (error) {
+              historyView = {
+                status: "error",
+                items: [],
+                error: error.message || "주문 내역을 불러오지 못했습니다.",
+              };
+            }
+            if (state.page === "history") render();
+          }, 220);
+        }
+
+        function handleClick(event) {
+          const target = event.target.closest("[data-action]");
+          if (!target) return;
+          event.preventDefault();
+
+          const action = target.dataset.action;
+          const id = target.dataset.id || "";
+          const optionLabel = target.dataset.optionLabel || "";
+          const optionValue = target.dataset.optionValue || "";
+
+          if (action === "toggle-menu") {
+            state.menuOpen = !state.menuOpen;
+            persistState();
+            render();
+          }
+          if (action === "close-menu") {
+            state.menuOpen = false;
+            persistState();
+            render();
+          }
+          if (action === "open-info") {
+            state.infoPanelType = target.dataset.panel || "purchase";
+            state.menuOpen = false;
+            persistState();
+            render();
+          }
+          if (action === "close-info") {
+            state.infoPanelType = "";
+            if (location.hash.startsWith("#/info/")) {
+              if (state.page === "home") {
+                setRootUrlForHome();
+              } else {
+                setHash(hashForState());
+              }
+            }
+            persistState();
+            render();
+          }
+
+          if (action === "home") {
+            if (isStandaloneProduct()) {
+              navigate("detail", {
+                origin: {
+                  page: "detail",
+                  label: `${currentProduct().name} 전용 페이지`,
+                  hash: `/${productRouteId(state.selectedProductId)}/`,
+                },
+              });
+            } else {
+              navigate("home", {
+                origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
+              });
+            }
+          }
+
+          if (action === "back") goBack();
+          if (action === "history") navigate("history");
+          if (action === "search") {
+            if (isStandaloneProduct()) {
+              navigate("detail");
+              return;
+            }
+            navigate("home");
+            window.setTimeout(() => {
+              document.getElementById("productSearch")?.focus();
+              document.getElementById("products")?.scrollIntoView({ block: "start" });
+            }, 40);
+          }
+          if (action === "set-category") {
+            state.selectedCategory = target.dataset.categoryId || "all";
+            persistState();
+            render();
+            window.setTimeout(() => {
+              document.getElementById("products")?.scrollIntoView({ block: "start" });
+            }, 40);
+          }
+          if (action === "clear-product-filters") {
+            state.searchQuery = "";
+            state.selectedCategory = "all";
+            persistState();
+            render();
+          }
+          if (action === "menu-products") {
+            if (isStandaloneProduct()) {
+              navigate("detail");
+              return;
+            }
+            navigate("home");
+            window.setTimeout(() => {
+              document.getElementById("products")?.scrollIntoView({ block: "start" });
+            }, 40);
+          }
+          if (action === "support") {
+            state.infoPanelType = "support";
+            state.menuOpen = false;
+            persistState();
+            render();
+          }
+          if (action === "select-image") {
+            clearGallerySwipeCommit();
+            resetGallerySwipe();
+            state.selectedImageIndex = Number(target.dataset.index || 0);
+            persistState();
+            render();
+          }
+          if (action === "select-option" && optionLabel) {
+            state.selectedOptions[optionLabel] = optionValue;
+            persistState();
+            render();
+          }
+          if (action === "select-product") {
+            const product = findProduct(id);
+            if (product) {
+              trackCommerceEvent(
+                "ProductDetailClick",
+                {
+                  source: target.dataset.pixelSource || "product_card",
+                  buttonLabel: target.textContent.trim(),
+                },
+                product,
+              );
+            }
+            selectProduct(id);
+          }
+          if (action === "select-product-from-origin") {
+            selectProduct(id, {
+              page: "history",
+              label: "주문 내역 확인",
+              hash: "#/history",
+            });
+          }
+          if (action === "apply") {
+            const checkoutSource = target.dataset.checkoutSource || "direct_buy";
+            const isNpayTrackingClick = checkoutSource === "npay";
+            trackCommerceEvent(isNpayTrackingClick ? "NpayPurchaseClick" : "PurchaseCtaClick", {
+              source: checkoutSource,
+              buttonLabel: target.textContent.trim(),
+              paymentMethod: "toss_pg",
+              commerceEventType: isNpayTrackingClick ? "npay_button_click" : "purchase_button_click",
+            });
+            state.form.paymentMethod = "toss_pg";
+            navigate("apply", {
+              form: { ...state.form },
+              draftSubmissionId: "",
+              origin: {
+                page: "detail",
+                label: `${currentProduct().name} 상세`,
+                hash: `#/product/${productRouteId(state.selectedProductId)}`,
+              },
+            });
+          }
+          if (action === "resume-origin") resumeOrigin();
+          if (action === "quantity-minus") {
+            state.quantity = Math.max(1, Number(state.quantity || 1) - 1);
+            navigate(state.page);
+          }
+          if (action === "quantity-plus") {
+            state.quantity = Number(state.quantity || 1) + 1;
+            navigate(state.page);
+          }
+          if (action === "open-postcode") openPostcodeSearch();
+          if (action === "use-recent-address") applyRecentAddress(target.dataset.index || 0);
+          if (action === "clear-recent-addresses") clearRecentAddresses();
+          if (action === "submit-apply") submitApply();
+          if (action === "complete-payment") completeCurrentPayment();
+          if (action === "view-submission") {
+            navigate("submissionDetail", { viewSubmissionId: id });
+          }
+          if (action === "edit-submission") editSubmission(id);
+          if (action === "retry-history") loadHistory();
+          if (action === "resume-draft") navigate("apply");
+          if (action === "clear-local-data") {
+            if (confirm("저장된 주문 내역과 작성 중 상태를 모두 지울까요?")) {
+              localStorage.removeItem(storageKeys.submissions);
+              localStorage.removeItem(storageKeys.state);
+              localStorage.removeItem(storageKeys.recentAddresses);
+              Object.assign(state, {
+                page: "home",
+                selectedProductId: mainSiteProduct().id,
+                selectedImageIndex: 0,
+                selectedOptions: getInitialSelectedOptions(mainSiteProduct()),
+                quantity: 1,
+                form: { ...emptyForm },
+                origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
+                editingSubmissionId: "",
+                draftSubmissionId: "",
+                completeMode: "create",
+                lastSubmissionId: "",
+                viewSubmissionId: "",
+                menuOpen: false,
+                infoPanelType: "",
+                searchQuery: "",
+                selectedCategory: "all",
+                scroll: {},
+              });
+              navigate("home");
+            }
+          }
+        }
+
+        function handleGalleryPointerDown(event) {
+          if (event.pointerType === "mouse" && event.button !== 0) return;
+          const target = event.target.closest("[data-gallery-swipe]");
+          if (!target || state.page !== "detail") return;
+          const images = currentProduct().images?.length ? currentProduct().images : [currentProduct().image];
+          if (images.length < 2) return;
+          clearGallerySwipeCommit();
+          target.classList.remove("is-dragging");
+          target.style.setProperty("--drag-offset", "0px");
+          gallerySwipe = {
+            pointerId: event.pointerId,
+            target,
+            startX: event.clientX,
+            startY: event.clientY,
+            currentX: event.clientX,
+            currentY: event.clientY,
+            width: target.clientWidth || window.innerWidth,
+            active: false,
+          };
+        }
+
+        function handleGalleryPointerMove(event) {
+          if (!gallerySwipe || gallerySwipe.pointerId !== event.pointerId) return;
+          const swipe = gallerySwipe;
+          if (!swipe.target.isConnected) {
+            resetGallerySwipe();
+            return;
+          }
+
+          swipe.currentX = event.clientX;
+          swipe.currentY = event.clientY;
+          const deltaX = swipe.currentX - swipe.startX;
+          const deltaY = swipe.currentY - swipe.startY;
+          const absX = Math.abs(deltaX);
+          const absY = Math.abs(deltaY);
+
+          if (!swipe.active) {
+            if (absY > 18 && absY > absX * 1.15) {
+              resetGallerySwipe();
+              return;
+            }
+            if (absX < 8 || absX < absY * 1.1) return;
+            swipe.active = true;
+            swipe.target.classList.add("is-dragging");
+          }
+
+          const width = swipe.target.clientWidth || swipe.width || window.innerWidth;
+          swipe.width = width;
+          const clampedDelta = clamp(deltaX, -width, width);
+          swipe.target.style.setProperty("--drag-offset", `${clampedDelta}px`);
+        }
+
+        function handleGalleryPointerUp(event) {
+          if (!gallerySwipe || gallerySwipe.pointerId !== event.pointerId) return;
+          const swipe = gallerySwipe;
+          const deltaX = (swipe.currentX ?? event.clientX) - swipe.startX;
+          const deltaY = (swipe.currentY ?? event.clientY) - swipe.startY;
+          const absX = Math.abs(deltaX);
+          const absY = Math.abs(deltaY);
+          const width = swipe.target.clientWidth || swipe.width || window.innerWidth;
+          const threshold = Math.min(90, width * 0.22);
+          if (!swipe.active || absX < threshold || absX < absY * 1.1) {
+            resetGallerySwipe();
+            return;
+          }
+          commitGallerySwipe(deltaX < 0 ? 1 : -1, swipe.target, width);
+        }
+
+        function resetGallerySwipe() {
+          const swipe = gallerySwipe;
+          gallerySwipe = null;
+          if (!swipe?.target?.isConnected) return;
+          swipe.target.classList.remove("is-dragging");
+          swipe.target.style.setProperty("--drag-offset", "0px");
+        }
+
+        function clearGallerySwipeCommit() {
+          if (!gallerySwipeCommitTimer) return;
+          window.clearTimeout(gallerySwipeCommitTimer);
+          gallerySwipeCommitTimer = 0;
+        }
+
+        function commitGallerySwipe(direction, target, width) {
+          gallerySwipe = null;
+          target.classList.remove("is-dragging");
+          target.style.setProperty("--drag-offset", `${direction > 0 ? -width : width}px`);
+          clearGallerySwipeCommit();
+          gallerySwipeCommitTimer = window.setTimeout(() => {
+            gallerySwipeCommitTimer = 0;
+            shiftGalleryImage(direction);
+          }, 190);
+        }
+
+        function clamp(value, min, max) {
+          return Math.min(Math.max(value, min), max);
+        }
+
+        function shiftGalleryImage(direction) {
+          const images = currentProduct().images?.length ? currentProduct().images : [currentProduct().image];
+          if (images.length < 2) return;
+          const currentIndex = Math.min(
+            Math.max(Number(state.selectedImageIndex || 0), 0),
+            images.length - 1,
+          );
+          state.selectedImageIndex = (currentIndex + direction + images.length) % images.length;
+          persistState();
+          render();
+        }
+
+        function handleInput(event) {
+          const field = event.target.dataset.field;
+          const search = event.target.dataset.search;
+
+          if (field) {
+            state.form[field] = event.target.value;
+            if (["postcode", "roadAddress", "jibunAddress", "detailAddress", "extraAddress"].includes(field)) {
+              state.form.fulfillmentPrimary = buildFulfillmentPrimary();
+            }
+            persistState();
+            syncSubmitButton();
+          }
+
+          if (search) {
+            state.searchQuery = event.target.value;
+            persistState();
+            updateProductVisibility();
+          }
+        }
+
+        function handleChange(event) {
+          const field = event.target.dataset.field;
+          const optionLabel = event.target.dataset.optionLabel;
+
+          if (field) {
+            state.form[field] =
+              event.target.type === "checkbox" ? event.target.checked : event.target.value;
+            if (["postcode", "roadAddress", "jibunAddress", "detailAddress", "extraAddress"].includes(field)) {
+              state.form.fulfillmentPrimary = buildFulfillmentPrimary();
+            }
+            persistState();
+            syncSubmitButton();
+          }
+
+          if (optionLabel) {
+            state.selectedOptions[optionLabel] = event.target.value;
+            persistState();
+          }
+        }
+
+        function openPostcodeSearch() {
+          const Postcode = window.daum?.Postcode || window.kakao?.Postcode;
+          if (!Postcode) {
+            alert("우편번호 서비스를 아직 불러오지 못했습니다. 잠시 후 다시 누르거나 주소를 직접 입력해주세요.");
+            return;
+          }
+
+          new Postcode({
+            oncomplete(data) {
+              const roadAddress = data.roadAddress || data.autoRoadAddress || "";
+              const jibunAddress = data.jibunAddress || data.autoJibunAddress || "";
+              const extraParts = [];
+              if (data.bname && /(동|로|가)$/.test(data.bname)) extraParts.push(data.bname);
+              if (data.buildingName && data.apartment === "Y") extraParts.push(data.buildingName);
+              const extraAddress = extraParts.length ? `(${extraParts.join(", ")})` : "";
+              Object.assign(state.form, {
+                postcode: data.zonecode || "",
+                roadAddress,
+                jibunAddress,
+                extraAddress,
+              });
+              state.form.fulfillmentPrimary = buildFulfillmentPrimary();
+              persistState();
+              render();
+              window.setTimeout(() => document.querySelector('[data-field="detailAddress"]')?.focus(), 60);
+            },
+          }).open({
+            popupTitle: "ITTEMMALL 배송지 검색",
+          });
+        }
+
+        function syncSubmitButton() {
+          const button = document.querySelector('[data-action="submit-apply"]');
+          if (button) button.disabled = !isFormReady();
+        }
+
+        function updateProductVisibility() {
+          const query = state.searchQuery.trim().toLowerCase();
+          const selectedCategory = state.selectedCategory || "all";
+          document.querySelectorAll("[data-product-card]").forEach((card) => {
+            const haystack = card.dataset.productCard.toLowerCase();
+            const category = card.dataset.category || "";
+            const queryMatch = !query || haystack.includes(query);
+            const categoryMatch = selectedCategory === "all" || category === selectedCategory;
+            card.classList.toggle("hidden", !queryMatch || !categoryMatch);
+          });
+          const empty = document.getElementById("productFilterEmpty");
+          if (empty) {
+            const visibleCount = document.querySelectorAll(
+              "[data-product-card]:not(.hidden)",
+            ).length;
+            empty.classList.toggle("hidden", visibleCount > 0);
+          }
+        }
+
+        function goBack() {
+          if (state.page === "detail") {
+            resumeOrigin();
+            return;
+          }
+          if (state.page === "apply") {
+            navigate("detail");
+            return;
+          }
+          if (state.page === "payment") {
+            navigate("apply");
+            return;
+          }
+          if (state.page === "complete") {
+            navigate("history");
+            return;
+          }
+          if (state.page === "submissionDetail") {
+            navigate("history");
+            return;
+          }
+          navigate("home");
+        }
+
+        function resumeOrigin() {
+          const origin = state.origin || { page: "home", hash: "/" };
+          if (isStandaloneProduct() && origin.page === "home") {
+            navigate("detail");
+            return;
+          }
+          if (origin.page === "detail") {
+            navigate("detail");
+            return;
+          }
+          if (origin.page === "history") {
+            navigate("history");
+            return;
+          }
+          if (origin.page === "submissionDetail" && state.viewSubmissionId) {
+            navigate("submissionDetail");
+            return;
+          }
+          navigate("home");
+        }
+
+        function submitApply() {
+          if (!isFormReady()) return;
+
+          const product = currentProduct();
+          const paymentMethod = state.form.paymentMethod || "toss_pg";
+          const payload = buildCommercePayload(product, {
+            source: "payment_page_button",
+            buttonLabel: "결제수단 확인하기",
+            paymentMethod,
+            customerFields: {
+              hasName: Boolean(state.form.name.trim()),
+              hasPhone: Boolean(state.form.phone.trim()),
+              hasEmail: Boolean(state.form.email.trim()),
+              hasFulfillmentPrimary: Boolean(buildFulfillmentPrimary().trim()),
+              hasRequest: Boolean(state.form.request.trim()),
+              agreeTermsPrivacy: Boolean(state.form.agreeTermsPrivacy || state.form.agreeNotice),
+              agreeContact: Boolean(state.form.agreeContact),
+            },
+            originLabel: state.origin?.label || "상품 탐색",
+            commerceEventType: "payment_page_button_click",
+          });
+          trackPixelEvent("PaymentPageButtonClick", payload);
+          trackPixelEvent("InitiateCheckout", payload);
+          const submission = upsertSubmission("payment_pending");
+          state.lastSubmissionId = submission.id;
+          state.viewSubmissionId = submission.id;
+          state.draftSubmissionId = submission.id;
+          state.completeMode = state.editingSubmissionId ? "edit" : "create";
+          state.editingSubmissionId = "";
+          saveRecentAddressFromForm();
+          navigate("payment");
+        }
+
+        function upsertSubmission(status = "payment_pending") {
+          const product = currentProduct();
+          const address = normalizeAddressRecord();
+          const now = new Date().toISOString();
+          const storedItems = readJson(storageKeys.submissions, []);
+          const existingItems = Array.isArray(storedItems) ? storedItems : [];
+          const currentId = state.editingSubmissionId || state.draftSubmissionId || "";
+          const existing = existingItems.find((item) => item.id === currentId);
+          const id =
+            existing?.id ||
+            `IT-${Date.now().toString(36).toUpperCase()}-${Math.random()
+              .toString(36)
+              .slice(2, 6)
+              .toUpperCase()}`;
+          const submission = {
+            ...(existing || {}),
+            id,
+            status,
+            paymentStatus: status,
+            paymentMethod: state.form.paymentMethod || "toss_pg",
+            productId: product.id,
+            productName: product.name,
+            productImage: product.image,
+            selectedOptions: { ...state.selectedOptions },
+            selectedAddOns: getSelectedAddOns(product),
+            quantity: Number(state.quantity || 1),
+            amount: getOrderTotal(product, state.quantity),
+            addOnUnitTotal: getSelectedAddOnUnitTotal(product),
+            addOnTotal: getSelectedAddOnUnitTotal(product) * Number(state.quantity || 1),
+            extraFee: Number(product.extraFee || 0),
+            extraFeeLabel: product.extraFeeLabel || "",
+            customer: {
+              ...state.form,
+              ...address,
+              fulfillmentPrimary: address.fulfillmentPrimary,
+            },
+            source: "ittemmall-mobile-mvp-file",
+            createdAt: existing?.createdAt || now,
+            updatedAt: now,
+          };
+          const next = [submission, ...existingItems.filter((item) => item.id !== id)];
+          saveSubmissions(next);
+          return submission;
+        }
+
+        function completeCurrentPayment() {
+          const id = state.lastSubmissionId;
+          if (!id) {
+            navigate("history");
+            return;
+          }
+          const mode = state.completeMode;
+          const storedItems = readJson(storageKeys.submissions, []);
+          const items = Array.isArray(storedItems) ? storedItems : [];
+          const now = new Date().toISOString();
+          const next = items.map((item) =>
+            item.id === id
+              ? { ...item, status: "order_received", paymentStatus: "order_received", updatedAt: now }
+              : item,
+          );
+          saveSubmissions(next);
+          state.form = { ...emptyForm };
+          state.editingSubmissionId = "";
+          state.draftSubmissionId = "";
+          navigate("complete", { lastSubmissionId: id, completeMode: mode });
+        }
+
+        function editSubmission(id) {
+          const item = readJson(storageKeys.submissions, []).find(
+            (submission) => submission.id === id,
+          );
+          if (!item) {
+            navigate("history");
+            return;
+          }
+
+          navigate("apply", {
+            selectedProductId: item.productId,
+            selectedOptions: { ...item.selectedOptions },
+            quantity: item.quantity,
+            form: { ...emptyForm, ...item.customer },
+            editingSubmissionId: id,
+            draftSubmissionId: id,
+            origin: {
+              page: "submissionDetail",
+              label: "주문 상세 수정",
+              hash: `#/submission/${id}`,
+            },
+          });
+        }
+
+        function render() {
+          const app = document.getElementById("app");
+          const product = currentProduct();
+          app.innerHTML = `
+            <div class="phone-shell ${isStandaloneProduct(product) ? "is-standalone-store" : ""} ${themeModeClass(product)}" style="${productThemeStyle(product)}">
+              ${renderHeader()}
+              ${renderPage()}
+              ${renderInfoPanel()}
+            </div>
+          `;
+          updateProductVisibility();
+          syncSubmitButton();
+          trackPageViewIfNeeded();
+        }
+
+        function themeModeClass(product) {
+          if (product?.theme?.mode === "white") return "is-white-theme";
+          if (product?.theme?.mode === "black") return "is-black-theme";
+          return "";
+        }
+
+        function productThemeStyle(product) {
+          if (!product || !product.theme) {
+            return "";
+          }
+
+          const themeMap = {
+            "--brand": product.theme.brand,
+            "--brand-light": product.theme.brandLight,
+            "--accent": product.theme.accent,
+            "--accent-2": product.theme.accent2,
+            "--soft": product.theme.soft,
+            "--on-brand": product.theme.onBrand,
+            "--header-bg": product.theme.headerBg,
+            "--header-text": product.theme.headerText,
+            "--header-border": product.theme.headerBorder,
+          };
+
+          return Object.entries(themeMap)
+            .filter(([, value]) => value)
+            .map(([key, value]) => `${key}: ${escapeHtml(String(value))}`)
+            .join("; ");
+        }
+
+        function trackPageViewIfNeeded() {
+          const product = currentProduct();
+          const viewKey = `${state.page}:${product.id}:${location.hash || hashForState()}`;
+          if (viewKey === lastTrackedViewKey) return;
+          lastTrackedViewKey = viewKey;
+
+          if (state.page === "detail") {
+            trackCommerceEvent("ViewContent", {
+              source: "product_detail_view",
+              commerceEventType: "product_detail_view",
+            });
+          }
+          if (state.page === "apply") {
+            trackCommerceEvent("CheckoutPageView", {
+              source: "order_form_view",
+              commerceEventType: "order_form_view",
+            });
+          }
+          if (state.page === "payment") {
+            trackCommerceEvent("PaymentPageView", {
+              source: "payment_method_waiting_view",
+              paymentMethod: state.form.paymentMethod || "toss_pg",
+              commerceEventType: "payment_method_waiting_view",
+            });
+          }
+        }
+
+        function renderHeader() {
+          const showBack = state.page !== "home";
+          return `
+            <header class="app-header">
+              <div class="header-inner">
+                ${
+                  showBack
+                    ? `
+                      <button
+                        class="icon-button"
+                        type="button"
+                        data-action="back"
+                        aria-label="뒤로가기"
+                        title="뒤로가기"
+                      >
+                        ${icon("arrow-left")}
+                      </button>
+                    `
+                    : `
+                      <button
+                        class="icon-button"
+                        type="button"
+                        data-action="toggle-menu"
+                        aria-label="${state.menuOpen ? "메뉴 닫기" : "메뉴 열기"}"
+                        aria-expanded="${state.menuOpen ? "true" : "false"}"
+                        title="${state.menuOpen ? "메뉴 닫기" : "메뉴 열기"}"
+                      >
+                        ${state.menuOpen ? icon("x") : icon("menu")}
+                      </button>
+                    `
+                }
+                <button class="brand-button" type="button" data-action="home" aria-label="홈으로 이동">
+                  <p class="brand-logo">${escapeHtml(siteConfig.logoText)}</p>
+                </button>
+                <button
+                  class="support-button"
+                  type="button"
+                  data-action="support"
+                  aria-label="고객센터"
+                  title="고객센터"
+                >
+                  문의
+                </button>
+              </div>
+              ${!showBack && state.menuOpen ? renderMenuPanel() : ""}
+            </header>
+          `;
+        }
+
+        function renderMenuPanel() {
+          return `
+            <nav class="menu-panel" aria-label="주요 메뉴">
+              <p class="menu-kicker">MENU</p>
+              <div class="menu-grid">
+                <a class="menu-item" href="/" data-action="home">
+                  <span>
+                    <strong>홈 / 상품</strong>
+                    <span>카테고리와 상품 목록으로 이동</span>
+                  </span>
+                  ${icon("chevron-right", 18)}
+                </a>
+                <a class="menu-item" href="#/info/purchase" data-action="open-info" data-panel="purchase">
+                  <span>
+                    <strong>구매 안내</strong>
+                    <span>주문서 작성 흐름 확인</span>
+                  </span>
+                  ${icon("chevron-right", 18)}
+                </a>
+                <a class="menu-item" href="#/info/policy" data-action="open-info" data-panel="policy">
+                  <span>
+                    <strong>주문 / 환불 안내</strong>
+                    <span>취소 기준과 안내 방식 확인</span>
+                  </span>
+                  ${icon("chevron-right", 18)}
+                </a>
+                <a class="menu-item" href="#/info/support" data-action="open-info" data-panel="support">
+                  <span>
+                    <strong>고객센터</strong>
+                    <span>운영시간과 문의 채널 확인</span>
+                  </span>
+                  ${icon("chevron-right", 18)}
+                </a>
+                <a class="menu-item" href="#/history" data-action="history">
+                  <span>
+                    <strong>주문 내역</strong>
+                    <span>저장된 주문과 수정 화면 확인</span>
+                  </span>
+                  ${icon("chevron-right", 18)}
+                </a>
+                <button class="menu-item" type="button" data-action="close-menu">
+                  <span>
+                    <strong>메뉴 닫기</strong>
+                    <span>현재 화면으로 돌아가기</span>
+                  </span>
+                  ${icon("x", 18)}
+                </button>
+              </div>
+            </nav>
+          `;
+        }
+
+        function renderInfoPanel() {
+          if (!state.infoPanelType) return "";
+          const panel = siteConfig.infoPanels[state.infoPanelType];
+          if (!panel) return "";
+
+          return `
+            <div class="info-overlay" role="dialog" aria-modal="true" aria-label="${escapeHtml(panel.title)}">
+              <section class="info-sheet">
+                <div class="info-head">
+                  <div>
+                    <div class="info-icon">${icon(panel.icon, 20)}</div>
+                    <h2 class="info-title">${escapeHtml(panel.title)}</h2>
+                  </div>
+                  <button class="icon-button" type="button" data-action="close-info" aria-label="닫기">
+                    ${icon("x", 20)}
+                  </button>
+                </div>
+                <ul class="info-list">
+                  ${panel.lines.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}
+                </ul>
+                <div class="button-row" style="margin-top:18px">
+                  <button class="btn primary" type="button" data-action="close-info">확인</button>
+                  <button class="btn" type="button" data-action="history">주문 내역</button>
+                </div>
+                <div class="button-row one" style="margin-top:10px">
+                  <button class="btn ghost" type="button" data-action="home">상품 보기</button>
+                </div>
+              </section>
+            </div>
+          `;
+        }
+
+        function renderPage() {
+          if (state.page === "detail") return renderDetailPage();
+          if (state.page === "apply") return renderApplyPage();
+          if (state.page === "payment") return renderPaymentPage();
+          if (state.page === "complete") return renderCompletePage();
+          if (state.page === "history") return renderHistoryPage();
+          if (state.page === "submissionDetail") return renderSubmissionDetailPage();
+          return renderHomePage();
+        }
+
+        function renderHomePage() {
+          const heroProduct = mainSiteProduct();
+          const heroImage = siteConfig.heroImage || heroProduct.image;
+          return `
+            <main>
+              <section class="section">
+                <div class="hero">
+                  <img src="${heroImage}" alt="${escapeHtml(heroProduct.name)}" />
+                  <div class="hero-content">
+                    <div>
+                      <p class="eyebrow">${escapeHtml(siteConfig.heroEyebrow)}</p>
+                      <h1>${escapeHtml(siteConfig.mainHeadline)}</h1>
+                      <p class="hero-copy">${escapeHtml(siteConfig.mainSubcopy)}</p>
+                    </div>
+                    <div class="hero-actions">
+                      <button class="btn primary" type="button" data-action="select-product" data-id="${heroProduct.id}">
+                        ${escapeHtml(siteConfig.heroButtonText)}
+                      </button>
+                      <button class="btn" type="button" data-action="history">
+                        ${icon("list", 17)} 주문 내역
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section id="products" class="section-tight">
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">PRODUCTS</p>
+                    <h2>${escapeHtml(siteConfig.productSectionTitle)}</h2>
+                  </div>
+                  <button class="link-button" type="button" data-action="history">주문 내역</button>
+                </div>
+
+                <div class="search-box">
+                  <div class="field-shell">
+                    ${icon("search", 18)}
+                    <label class="sr-only" for="productSearch">상품 검색</label>
+                    <input
+                      id="productSearch"
+                      class="search-input"
+                      data-search="products"
+                      value="${escapeHtml(state.searchQuery)}"
+                      placeholder="상품명, 설명으로 검색"
+                    />
+                  </div>
+                </div>
+
+                <div class="category-strip" aria-label="상품 카테고리">
+                  ${categories
+                    .map(
+                      (category) => `
+                        <button
+                          class="category-chip ${state.selectedCategory === category.id ? "is-active" : ""}"
+                          type="button"
+                          data-action="set-category"
+                          data-category-id="${category.id}"
+                        >
+                          ${escapeHtml(category.label)}
+                        </button>
+                      `,
+                    )
+                    .join("")}
+                </div>
+
+                <div class="product-grid">
+                  ${homeProducts.map(renderProductCard).join("")}
+                </div>
+                <div id="productFilterEmpty" class="state-card hidden" style="margin-top:12px">
+                  <h2>조건에 맞는 상품이 없습니다.</h2>
+                  <p>다른 키워드나 카테고리를 선택하거나 전체 상품을 다시 확인해보세요.</p>
+                  <div class="button-row">
+                    <button class="btn" type="button" data-action="clear-product-filters">전체 보기</button>
+                    <button class="btn primary" type="button" data-action="select-product" data-id="${heroProduct.id}">대표 상품 보기</button>
+                  </div>
+                </div>
+              </section>
+
+              ${renderTrustRow()}
+              ${renderFooter()}
+            </main>
+          `;
+        }
+
+        function renderProductCard(product) {
+          return `
+            <article
+              class="product-card ${product.cardMediaClass ? `is-${product.cardMediaClass}` : ""}"
+              data-category="${escapeHtml(product.categoryId || "")}"
+              data-product-card="${escapeHtml(`${product.categoryLabel || ""} ${product.statusLabel || ""} ${product.name} ${product.shortDescription}`)}"
+            >
+              <button class="product-card-main" type="button" data-action="select-product" data-id="${product.id}">
+                <div class="product-media">
+                  <img src="${product.image}" alt="${escapeHtml(product.name)}" />
+                </div>
+                <div class="product-body">
+                  <div class="product-meta-row">
+                    <span class="product-kicker">${escapeHtml(product.categoryLabel || "상품")}</span>
+                    <span class="status-chip">${escapeHtml(product.statusLabel || "판매중")}</span>
+                  </div>
+                  <p class="product-title">${escapeHtml(product.cardTitle || product.name)}</p>
+                  <p class="product-desc">${escapeHtml(product.shortDescription)}</p>
+                  <div class="price-row">
+                    <p class="price">₩ ${formatPrice(product.price)}</p>
+                    ${
+                      product.originalPrice
+                        ? `<p class="original-price">₩ ${formatPrice(product.originalPrice)}</p>`
+                        : ""
+                    }
+                    ${
+                      product.discountRate
+                        ? `<span class="badge">${product.discountRate}%</span>`
+                        : ""
+                    }
+                  </div>
+                </div>
+              </button>
+              <div class="product-actions">
+                <button class="btn ghost" type="button" data-action="select-product" data-id="${product.id}">
+                  자세히 보기
+                </button>
+              </div>
+            </article>
+          `;
+        }
+
+        function renderDetailPage() {
+          const product = currentProduct();
+          const images = product.images?.length ? product.images : [product.image];
+          const selectedImageIndex = Math.min(
+            Math.max(Number(state.selectedImageIndex || 0), 0),
+            images.length - 1,
+          );
+          const gallerySlides = [-1, 0, 1].map((offset) => {
+            const index = (selectedImageIndex + offset + images.length) % images.length;
+            return { index, src: images[index] };
+          });
+          return `
+            <main class="has-detail-bottom">
+              <section class="image-stage">
+                <div class="main-image ${product.detailMediaClass || ""}" data-gallery-swipe aria-label="${escapeHtml(product.name)} 이미지 갤러리">
+                  <div class="gallery-track">
+                    ${gallerySlides
+                      .map(
+                        (slide) => `
+                          <div class="gallery-slide" aria-hidden="${slide.index === selectedImageIndex ? "false" : "true"}">
+                            <img src="${slide.src}" alt="${escapeHtml(product.name)} 이미지 ${slide.index + 1}" draggable="false" />
+                          </div>
+                        `,
+                      )
+                      .join("")}
+                  </div>
+                </div>
+                <div class="thumb-grid">
+                  ${images
+                    .slice(0, 5)
+                    .map(
+                      (src, index) => `
+                        <button
+                          class="thumb ${index === selectedImageIndex ? "active" : ""}"
+                          type="button"
+                          data-action="select-image"
+                          data-index="${index}"
+                          aria-label="${escapeHtml(product.name)} 이미지 ${index + 1} 보기"
+                        >
+                          <img src="${src}" alt="${escapeHtml(product.name)} 썸네일 ${index + 1}" />
+                        </button>
+                      `,
+                    )
+                    .join("")}
+                </div>
+              </section>
+
+              <section class="section-tight">
+                <p class="eyebrow">PRODUCT DETAIL</p>
+                <h1 class="detail-title">${escapeHtml(product.name)}</h1>
+                <p class="detail-copy">${escapeHtml(product.longDescription)}</p>
+                ${product.detailNotice ? `<p class="detail-notice">${escapeHtml(product.detailNotice)}</p>` : ""}
+                <div class="price-row">
+                  <p class="price" style="font-size:25px">₩ ${formatPrice(product.price)}</p>
+                  ${
+                    product.originalPrice
+                      ? `<p class="original-price" style="font-size:14px">₩ ${formatPrice(product.originalPrice)}</p>`
+                      : ""
+                  }
+                  ${
+                    product.discountRate
+                      ? `<span class="badge">${product.discountRate}%</span>`
+                      : ""
+                  }
+                </div>
+              </section>
+
+              <section class="divider-section form-grid">
+                <div class="option-group-grid">
+                  ${product.options.map(renderOptionSelect).join("")}
+                </div>
+                <div class="summary-card" style="margin-top:14px">
+                  <p class="summary-meta">선택 총액</p>
+                  <p class="summary-price">₩ ${formatPrice(getOrderTotal(product, state.quantity))}</p>
+                </div>
+                <div>
+                  <p class="field-label">수량</p>
+                  <div class="quantity-control" aria-label="수량 선택">
+                    <button type="button" data-action="quantity-minus" aria-label="수량 줄이기">-</button>
+                    <div class="quantity-value">${state.quantity}</div>
+                    <button type="button" data-action="quantity-plus" aria-label="수량 늘리기">+</button>
+                  </div>
+                </div>
+              </section>
+
+              ${renderProductStory(product)}
+
+              ${
+                product.hideStandaloneInfo
+                  ? ""
+                  : `
+                    <section class="divider-section">
+                      <h2 style="margin:0;font-size:17px">상품 정보</h2>
+                      <dl class="info-list">
+                        ${(product.infoItems || product.detailInfo || [])
+                          .map(
+                            (item) => `
+                              <div class="info-line">
+                                <dt>${escapeHtml(item.label)}</dt>
+                                <dd>${escapeHtml(item.value)}</dd>
+                              </div>
+                            `,
+                          )
+                          .join("")}
+                      </dl>
+                    </section>
+                  `
+              }
+
+              ${renderTrustRow()}
+              ${renderFooter()}
+              ${renderDetailBottomBar()}
+            </main>
+          `;
+        }
+
+        function renderProductStory(product) {
+          const story = product.story;
+          if (!story) return "";
+          const highlightEyebrow = story.highlightEyebrow || `왜 ${product.name}인가`;
+          const highlightCopy = story.highlightCopy || product.longDescription;
+          return `
+            <section class="divider-section story-stack">
+              ${(story.brandImages || [])
+                .map(
+                  (image) => `
+                    <figure class="story-image">
+                      <img src="${image.src}" alt="${escapeHtml(image.alt || product.name)}" />
+                    </figure>
+                  `,
+                )
+                .join("")}
+
+              ${
+                story.certification
+                  ? `
+                    <section class="certification-card">
+                      <img src="${story.certification.image}" alt="${escapeHtml(story.certification.title)}" />
+                      <div>
+                        <h2 class="story-heading">${escapeHtml(story.certification.title)}</h2>
+                        ${(story.certification.lines || [])
+                          .map((line) => `<p class="story-copy">${escapeHtml(line)}</p>`)
+                          .join("")}
+                      </div>
+                    </section>
+                  `
+                  : ""
+              }
+
+              ${
+                story.featureImage
+                  ? `
+                    <figure class="story-image story-feature-image">
+                      <img src="${story.featureImage.src}" alt="${escapeHtml(story.featureImage.alt || product.name)}" />
+                    </figure>
+                  `
+                  : ""
+              }
+
+              ${(story.highlights || []).length
+                ? `
+                  <section class="story-block why-block">
+                    <p class="eyebrow">${escapeHtml(highlightEyebrow)}</p>
+                    <ul class="highlight-list">
+                      ${story.highlights.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                    </ul>
+                    <p class="story-copy">${escapeHtml(highlightCopy)}</p>
+                  </section>
+                `
+                : ""}
+
+              ${
+                story.showcaseImage
+                  ? `
+                    <figure class="story-image story-feature-image">
+                      <img src="${story.showcaseImage.src}" alt="${escapeHtml(story.showcaseImage.alt || product.name)}" />
+                    </figure>
+                  `
+                  : ""
+              }
+
+              ${(story.sections || [])
+                .map(
+                  (section) => `
+                    <section class="story-block">
+                      <p class="eyebrow">${escapeHtml(section.eyebrow)}</p>
+                      <h2 class="story-heading">${escapeHtml(section.title)}</h2>
+                      ${(section.paragraphs || [])
+                        .map((paragraph) => `<p class="story-copy">${escapeHtml(paragraph)}</p>`)
+                        .join("")}
+                    </section>
+                  `,
+                )
+                .join("")}
+
+              ${(story.recommendations || []).length
+                ? `
+                  <section class="story-block">
+                    <h2 class="story-heading">${escapeHtml(story.recommendTitle || "추천 대상")}</h2>
+                    <ul class="plain-list">
+                      ${story.recommendations.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                    </ul>
+                  </section>
+                `
+                : ""}
+
+              ${renderSizeGuide(story)}
+
+              ${(story.specs || []).length
+                ? `
+                  <section class="story-block">
+                    <p class="eyebrow">${escapeHtml(story.specTitle || "제품 사양")}</p>
+                    <dl class="spec-list">
+                      ${story.specs
+                        .map(
+                          (item) => `
+                            <div class="spec-line">
+                              <dt>${escapeHtml(item.label)}</dt>
+                              <dd>${escapeHtml(item.value)}</dd>
+                            </div>
+                          `,
+                        )
+                        .join("")}
+                    </dl>
+                  </section>
+                `
+                : ""}
+            </section>
+          `;
+        }
+
+        function renderSizeGuide(story) {
+          if (!story.sizeGuide && !(story.sizeChart || []).length) return "";
+          const sizeColumns = story.sizeColumns || [
+            { label: "사이즈", key: "size" },
+            { label: "가슴둘레(cm)", key: "chest" },
+            { label: "어깨너비(cm)", key: "shoulder" },
+            { label: "총장(cm)", key: "length" },
+            { label: "권장 선택", key: "recommend" },
+          ];
+          return `
+            <section class="story-block size-guide-block">
+              <div>
+                <p class="eyebrow">${escapeHtml(story.sizeGuide?.title || "사이즈 선택 가이드")}</p>
+                ${
+                  story.sizeGuide?.copy
+                    ? `<p class="story-copy">${escapeHtml(story.sizeGuide.copy)}</p>`
+                    : ""
+                }
+                ${
+                  story.sizeGuide?.image
+                    ? `
+                      <figure class="size-guide-image">
+                        <img src="${story.sizeGuide.image}" alt="${escapeHtml(story.sizeGuide.alt || story.sizeGuide.title || "사이즈 안내 이미지")}" />
+                      </figure>
+                    `
+                    : ""
+                }
+              </div>
+              ${
+                (story.sizeChart || []).length
+                  ? `
+                    <div class="size-table-wrap" aria-label="사이즈표">
+                      <table class="size-table">
+                        <thead>
+                          <tr>
+                            ${sizeColumns.map((column) => `<th>${escapeHtml(column.label)}</th>`).join("")}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${story.sizeChart
+                            .map(
+                              (row) => `
+                                <tr>
+                                  ${sizeColumns
+                                    .map((column) => `<td>${escapeHtml(row[column.key] || "")}</td>`)
+                                    .join("")}
+                                </tr>
+                              `,
+                            )
+                            .join("")}
+                        </tbody>
+                      </table>
+                    </div>
+                  `
+                  : ""
+              }
+              ${
+                (story.sizeNotes || []).length
+                  ? `<ul class="size-notes">${story.sizeNotes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>`
+                  : ""
+              }
+            </section>
+          `;
+        }
+
+        function renderDetailBottomBar() {
+          return `
+            <div class="bottom-bar">
+              <div class="bottom-inner detail-bottom-actions">
+                <button class="btn primary" type="button" data-action="apply" data-checkout-source="direct_buy">
+                  바로 구매하기
+                </button>
+                <button class="npay-button" type="button" data-action="apply" data-checkout-source="npay" data-pixel-event="${escapeHtml(productNpayEventName(currentProduct()))}" aria-label="N pay 구매">
+                  <span class="npay-mark">N</span>
+                  <span>pay 구매</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }
+
+        function renderOriginCard(copy, firstAction, firstLabel, secondAction, secondLabel) {
+          const originText = state.origin?.label || "메인 상품 탐색";
+          return `
+            <div class="origin-card">
+              <p>${escapeHtml(originText)}에서 이어졌습니다. ${escapeHtml(copy)}</p>
+              <div class="button-row">
+                <button class="btn" type="button" data-action="${firstAction}">${escapeHtml(firstLabel)}</button>
+                <button class="btn ghost" type="button" data-action="${secondAction}">${escapeHtml(secondLabel)}</button>
+              </div>
+            </div>
+          `;
+        }
+
+        function renderOptionSelect(option) {
+          const value = state.selectedOptions[option.label] || option.values[0];
+          if (option.label === "색상") return renderColorOption(option, value);
+          if (option.label === "타입") return renderTypeOption(option, value);
+          return `
+            <div class="option-field">
+              <span class="field-label">${escapeHtml(option.label)}</span>
+              <div class="option-grid">
+                ${option.values
+                  .map((item) => renderOptionButton(option.label, item, item === value))
+                  .join("")}
+              </div>
+            </div>
+          `;
+        }
+
+        function renderColorOption(option, selectedValue) {
+          return `
+            <div class="option-field">
+              <span class="field-label">${escapeHtml(option.label)}</span>
+              <div class="color-swatch-row">
+                ${option.values
+                  .map(
+                    (item) => `
+                      <button
+                        class="color-swatch-button ${item === selectedValue ? "is-selected" : ""}"
+                        type="button"
+                        data-action="select-option"
+                        data-option-label="${escapeHtml(option.label)}"
+                        data-option-value="${escapeHtml(item)}"
+                        style="--swatch-color:${escapeHtml(getColorSwatch(item))}"
+                        aria-label="${escapeHtml(item)} 색상 선택"
+                        aria-pressed="${item === selectedValue ? "true" : "false"}"
+                      ></button>
+                    `,
+                  )
+                  .join("")}
+                <span class="color-swatch-name">${escapeHtml(selectedValue)}</span>
+              </div>
+            </div>
+          `;
+        }
+
+        function renderTypeOption(option, selectedValue) {
+          return `
+            <div class="option-field">
+              <span class="field-label">${escapeHtml(option.label)}</span>
+              <div class="type-value">${escapeHtml(selectedValue)}</div>
+            </div>
+          `;
+        }
+
+        function renderOptionButton(label, value, selected) {
+          const tone = getOptionTone(value);
+          return `
+            <button
+              class="option-button ${tone ? `tone-${tone}` : ""} ${selected ? "is-selected" : ""}"
+              type="button"
+              data-action="select-option"
+              data-option-label="${escapeHtml(label)}"
+              data-option-value="${escapeHtml(value)}"
+              aria-pressed="${selected ? "true" : "false"}"
+            >
+              <span>${escapeHtml(formatOptionLabel(value))}</span>
+              ${selected ? `<span class="option-check">${icon("check", 20)}</span>` : ""}
+            </button>
+          `;
+        }
+
+        function getOptionTone(value) {
+          const normalized = String(value).trim().toLowerCase();
+          if (["black", "블랙", "charcoal", "차콜"].includes(normalized)) return "black";
+          if (["white", "화이트"].includes(normalized)) return "white";
+          if (["gray", "grey", "그레이"].includes(normalized)) return "gray";
+          if (["pink", "핑크"].includes(normalized)) return "pink";
+          return "";
+        }
+
+        function getColorSwatch(value) {
+          const normalized = String(value).trim().toLowerCase();
+          if (["pink", "핑크"].includes(normalized)) return "#e5bcc0";
+          if (["black", "블랙"].includes(normalized)) return "#111111";
+          if (["charcoal", "차콜"].includes(normalized)) return "#2f3437";
+          if (["white", "화이트"].includes(normalized)) return "#ffffff";
+          if (["silver", "실버"].includes(normalized)) return "linear-gradient(135deg, #f8fafc 0%, #cbd5e1 48%, #f1f5f9 100%)";
+          if (["gray", "grey", "그레이"].includes(normalized)) return "#d4d4d8";
+          return "#e5bcc0";
+        }
+
+        function formatOptionLabel(value) {
+          const normalized = String(value).trim().toLowerCase();
+          if (normalized === "블랙") return "BLACK";
+          if (normalized === "화이트") return "WHITE";
+          if (normalized === "그레이") return "GRAY";
+          if (normalized === "차콜") return "CHARCOAL";
+          if (normalized === "핑크") return "핑크";
+          return value;
+        }
+
+        function renderApplyPage() {
+          const product = currentProduct();
+          return `
+            <main class="has-bottom">
+              <section class="section">
+                ${renderOriginCard("배송지와 결제수단을 선택한 뒤 결제 대기 화면으로 이동합니다.", "resume-origin", "원래 보던 상품", "history", "주문 내역")}
+                ${renderProductSummary(product)}
+
+                <section class="form-grid" style="margin-top:22px">
+                  ${renderTextField("name", "이름", "이름을 입력해주세요")}
+                  ${renderTextField("phone", "휴대폰 번호", "- 없이 숫자만 입력해주세요")}
+                  ${renderTextField("email", "이메일", "이메일 주소를 입력해주세요")}
+                  ${renderAddressFields()}
+                  <label>
+                    <span class="field-label">${escapeHtml(siteConfig.requestLabel)}</span>
+                    <textarea
+                      class="textarea"
+                      data-field="request"
+                      placeholder="${escapeHtml(siteConfig.requestPlaceholder)}"
+                    >${escapeHtml(state.form.request)}</textarea>
+                  </label>
+                </section>
+
+                ${renderPaymentMethodSelector()}
+
+                <section class="notice-card">
+                  <h3>주문 접수 안내</h3>
+                  <ul>
+                    ${siteConfig.orderNoticeLines.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}
+                  </ul>
+                </section>
+
+                <section class="check-list">
+                  <label class="check-label">
+                    <input
+                      type="checkbox"
+                      data-field="agreeTermsPrivacy"
+                      ${state.form.agreeTermsPrivacy || state.form.agreeNotice ? "checked" : ""}
+                    />
+                    <span>
+                      주문 접수 안내와
+                      <a href="./legal/terms.html" target="_blank" rel="noopener">이용약관</a>,
+                      <a href="./legal/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>을 확인했습니다.
+                      <strong>필수</strong>
+                    </span>
+                  </label>
+                  <label class="check-label">
+                    <input
+                      type="checkbox"
+                      data-field="agreeContact"
+                      ${state.form.agreeContact ? "checked" : ""}
+                    />
+                    <span>구매 가능 일정 및 결제 안내 연락에 동의합니다. 선택</span>
+                  </label>
+                </section>
+              </section>
+
+              ${renderFooter()}
+              <div class="bottom-bar">
+                <div class="bottom-inner">
+                  <button
+                    class="btn primary"
+                    type="button"
+                    data-action="submit-apply"
+                    style="width:100%"
+                    ${isFormReady() ? "" : "disabled"}
+                  >
+                    결제수단 확인하기
+                  </button>
+                </div>
+              </div>
+            </main>
+          `;
+        }
+
+        function renderTextField(key, label, placeholder) {
+          return `
+            <label>
+              <span class="field-label">${escapeHtml(label)}</span>
+              <input
+                class="input"
+                data-field="${key}"
+                value="${escapeHtml(state.form[key])}"
+                placeholder="${escapeHtml(placeholder)}"
+              />
+            </label>
+          `;
+        }
+
+        function renderAddressFields() {
+          const recentAddresses = readRecentAddresses();
+          return `
+            <div class="address-stack">
+              <div>
+                <span class="field-label">${escapeHtml(siteConfig.fulfillmentPrimaryLabel)}</span>
+                <div class="postcode-grid">
+                  <input
+                    class="input"
+                    data-field="postcode"
+                    value="${escapeHtml(state.form.postcode)}"
+                    placeholder="우편번호"
+                    inputmode="numeric"
+                  />
+                  <button class="btn primary" type="button" data-action="open-postcode">주소 검색</button>
+                </div>
+              </div>
+              <input
+                class="input"
+                data-field="roadAddress"
+                value="${escapeHtml(state.form.roadAddress)}"
+                placeholder="도로명 주소"
+              />
+              <input
+                class="input"
+                data-field="detailAddress"
+                value="${escapeHtml(state.form.detailAddress)}"
+                placeholder="상세주소를 입력해주세요"
+              />
+              <input
+                class="input"
+                data-field="extraAddress"
+                value="${escapeHtml(state.form.extraAddress)}"
+                placeholder="참고항목"
+              />
+              <input
+                class="input"
+                data-field="fulfillmentPrimary"
+                value="${escapeHtml(buildFulfillmentPrimary())}"
+                placeholder="${escapeHtml(siteConfig.fulfillmentPrimaryPlaceholder)}"
+                readonly
+                aria-label="완성된 배송지"
+              />
+              ${
+                recentAddresses.length
+                  ? `
+                    <div>
+                      <div class="section-heading" style="margin:4px 0 0">
+                        <span class="field-label">최근 배송지</span>
+                        <button class="link-button" type="button" data-action="clear-recent-addresses">비우기</button>
+                      </div>
+                      <div class="recent-address-list">
+                        ${recentAddresses
+                          .map(
+                            (item, index) => `
+                              <button class="recent-address-button" type="button" data-action="use-recent-address" data-index="${index}">
+                                <strong>${escapeHtml(item.label || item.roadAddress || "최근 배송지")}</strong>
+                                <span>${escapeHtml(item.fulfillmentPrimary || "")}</span>
+                              </button>
+                            `,
+                          )
+                          .join("")}
+                      </div>
+                    </div>
+                  `
+                  : ""
+              }
+            </div>
+          `;
+        }
+
+        function renderPaymentMethodSelector() {
+          const selected = state.form.paymentMethod || "toss_pg";
+          return `
+            <section class="summary-card" style="margin-top:18px">
+              <span class="field-label">결제수단</span>
+              <div class="payment-method-grid">
+                ${Object.entries(paymentMethods)
+                  .map(([key, method]) => {
+                    const isSelected = key === selected;
+                    return `
+                      <label class="payment-method-option">
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          data-field="paymentMethod"
+                          value="${escapeHtml(key)}"
+                          ${isSelected ? "checked" : ""}
+                        />
+                        <span>
+                          <span class="payment-method-title">
+                            ${escapeHtml(method.label)}
+                            <span class="method-badge">${escapeHtml(method.badge)}</span>
+                          </span>
+                          <span class="payment-method-copy">${escapeHtml(method.description)}</span>
+                        </span>
+                      </label>
+                    `;
+                  })
+                  .join("")}
+              </div>
+            </section>
+          `;
+        }
+
+        function renderPaymentPage() {
+          const storedItems = readJson(storageKeys.submissions, []);
+          const submissions = Array.isArray(storedItems) ? storedItems : [];
+          const submission = submissions.find(
+            (item) => item.id === state.lastSubmissionId,
+          );
+          if (!submission) {
+            return `
+              <main>
+                <section class="section">
+                  <div class="state-card">
+                    <h2>결제 대기 주문을 찾지 못했습니다.</h2>
+                    <p>주문서를 다시 작성하거나 저장된 주문 내역에서 확인할 수 있습니다.</p>
+                    <div class="button-row">
+                      <button class="btn primary" type="button" data-action="select-product" data-id="${representativeProduct().id}">주문서 다시 작성</button>
+                      <button class="btn" type="button" data-action="history">주문 내역</button>
+                    </div>
+                  </div>
+                </section>
+                ${renderFooter()}
+              </main>
+            `;
+          }
+
+          const method = paymentMethods[submission.paymentMethod] || paymentMethods.toss_pg;
+          const isManual = submission.paymentMethod === "manual";
+          const isToss = submission.paymentMethod === "toss_pg";
+          const tossCheckoutUrl = isToss ? buildTossCheckoutUrl(submission) : "";
+          return `
+            <main>
+              <section class="section">
+                ${renderOriginCard("결제수단 확인 후 접수 완료 또는 주문 수정으로 이동할 수 있습니다.", "back", "주문서로", "history", "주문 내역")}
+                <section class="payment-status-card">
+                  <span class="method-badge">${escapeHtml(method.badge)}</span>
+                  <h1>${escapeHtml(method.label)} 안내 요청</h1>
+                  <p>${escapeHtml(method.description)}</p>
+                  <ul class="owner-gate-list">
+                    ${(method.guideItems || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                  </ul>
+                  <div class="button-row">
+                    ${
+                      isToss
+                        ? `<a class="btn primary" href="${escapeHtml(tossCheckoutUrl)}">토스 결제창 열기</a>`
+                        : `<button class="btn primary" type="button" data-action="complete-payment">주문 접수 완료하기</button>`
+                    }
+                    <button class="btn" type="button" data-action="edit-submission" data-id="${submission.id}">주문 수정</button>
+                  </div>
+                  ${
+                    isToss
+                      ? `<div class="button-row one"><button class="btn ghost" type="button" data-action="complete-payment">결제 없이 주문 접수만 완료</button></div>`
+                      : ""
+                  }
+                  <div class="button-row one">
+                    <button class="btn ghost" type="button" data-action="home">상품 더 보기</button>
+                  </div>
+                </section>
+
+                <div style="margin-top:14px">
+                  ${renderSubmissionSummary(submission)}
+                </div>
+              </section>
+              ${renderFooter()}
+            </main>
+          `;
+        }
+
+        function renderProductSummary(product) {
+          const addOnTotal = getSelectedAddOnUnitTotal(product) * Number(state.quantity || 1);
+          return `
+            <section class="summary-card">
+              <div class="summary-flex">
+                <div class="summary-image">
+                  <img src="${product.image}" alt="${escapeHtml(product.name)}" />
+                </div>
+                <div style="min-width:0;flex:1">
+                  <p class="summary-title">${escapeHtml(product.name)}</p>
+                  ${Object.entries(state.selectedOptions)
+                    .map(
+                      ([label, value]) =>
+                        `<p class="summary-meta">${escapeHtml(label)}: ${escapeHtml(value)}</p>`,
+                    )
+                    .join("")}
+                  <p class="summary-meta">수량: ${state.quantity}개</p>
+                  ${
+                    addOnTotal
+                      ? `<p class="summary-meta">추가상품 금액: ₩ ${formatPrice(addOnTotal)}</p>`
+                      : ""
+                  }
+                  ${
+                    product.extraFee
+                      ? `<p class="summary-meta">${escapeHtml(product.extraFeeLabel || "추가 비용")}: ₩ ${formatPrice(product.extraFee)}</p>`
+                      : ""
+                  }
+                  <p class="summary-price">₩ ${formatPrice(getOrderTotal(product, state.quantity))}</p>
+                </div>
+              </div>
+            </section>
+          `;
+        }
+
+        function renderCompletePage() {
+          const submission = readJson(storageKeys.submissions, []).find(
+            (item) => item.id === state.lastSubmissionId,
+          );
+          if (!submission) {
+            return `
+              <main>
+                <section class="section">
+                  <div class="state-card">
+                    <h2>주문 완료 내역을 찾지 못했습니다.</h2>
+                    <p>저장된 주문 내역에서 다시 확인하거나 상품 목록으로 돌아갈 수 있습니다.</p>
+                    <div class="button-row">
+                      <button class="btn primary" type="button" data-action="history">주문 내역</button>
+                      <button class="btn" type="button" data-action="home">상품 보기</button>
+                    </div>
+                  </div>
+                </section>
+                ${renderFooter()}
+              </main>
+            `;
+          }
+
+          return `
+            <main>
+              <section class="complete-wrap">
+                <div class="complete-icon">${icon("check", 40)}</div>
+                <div class="complete-text">
+                  <h1>${state.completeMode === "edit" ? "주문 수정이 완료되었습니다." : "주문 접수가 완료되었습니다."}</h1>
+                  <p>구매 가능 일정과 결제 안내를<br />입력하신 연락처로 안내드리겠습니다.</p>
+                </div>
+                <div style="margin-top:28px">
+                  ${renderSubmissionSummary(submission)}
+                </div>
+                <div class="button-row" style="margin-top:18px">
+                  <button class="btn primary" type="button" data-action="history">주문 내역 보기</button>
+                  <button class="btn" type="button" data-action="select-product-from-origin" data-id="${submission.productId}">상품 다시 보기</button>
+                </div>
+                <div class="button-row one" style="margin-top:10px">
+                  <button class="btn ghost" type="button" data-action="home">다른 상품 보기</button>
+                </div>
+              </section>
+              ${renderFooter()}
+            </main>
+          `;
+        }
+
+        function renderSubmissionSummary(submission) {
+          return `
+            <section class="summary-card">
+              <div class="summary-flex">
+                <div class="summary-image">
+                  <img src="${submission.productImage}" alt="${escapeHtml(submission.productName)}" />
+                </div>
+                <dl class="detail-dl" style="flex:1">
+                  <dt>상품명</dt>
+                  <dd>${escapeHtml(submission.productName)}</dd>
+                  ${Object.entries(submission.selectedOptions || {})
+                    .map(
+                      ([label, value]) => `
+                        <dt>${escapeHtml(label)}</dt>
+                        <dd>${escapeHtml(value)}</dd>
+                      `,
+                    )
+                    .join("")}
+                  <dt>수량</dt>
+                  <dd>${submission.quantity}개</dd>
+                  ${
+                    submission.extraFee
+                      ? `
+                        <dt>${escapeHtml(submission.extraFeeLabel || "추가 비용")}</dt>
+                        <dd>₩ ${formatPrice(submission.extraFee)}</dd>
+                      `
+                      : ""
+                  }
+                  ${
+                    submission.addOnTotal
+                      ? `
+                        <dt>추가상품 금액</dt>
+                        <dd>₩ ${formatPrice(submission.addOnTotal)}</dd>
+                      `
+                      : ""
+                  }
+                  <dt>주문 금액</dt>
+                  <dd>₩ ${formatPrice(submission.amount)}</dd>
+                  <dt>결제수단</dt>
+                  <dd>${escapeHtml(formatPaymentMethod(submission.paymentMethod))}</dd>
+                  <dt>상태</dt>
+                  <dd>${escapeHtml(formatSubmissionStatus(submission.status || submission.paymentStatus))}</dd>
+                  <dt>연락처</dt>
+                  <dd>${escapeHtml(maskPhone(submission.customer?.phone))}</dd>
+                </dl>
+              </div>
+            </section>
+          `;
+        }
+
+        function renderHistoryPage() {
+          return `
+            <main>
+              <section class="section">
+                <div class="section-heading">
+                  <div>
+                    <p class="eyebrow">HISTORY</p>
+                    <h2>주문 내역</h2>
+                  </div>
+                  <button class="link-button" type="button" data-action="clear-local-data">저장값 초기화</button>
+                </div>
+                ${renderHistoryState()}
+              </section>
+              ${renderFooter()}
+            </main>
+          `;
+        }
+
+        function renderHistoryState() {
+          if (historyView.status === "loading" || historyView.status === "idle") {
+            return `
+              <div class="state-card">
+                <h2>주문 내역을 불러오는 중입니다.</h2>
+                <p>이 브라우저에 저장된 주문 데이터를 확인하고 있어요.</p>
+                <div class="skeleton" aria-hidden="true">
+                  <div class="skeleton-line"></div>
+                  <div class="skeleton-line" style="width:78%;margin:0 auto"></div>
+                  <div class="skeleton-line" style="width:54%;margin:0 auto"></div>
+                </div>
+              </div>
+            `;
+          }
+
+          if (historyView.status === "error") {
+            return `
+              <div class="state-card">
+                <h2>내역을 불러오지 못했습니다.</h2>
+                <p>${escapeHtml(historyView.error)} 저장 데이터를 초기화하거나 다시 불러올 수 있습니다.</p>
+                <div class="button-row">
+                  <button class="btn primary" type="button" data-action="retry-history">다시 불러오기</button>
+                  <button class="btn" type="button" data-action="home">상품 보기</button>
+                </div>
+              </div>
+            `;
+          }
+
+          if (historyView.status === "empty") {
+            return `
+              <div class="state-card">
+                <h2>아직 주문 내역이 없습니다.</h2>
+                <p>상품 상세에서 주문서를 접수하면 이곳에 내역이 쌓이고 새로고침 후에도 남습니다.</p>
+                <div class="button-row">
+                  <button class="btn primary" type="button" data-action="select-product" data-id="${representativeProduct().id}">대표 상품 보기</button>
+                  <button class="btn" type="button" data-action="home">상품 목록</button>
+                </div>
+                ${
+                  hasDraft()
+                    ? `<div class="button-row one" style="margin-top:10px"><button class="btn warning" type="button" data-action="resume-draft">작성 중 주문서 이어가기</button></div>`
+                    : ""
+                }
+              </div>
+            `;
+          }
+
+          return `
+            <div class="origin-card">
+              <p>주문 내역은 이 브라우저의 LocalStorage에 저장됩니다. 상세에서 수정하거나 상품으로 돌아갈 수 있어요.</p>
+              <div class="button-row">
+                <button class="btn primary" type="button" data-action="home">상품 더 보기</button>
+                ${
+                  hasDraft()
+                    ? `<button class="btn warning" type="button" data-action="resume-draft">주문서 작성 이어가기</button>`
+                    : `<button class="btn" type="button" data-action="select-product" data-id="${representativeProduct().id}">대표 상품 보기</button>`
+                }
+              </div>
+            </div>
+            <div class="history-list">
+              ${historyView.items.map(renderSubmissionCard).join("")}
+            </div>
+          `;
+        }
+
+        function renderSubmissionCard(submission) {
+          return `
+            <article class="submission-card">
+              <button type="button" data-action="view-submission" data-id="${submission.id}">
+                <div class="submission-top">
+                  <div class="submission-thumb">
+                    <img src="${submission.productImage}" alt="${escapeHtml(submission.productName)}" />
+                  </div>
+                  <div style="min-width:0;flex:1">
+                    <p class="submission-name">${escapeHtml(submission.productName)}</p>
+                    <p class="submission-meta">
+                      ${escapeHtml(submission.id)}<br />
+                      ${formatDate(submission.updatedAt)} · ₩ ${formatPrice(submission.amount)}
+                      <br />${escapeHtml(formatPaymentMethod(submission.paymentMethod))}
+                    </p>
+                    <span class="status-pill">${escapeHtml(formatSubmissionStatus(submission.status || submission.paymentStatus))}</span>
+                  </div>
+                </div>
+              </button>
+            </article>
+          `;
+        }
+
+        function renderSubmissionDetailPage() {
+          const submission = readJson(storageKeys.submissions, []).find(
+            (item) => item.id === state.viewSubmissionId,
+          );
+
+          if (!submission) {
+            return `
+              <main>
+                <section class="section">
+                  <div class="state-card">
+                    <h2>주문 상세를 찾지 못했습니다.</h2>
+                    <p>내역이 삭제되었거나 다른 브라우저에 저장된 주문일 수 있습니다.</p>
+                    <div class="button-row">
+                      <button class="btn primary" type="button" data-action="history">주문 내역</button>
+                      <button class="btn" type="button" data-action="home">상품 보기</button>
+                    </div>
+                  </div>
+                </section>
+                ${renderFooter()}
+              </main>
+            `;
+          }
+
+          return `
+            <main>
+              <section class="section">
+                ${renderOriginCard("상세 확인 후 수정하거나 상품으로 돌아갈 수 있습니다.", "history", "내역으로", "home", "상품 목록")}
+                ${renderSubmissionSummary(submission)}
+                <section class="summary-card" style="margin-top:12px">
+                  <dl class="detail-dl">
+                    <dt>주문번호</dt>
+                    <dd>${escapeHtml(submission.id)}</dd>
+                    <dt>상태</dt>
+                    <dd>${escapeHtml(formatSubmissionStatus(submission.status || submission.paymentStatus))}</dd>
+                    <dt>결제수단</dt>
+                    <dd>${escapeHtml(formatPaymentMethod(submission.paymentMethod))}</dd>
+                    <dt>주문자</dt>
+                    <dd>${escapeHtml(submission.customer?.name || "-")}</dd>
+                    <dt>이메일</dt>
+                    <dd>${escapeHtml(submission.customer?.email || "-")}</dd>
+                    <dt>${escapeHtml(siteConfig.fulfillmentPrimaryLabel)}</dt>
+                    <dd>${escapeHtml(submission.customer?.fulfillmentPrimary || submission.customer?.address || "-")}</dd>
+                    <dt>요청사항</dt>
+                    <dd>${escapeHtml(submission.customer?.request || "-")}</dd>
+                    <dt>저장 시각</dt>
+                    <dd>${formatDate(submission.updatedAt)}</dd>
+                  </dl>
+                </section>
+                <div class="button-row" style="margin-top:14px">
+                  <button class="btn primary" type="button" data-action="edit-submission" data-id="${submission.id}">주문 정보 수정</button>
+                  <button class="btn" type="button" data-action="select-product-from-origin" data-id="${submission.productId}">상품 다시 보기</button>
+                </div>
+              </section>
+              ${renderFooter()}
+            </main>
+          `;
+        }
+
+        function renderTrustRow() {
+          const items = [
+            { icon: "package", title: "상품 확인", desc: "상세 정보 제공" },
+            { icon: "shield", title: "주문 정보", desc: "안전하게 입력" },
+            { icon: "headphones", title: "고객 안내", desc: "연락처로 안내" },
+          ];
+          return `
+            <section class="trust-row">
+              ${items
+                .map(
+                  (item) => `
+                    <div class="trust-item">
+                      ${icon(item.icon, 18)}
+                      <p class="trust-title">${escapeHtml(item.title)}</p>
+                      <p class="trust-desc">${escapeHtml(item.desc)}</p>
+                    </div>
+                  `,
+                )
+                .join("")}
+            </section>
+          `;
+        }
+
+        function renderFooter() {
+          const footerLinks = [
+            { label: "고객센터", href: "#/info/support" },
+            { label: "사업자 정보", href: "./legal/business.html" },
+            { label: "이용약관", href: "./legal/terms.html" },
+            { label: "개인정보처리방침", href: "./legal/privacy.html" },
+            { label: "주문 조회", href: "./payment/order-lookup.html" },
+          ];
+          const legal = siteConfig.legalInfo;
+          return `
+            <footer class="footer">
+              <div class="footer-links">
+                ${footerLinks.map((link) => `<a href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a>`).join("")}
+              </div>
+              <div class="footer-business" aria-label="사업자 정보">
+                <p>상호: ${escapeHtml(legal.companyName)} · 대표자: ${escapeHtml(legal.representative)}</p>
+                <p>사업자등록번호: ${escapeHtml(legal.businessRegistrationNumber)}</p>
+                <p>통신판매업 신고번호: ${escapeHtml(legal.ecommerceLicense)}</p>
+                <p>주소: ${escapeHtml(legal.businessAddress)}</p>
+                <p>고객센터: ${escapeHtml(legal.customerCenter)} · ${escapeHtml(legal.email)}</p>
+              </div>
+              <p class="footer-copy">© 2026 ${escapeHtml(siteConfig.brandName)}. All rights reserved.</p>
+            </footer>
+          `;
+        }
+
+        function icon(name, size = 22) {
+          const attrs = `width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"`;
+          const paths = {
+            "arrow-left": '<path d="m15 18-6-6 6-6"/><path d="M21 12H9"/>',
+            menu: '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
+            search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+            check: '<path d="M20 6 9 17l-5-5"/>',
+            list: '<path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/>',
+            info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+            refresh: '<path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/>',
+            headphones: '<path d="M3 14h3a2 2 0 0 1 2 2v3H6a3 3 0 0 1-3-3v-2Z"/><path d="M21 14h-3a2 2 0 0 0-2 2v3h2a3 3 0 0 0 3-3v-2Z"/><path d="M3 14v-2a9 9 0 0 1 18 0v2"/>',
+            package: '<path d="m7.5 4.3 9 5.2"/><path d="M21 8.5 12 14 3 8.5"/><path d="M12 22V14"/><path d="M3 8.5v7L12 21l9-5.5v-7L12 3 3 8.5Z"/>',
+            truck:
+              '<path d="M10 17h4V5H2v12h3"/><path d="M14 17h1"/><path d="M14 8h4l4 4v5h-3"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+            shield:
+              '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/>',
+            lock:
+              '<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+            "chevron-down": '<path d="m6 9 6 6 6-6"/>',
+            "chevron-right": '<path d="m9 18 6-6-6-6"/>',
+            x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+          };
+          return `<svg ${attrs}>${paths[name] || ""}</svg>`;
+        }
+      })();
+    </script>
+  </body>
+</html>
