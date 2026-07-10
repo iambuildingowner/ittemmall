@@ -76,19 +76,19 @@ function ittemmallProductCatalog(): array
         ],
         'product-006' => [
             'name' => '나이트클린 LED 모기트랩',
-            'price' => 59900,
+            'price' => 49900,
         ],
         'product-007' => [
             'name' => '썸머쿨 냉감패드',
-            'price' => 59900,
+            'price' => 39900,
         ],
         'product-010' => [
             'name' => '모닝핏 접이식 스팀다리미',
-            'price' => 42900,
+            'price' => 59900,
         ],
         'product-009' => [
             'name' => '쿨터치 냉각 손선풍기',
-            'price' => 39900,
+            'price' => 29900,
         ],
     ];
 }
