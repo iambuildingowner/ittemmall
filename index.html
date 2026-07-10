@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light only" />
     <meta name="darkreader-lock" />
-    <base href="/" />
-    <title>ITTEMMALL | 시즌 라이프스타일 셀렉트샵</title>
+    <script>
+      document.write(`<base href="${location.protocol === "file:" ? "./" : "/"}" />`);
+    </script>
+    <title>ITTEMMALL | 생활 가치 셀렉트샵</title>
     <meta
       name="description"
-      content="ITTEMMALL은 러닝, 스포츠, 야외활동, 시즌 생활용품을 한곳에서 확인하고 주문할 수 있는 라이프스타일 셀렉트샵입니다."
+      content="ITTEMMALL은 생활에 실질적인 가치를 더하는 아이템을 골라 소개하는 라이프스타일 셀렉트샵입니다."
     />
     <link rel="canonical" href="https://ittemmall.com/" />
     <link rel="icon" type="image/svg+xml" href="assets/ittemmall/favicon.svg" />
@@ -53,32 +55,12 @@
                 "position": 1,
                 "item": {
                   "@type": "Product",
-                  "name": "러너윈 테크니컬 헤드밴드",
-                  "brand": {
-                    "@type": "Brand",
-                    "name": "RUNNERWIN"
-                  },
-                  "image": "https://ittemmall.com/assets/images/runnerwin-wide-headband-main.png",
-                  "offers": {
-                    "@type": "Offer",
-                    "price": "7900",
-                    "priceCurrency": "KRW",
-                    "availability": "https://schema.org/InStock",
-                    "url": "https://ittemmall.com/#/product/runnerwin-headband"
-                  }
-                }
-              },
-              {
-                "@type": "ListItem",
-                "position": 2,
-                "item": {
-                  "@type": "Product",
-                  "name": "윈드쿨 에어 선풍기 조끼",
+                  "name": "빙하기 선풍기조끼",
                   "brand": {
                     "@type": "Brand",
                     "name": "ITTEMMALL"
                   },
-                  "image": "https://ittemmall.com/assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
+                  "image": "https://ittemmall.com/assets/ittemmall/fan-vest/windcool-vest-ice-thumb-v2.png",
                   "offers": {
                     "@type": "Offer",
                     "price": "59900",
@@ -128,6 +110,22 @@
     <script src="payment/toss-config.js?v=20260617toss"></script>
     <script src="https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" async></script>
     <style>
+      @font-face {
+        font-family: "Pretendard";
+        src: url("assets/fonts/Pretendard-Regular.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Pretendard";
+        src: url("assets/fonts/Pretendard-Bold.woff2") format("woff2");
+        font-weight: 700 950;
+        font-style: normal;
+        font-display: swap;
+      }
+
       :root {
         --bg: #ffffff;
         --paper: #ffffff;
@@ -160,7 +158,8 @@
         background: var(--bg);
         color: var(--ink);
         font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+        letter-spacing: 0;
       }
 
       button,
@@ -235,6 +234,7 @@
         background: transparent;
         color: inherit;
         text-align: center;
+        text-decoration: none;
       }
 
       .brand-logo {
@@ -279,10 +279,10 @@
         position: relative;
         min-height: 340px;
         overflow: hidden;
-        border: 1px solid var(--brand);
+        border: 1px solid #d4d4d8;
         border-radius: 8px;
-        background: #101010;
-        color: white;
+        background: #f4f4f2;
+        color: var(--ink);
       }
 
       .hero img {
@@ -291,14 +291,8 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        opacity: 0.82;
-      }
-
-      .hero::after {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.72));
-        content: "";
+        object-position: 50% 35%;
+        opacity: 1;
       }
 
       .hero-content {
@@ -320,7 +314,18 @@
       }
 
       .hero .eyebrow {
-        color: rgba(255, 255, 255, 0.72);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(17, 17, 17, 0.62);
+      }
+
+      .hero .eyebrow::before {
+        width: 24px;
+        height: 2px;
+        flex: 0 0 auto;
+        background: #111111;
+        content: "";
       }
 
       h1,
@@ -331,23 +336,23 @@
       }
 
       .hero h1 {
-        max-width: 100%;
+        max-width: 286px;
         margin: 14px 0 0;
         font-size: 28px;
         line-height: 1.18;
         letter-spacing: 0;
         word-break: keep-all;
-        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.28);
+        white-space: pre-line;
+        color: #111111;
       }
 
       .hero-copy {
-        max-width: 100%;
+        max-width: 286px;
         margin: 12px 0 0;
-        color: rgba(255, 255, 255, 0.84);
+        color: rgba(17, 17, 17, 0.72);
         font-size: 14px;
         line-height: 1.7;
         word-break: keep-all;
-        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.24);
       }
 
       .hero-actions,
@@ -359,6 +364,28 @@
 
       .button-row.one {
         grid-template-columns: 1fr;
+      }
+
+      .hero-actions .btn {
+        box-shadow: 0 8px 20px rgba(17, 17, 17, 0.12);
+        transition:
+          transform 160ms ease,
+          box-shadow 160ms ease;
+      }
+
+      .hero-actions .btn:not(.primary) {
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(10px);
+      }
+
+      .hero-actions .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(17, 17, 17, 0.16);
+      }
+
+      .hero-actions .btn:focus-visible {
+        outline: 3px solid rgba(17, 17, 17, 0.24);
+        outline-offset: 3px;
       }
 
       .btn {
@@ -702,23 +729,26 @@
         border: 0;
         background: transparent;
         color: inherit;
+        cursor: pointer;
+        font: inherit;
         text-align: left;
+        text-decoration: none;
       }
 
       .product-media {
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 3 / 4;
         overflow: hidden;
         background: white;
       }
 
       .product-card.is-portrait .product-media {
-        aspect-ratio: 4 / 5;
+        aspect-ratio: 3 / 4;
       }
 
       .product-media img {
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
         background: white;
       }
 
@@ -919,6 +949,19 @@
         aspect-ratio: 4 / 5;
       }
 
+      .main-image.portrait-three-four {
+        width: min(94%, 360px);
+        margin: 0 auto;
+        aspect-ratio: 3 / 4;
+      }
+
+      .main-image.jewelry-square {
+        width: 100%;
+        margin: 0;
+        aspect-ratio: 1 / 1;
+        border-radius: 0;
+      }
+
       .main-image.is-dragging {
         cursor: grabbing;
       }
@@ -957,6 +1000,11 @@
         grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 8px;
         margin-top: 10px;
+      }
+
+      .thumb-grid.is-six {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 6px;
       }
 
       .thumb {
@@ -1016,6 +1064,10 @@
         min-width: 0;
       }
 
+      .option-group-grid .option-field:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+
       .field-label {
         display: block;
         margin-bottom: 8px;
@@ -1064,6 +1116,9 @@
         font-size: 13px;
         font-weight: 900;
         letter-spacing: 0;
+        overflow-wrap: anywhere;
+        text-align: center;
+        word-break: keep-all;
       }
 
       .option-button.is-selected {
@@ -1102,35 +1157,43 @@
       .color-swatch-row {
         display: flex;
         align-items: center;
-        gap: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
       }
 
       .color-swatch-button {
         display: inline-flex;
-        width: 32px;
-        height: 32px;
+        min-height: 38px;
         align-items: center;
         justify-content: center;
+        gap: 6px;
         border: 1px solid #d6c5c8;
-        border-radius: 8px;
-        background: var(--swatch-color, #e5bcc0);
-        box-shadow:
-          inset 0 0 0 1px rgba(255, 255, 255, 0.36),
-          0 8px 18px rgba(17, 17, 17, 0.06);
+        border-radius: 999px;
+        padding: 5px 10px 5px 6px;
+        background: white;
+        color: #18181b;
+        font-size: 12px;
+        font-weight: 900;
       }
 
       .color-swatch-button.is-selected {
-        border-color: var(--brand);
-        box-shadow:
-          inset 0 0 0 2px white,
-          0 0 0 1px var(--brand),
-          0 10px 22px rgba(17, 17, 17, 0.08);
+        border-color: #111111;
+        background: #111111;
+        color: white;
       }
 
-      .color-swatch-name {
-        color: #3f3f46;
-        font-size: 13px;
-        font-weight: 800;
+      .color-swatch-dot {
+        width: 24px;
+        height: 24px;
+        flex: 0 0 auto;
+        border: 1px solid rgba(24, 24, 27, 0.18);
+        border-radius: 999px;
+        background: var(--swatch-color, #e5bcc0);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+      }
+
+      .color-swatch-button.is-selected .color-swatch-dot {
+        border-color: rgba(255, 255, 255, 0.74);
       }
 
       .type-value {
@@ -1475,6 +1538,1160 @@
         font-size: 12px;
         font-weight: 700;
         line-height: 1.55;
+      }
+
+      .story-v6 {
+        overflow: hidden;
+        border-top: 1px solid var(--line);
+        background: #efede7;
+        color: #171717;
+        font-family:
+          "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+        letter-spacing: 0;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+      }
+
+      .story-v6 img {
+        display: block;
+        width: 100%;
+      }
+
+      .story-v6-visual {
+        position: relative;
+        min-height: 560px;
+        overflow: hidden;
+        isolation: isolate;
+        background: #111111;
+      }
+
+      .story-v6-visual > img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .story-v6-visual.story-v6-notice-safe {
+        min-height: 0;
+      }
+
+      .story-v6-visual.story-v6-notice-safe > img {
+        position: relative;
+        inset: auto;
+        height: auto;
+        object-fit: contain;
+        object-position: center center;
+      }
+
+      .story-v6-visual.story-v6-notice-safe .story-v6-copy {
+        position: absolute;
+        inset: 0;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+
+      .story-v6-text-below .story-v6-visual.story-v6-notice-safe .story-v6-copy,
+      .story-v6-visual.story-v6-copy-below.story-v6-notice-safe .story-v6-copy {
+        position: relative;
+        inset: auto;
+        height: auto;
+      }
+
+      .story-v6-gallery-fit .story-v6-visual > img {
+        object-fit: contain;
+        object-position: center center;
+        background: #111111;
+      }
+
+      .story-v6-portrait-fit .story-v6-visual {
+        min-height: 0;
+        aspect-ratio: 3 / 4;
+      }
+
+      .story-v6-portrait-fit .story-v6-visual > img {
+        object-fit: cover;
+        object-position: center center;
+      }
+
+      .story-v6-text-below.story-v6-portrait-fit .story-v6-visual {
+        display: flex;
+        min-height: 0;
+        aspect-ratio: auto;
+        flex-direction: column;
+        overflow: visible;
+        background: #ffffff;
+      }
+
+      .story-v6-text-below .story-v6-visual > img {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
+        object-position: center center;
+      }
+
+      .story-v6-text-below .story-v6-visual.story-v6-notice-safe > img {
+        aspect-ratio: auto;
+        object-fit: contain;
+      }
+
+      .story-v6-text-below .story-v6-visual::after {
+        display: none;
+      }
+
+      .story-v6-text-below .story-v6-copy,
+      .story-v6-text-below .story-v6-feature-main .story-v6-copy,
+      .story-v6-text-below .story-v6-detail .story-v6-copy {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 0;
+        max-width: none;
+        justify-content: flex-start;
+        padding: 44px 24px 48px;
+        background: #ffffff;
+        color: #18211c;
+      }
+
+      .story-v6-text-below .story-v6-problem .story-v6-copy,
+      .story-v6-text-below .story-v6-detail .story-v6-copy {
+        background: #f6f4ef;
+      }
+
+      .story-v6-text-below .story-v6-copy .story-v6-eyebrow {
+        color: #7a8b79;
+        opacity: 1;
+      }
+
+      .story-v6-text-below .story-v6-title {
+        color: #18211c;
+        font-size: 32px;
+        line-height: 1.12;
+      }
+
+      .story-v6-text-below .story-v6-lead {
+        color: #626762;
+        font-size: 14px;
+        line-height: 1.75;
+        opacity: 1;
+      }
+
+      .story-v6-text-below .story-v6-model {
+        display: none;
+      }
+
+      .story-v6-visual.story-v6-copy-below {
+        display: flex;
+        min-height: 0;
+        flex-direction: column;
+        overflow: visible;
+        background: #ffffff;
+      }
+
+      .story-v6-visual.story-v6-copy-below > img {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        object-position: center center;
+      }
+
+      .story-v6-visual.story-v6-copy-below::after {
+        display: none;
+      }
+
+      .story-v6-copy-below .story-v6-copy {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 0;
+        max-width: none;
+        justify-content: flex-start;
+        padding: 44px 24px 48px;
+        background: #ffffff;
+        color: #18211c;
+      }
+
+      .story-v6-copy-below .story-v6-eyebrow {
+        color: #7a8b79;
+        opacity: 1;
+      }
+
+      .story-v6-copy-below .story-v6-title {
+        color: #18211c;
+        font-size: 32px;
+        line-height: 1.12;
+      }
+
+      .story-v6-copy-below .story-v6-lead {
+        color: #626762;
+        font-size: 14px;
+        line-height: 1.75;
+        opacity: 1;
+      }
+
+      .story-v6-visual.story-v6-overlay-top-left {
+        min-height: 0;
+        aspect-ratio: 4 / 5;
+      }
+
+      .story-v6-visual.story-v6-overlay-top-left::after {
+        background: rgba(0, 0, 0, 0.24);
+      }
+
+      .story-v6-feature-main.story-v6-overlay-top-left .story-v6-copy {
+        position: absolute;
+        inset: 0 auto auto 0;
+        min-height: 0;
+        max-width: 340px;
+        justify-content: flex-start;
+        padding: 26px 22px;
+      }
+
+      .story-v6-overlay-top-left .story-v6-eyebrow {
+        margin-bottom: 6px;
+      }
+
+      .story-v6-overlay-top-left .story-v6-title {
+        max-width: 260px;
+        font-size: 30px;
+        line-height: 1.06;
+      }
+
+      .story-v6-visual::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.18) 46%, rgba(0, 0, 0, 0.40) 100%);
+      }
+
+      .story-v6-hero {
+        min-height: 650px;
+      }
+
+      .story-v6-visual.story-v6-square-fit {
+        min-height: 0;
+        aspect-ratio: 1 / 1;
+      }
+
+      .story-v6-problem {
+        min-height: 560px;
+      }
+
+      .story-v6-detail {
+        min-height: 590px;
+      }
+
+      .story-v6-feature-main {
+        min-height: 640px;
+      }
+
+      .story-v6-feature-main .story-v6-copy {
+        justify-content: flex-end;
+        padding-top: 180px;
+      }
+
+      .story-v6-feature-main:not(.story-v6-copy-top):not(.story-v6-copy-below):not(.story-v6-overlay-top-left) .story-v6-copy,
+      .story-v6:not(.story-v6-text-below) .story-v6-detail .story-v6-copy {
+        padding-bottom: 76px;
+      }
+
+      .story-v6-feature-main.story-v6-copy-top .story-v6-copy {
+        justify-content: flex-start;
+        padding-top: 34px;
+      }
+
+      .story-v6-copy {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        min-height: inherit;
+        max-width: 340px;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 34px 24px 32px;
+        color: #ffffff;
+      }
+
+      .story-v6-detail .story-v6-copy {
+        justify-content: flex-end;
+        padding-top: 180px;
+      }
+
+      .story-v6-eyebrow {
+        margin: 0 0 10px;
+        color: inherit;
+        font-size: 11px;
+        font-weight: 900;
+        line-height: 1.35;
+        opacity: 0.88;
+      }
+
+      .story-v6-title {
+        margin: 0;
+        color: inherit;
+        font-size: 38px;
+        font-weight: 950;
+        line-height: 1.07;
+      }
+
+      .story-v6-lead {
+        margin: 16px 0 0;
+        color: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.7;
+        opacity: 0.84;
+      }
+
+      .story-v6-model {
+        position: absolute;
+        right: 20px;
+        bottom: 58px;
+        z-index: 2;
+        display: inline-flex;
+        max-width: calc(100% - 40px);
+        align-items: center;
+        gap: 9px;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        padding: 10px 12px;
+        background: rgba(0, 0, 0, 0.24);
+        color: rgba(255, 255, 255, 0.92);
+        font-size: 11px;
+        font-weight: 700;
+        backdrop-filter: blur(12px);
+      }
+
+      .story-v6-model b {
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 950;
+      }
+
+      .story-v6-spec-strip {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1px;
+        border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+        background: rgba(17, 17, 17, 0.12);
+      }
+
+      .story-v6-spec {
+        display: grid;
+        min-height: 104px;
+        place-items: center;
+        padding: 16px 14px;
+        background: #fbfaf6;
+        text-align: center;
+      }
+
+      .story-v6-spec-inner {
+        display: grid;
+        gap: 7px;
+        place-items: center;
+        text-align: center;
+      }
+
+      .story-v6-spec strong {
+        display: block;
+        color: #151515;
+        font-size: 18px;
+        font-weight: 950;
+        line-height: 1.2;
+      }
+
+      .story-v6-spec span {
+        display: block;
+        color: #707070;
+        font-size: 11px;
+        font-weight: 750;
+        line-height: 1.35;
+      }
+
+      .story-v6-spec-strip .story-v6-spec:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+
+      .story-v6-intro {
+        padding: 48px 24px 46px;
+        background: #ffffff;
+      }
+
+      .story-v6-intro h2 {
+        margin: 0;
+        color: #1c2420;
+        font-size: 28px;
+        font-weight: 950;
+        line-height: 1.22;
+      }
+
+      .story-v6-intro p {
+        margin: 16px 0 0;
+        color: #5d625f;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.75;
+      }
+
+      .story-v6-feature {
+        display: grid;
+        background: #ffffff;
+      }
+
+      .story-v6-feature-text {
+        padding: 44px 24px 42px;
+        background:
+          linear-gradient(180deg, #ffffff 0%, #f4f5f1 100%);
+      }
+
+      .story-v6-feature-text h2 {
+        margin: 0;
+        color: #171717;
+        font-size: 31px;
+        font-weight: 950;
+        line-height: 1.1;
+      }
+
+      .story-v6-feature-text p {
+        margin: 16px 0 0;
+        color: #5a5f5b;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.72;
+      }
+
+      .story-v6-feature-image {
+        min-height: 390px;
+        background: #0f1110;
+      }
+
+      .story-v6-feature-image img {
+        width: 100%;
+        height: 100%;
+        min-height: 390px;
+        object-fit: cover;
+      }
+
+      .story-v6-points {
+        display: grid;
+        gap: 8px;
+        margin-top: 24px;
+      }
+
+      .story-v6-point {
+        border: 1px solid rgba(17, 17, 17, 0.12);
+        padding: 14px 14px;
+        background: #ffffff;
+      }
+
+      .story-v6-point strong {
+        display: block;
+        color: #171717;
+        font-size: 16px;
+        font-weight: 950;
+        line-height: 1.25;
+      }
+
+      .story-v6-point span {
+        display: block;
+        margin-top: 6px;
+        color: #6f7470;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .story-v6-proof {
+        padding: 50px 24px 56px;
+        background: #0f0f0f;
+        color: #ffffff;
+      }
+
+      .story-v6-proof-blue .story-v6-proof {
+        background:
+          linear-gradient(180deg, rgba(4, 35, 68, 0.78) 0%, rgba(3, 24, 49, 0.90) 100%),
+          url("assets/ittemmall/fan-vest/windcool-vest-proof-texture-blue-v1.png") center / cover no-repeat;
+        background-color: #061f3b;
+      }
+
+      .story-v6-proof-blue .story-v6-proof-head .story-v6-eyebrow {
+        color: #b9dcf6;
+      }
+
+      .story-v6-proof-head {
+        margin: 0 0 28px;
+        text-align: center;
+      }
+
+      .story-v6-proof-head .story-v6-eyebrow {
+        color: #d7b6a8;
+      }
+
+      .story-v6-proof-head h2 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 30px;
+        font-weight: 950;
+        line-height: 1.18;
+      }
+
+      .story-v6-proof-head p {
+        margin: 14px auto 0;
+        max-width: 420px;
+        color: rgba(255, 255, 255, 0.70);
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.65;
+      }
+
+      .story-v6-proof-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .story-v6-proof-card {
+        display: grid;
+        grid-template-columns: 1fr 78px;
+        align-items: center;
+        gap: 16px;
+        border-radius: 8px;
+        min-height: 112px;
+        padding: 20px 18px;
+        background: #ffffff;
+        color: #171717;
+      }
+
+      .story-v6-proof-card-text {
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .story-v6-proof-number {
+        color: #b5b5b5;
+        font-size: 17px;
+        font-weight: 950;
+        line-height: 1.2;
+      }
+
+      .story-v6-proof-card strong {
+        display: block;
+        color: #111111;
+        font-size: 18px;
+        font-weight: 950;
+        line-height: 1.28;
+      }
+
+      .story-v6-proof-card span {
+        display: block;
+        margin-top: 8px;
+        color: #626262;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.6;
+      }
+
+      .story-v6-proof-icon {
+        display: grid;
+        width: 72px;
+        height: 72px;
+        place-items: center;
+        border-left: 1px solid rgba(17, 17, 17, 0.12);
+        color: #56595f;
+      }
+
+      .story-v6-proof-icon svg {
+        width: 52px;
+        height: 52px;
+        stroke-width: 1.75;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .story-v6-proof-icon img {
+        display: block;
+        width: 52px;
+        height: 52px;
+        object-fit: contain;
+      }
+
+      .story-v6-benefit {
+        display: grid;
+        background: #ffffff;
+        color: #171717;
+      }
+
+      .story-v6-benefit-image {
+        min-height: 440px;
+        background: #101210;
+      }
+
+      .story-v6-benefit-image img {
+        width: 100%;
+        height: 100%;
+        min-height: 440px;
+        object-fit: cover;
+      }
+
+      .story-v6-benefit-notice-safe .story-v6-benefit-image {
+        min-height: 0;
+      }
+
+      .story-v6-benefit-notice-safe .story-v6-benefit-image img {
+        height: auto;
+        min-height: 0;
+        object-fit: contain;
+      }
+
+      .story-v6-benefit-notice-safe .story-v6-benefit-text {
+        min-height: auto;
+      }
+
+      .story-v6-gallery-fit .story-v6-benefit-image {
+        display: grid;
+        place-items: center;
+        background: #111111;
+      }
+
+      .story-v6-gallery-fit .story-v6-benefit-image img {
+        min-height: 0;
+        object-fit: contain;
+        object-position: center center;
+        background: #111111;
+      }
+
+      .story-v6-portrait-fit .story-v6-benefit {
+        grid-template-columns: 1fr;
+      }
+
+      .story-v6-portrait-fit .story-v6-benefit-image {
+        min-height: 0;
+        aspect-ratio: 3 / 4;
+      }
+
+      .story-v6-portrait-fit .story-v6-benefit-image img {
+        height: 100%;
+        min-height: 0;
+        object-fit: cover;
+        object-position: center center;
+      }
+
+      .story-v6-portrait-fit .story-v6-benefit-notice-safe .story-v6-benefit-image img {
+        height: auto;
+        object-fit: contain;
+      }
+
+      .story-v6-portrait-fit .story-v6-benefit-text {
+        min-height: 0;
+      }
+
+      .story-v6-benefit-text {
+        padding: 44px 24px 48px;
+        background: #f6f4ef;
+      }
+
+      .story-v6-benefit-text h2 {
+        margin: 0;
+        color: #18211c;
+        font-size: 32px;
+        font-weight: 950;
+        line-height: 1.12;
+      }
+
+      .story-v6-benefit-text p {
+        margin: 16px 0 0;
+        color: #5d625f;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.72;
+      }
+
+      .story-v6-benefit-points {
+        display: grid;
+        gap: 1px;
+        margin-top: 26px;
+        border: 1px solid rgba(17, 17, 17, 0.10);
+        background: rgba(17, 17, 17, 0.10);
+      }
+
+      .story-v6-benefit-point {
+        display: flex;
+        min-height: 92px;
+        flex-direction: column;
+        justify-content: center;
+        padding: 16px 15px;
+        background: rgba(255, 255, 255, 0.84);
+        text-align: center;
+      }
+
+      .story-v6-benefit-point strong {
+        display: block;
+        color: #171717;
+        font-size: 15px;
+        font-weight: 950;
+        line-height: 1.3;
+      }
+
+      .story-v6-benefit-point span {
+        display: block;
+        margin-top: 7px;
+        color: #686e69;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.55;
+      }
+
+      .story-v6-info-section {
+        padding: 48px 24px 52px;
+        background: #fbfaf7;
+      }
+
+      .story-v6-info-section h2 {
+        margin: 0;
+        color: #171717;
+        font-size: 29px;
+        font-weight: 950;
+        line-height: 1.15;
+      }
+
+      .story-v6-info-section p {
+        margin: 14px 0 26px;
+        color: #696d69;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.65;
+      }
+
+      .story-v6-info-grid {
+        display: grid;
+        border-top: 1px solid rgba(17, 17, 17, 0.12);
+        border-left: 1px solid rgba(17, 17, 17, 0.12);
+        background: #ffffff;
+      }
+
+      .story-v6-info {
+        min-height: 84px;
+        border-right: 1px solid rgba(17, 17, 17, 0.12);
+        border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+        padding: 17px 16px;
+      }
+
+      .story-v6-info span {
+        display: block;
+        color: #707070;
+        font-size: 11px;
+        font-weight: 750;
+        line-height: 1.35;
+      }
+
+      .story-v6-info strong {
+        display: block;
+        margin-top: 7px;
+        color: #161616;
+        font-size: 17px;
+        font-weight: 950;
+        line-height: 1.25;
+      }
+
+      .story-v6-fit {
+        margin-top: 28px;
+        border-top: 1px solid rgba(17, 17, 17, 0.12);
+        padding-top: 22px;
+      }
+
+      .story-v6-fit h3 {
+        margin: 0;
+        color: #171717;
+        font-size: 21px;
+        font-weight: 950;
+        line-height: 1.25;
+      }
+
+      .story-v6-fit ul {
+        display: grid;
+        gap: 9px;
+        margin: 16px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .story-v6-fit li {
+        border-left: 3px solid #6f816f;
+        padding-left: 12px;
+        color: #2e332f;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1.55;
+      }
+
+      .story-v6-policy {
+        border-top: 1px solid rgba(17, 17, 17, 0.10);
+        padding: 48px 24px 56px;
+        background: #f4f1eb;
+        color: #171717;
+      }
+
+      .story-v6-policy h2 {
+        margin: 0;
+        max-width: 420px;
+        font-size: 28px;
+        font-weight: 950;
+        line-height: 1.18;
+      }
+
+      .story-v6-policy > p {
+        margin: 14px 0 24px;
+        max-width: 460px;
+        color: #696d69;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.65;
+      }
+
+      .story-v6-policy-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .story-v6-policy-item {
+        border: 1px solid rgba(17, 17, 17, 0.10);
+        background: rgba(255, 255, 255, 0.74);
+        padding: 18px 16px;
+      }
+
+      .story-v6-policy-item strong {
+        display: block;
+        color: #171717;
+        font-size: 15px;
+        font-weight: 900;
+        line-height: 1.35;
+      }
+
+      .story-v6-policy-item p {
+        margin: 8px 0 0;
+        color: #5f645f;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.65;
+      }
+
+      .story-v6-policy-caution {
+        margin: 18px 0 0;
+        border-top: 1px solid rgba(17, 17, 17, 0.10);
+        padding-top: 16px;
+        color: #6a6f6a;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.62;
+      }
+
+      .phone-shell.is-aquaglow-theme .story-v6 {
+        background: #f4fcfb;
+      }
+
+      .phone-shell.is-aquaglow-theme .story-v6-spec {
+        background: #f2fbfa;
+      }
+
+      .phone-shell.is-aquaglow-theme .story-v6-feature-text {
+        background: #ffffff;
+      }
+
+      .phone-shell.is-aquaglow-theme .story-v6-proof {
+        background: #123238;
+      }
+
+      .phone-shell.is-aquaglow-theme .story-v6-proof-head .story-v6-eyebrow,
+      .phone-shell.is-aquaglow-theme .story-v6-feature-text .story-v6-eyebrow,
+      .phone-shell.is-aquaglow-theme .story-v6-benefit-text .story-v6-eyebrow {
+        color: #42b7ac !important;
+      }
+
+      .phone-shell.is-aquaglow-theme .story-v6-benefit-text,
+      .phone-shell.is-aquaglow-theme .story-v6-info-section,
+      .phone-shell.is-aquaglow-theme .story-v6-policy {
+        background: #effaf8;
+      }
+
+      .phone-shell.is-aquaglow-theme .story-v6-fit li {
+        border-left-color: #42b7ac;
+      }
+
+      .phone-shell.is-aquaglow-theme .image-stage {
+        padding: 0 0 20px;
+        background: #ffffff;
+      }
+
+      .phone-shell.is-aquaglow-theme .thumb-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin: 12px 16px 0;
+      }
+
+      .phone-shell.is-aquaglow-theme .thumb {
+        border-radius: 0;
+        background: #ffffff;
+      }
+
+      .phone-shell.is-aquaglow-theme .section-tight {
+        padding: 34px 20px 28px;
+      }
+
+      .phone-shell.is-aquaglow-theme .section-tight .eyebrow {
+        color: #278f88;
+      }
+
+      .jewelry-story {
+        border-top: 1px solid #dbe9e7;
+        background: #ffffff;
+        color: #171717;
+        letter-spacing: 0;
+        word-break: keep-all;
+      }
+
+      .jewelry-story-intro {
+        padding: 58px 22px 54px;
+      }
+
+      .jewelry-story-eyebrow {
+        margin: 0 0 16px;
+        color: #278f88;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1.4;
+      }
+
+      .jewelry-story h2 {
+        margin: 0;
+        color: #141414;
+        font-family: "Noto Serif KR", "AppleMyungjo", "Batang", Georgia, serif;
+        font-size: 31px;
+        font-weight: 500;
+        line-height: 1.35;
+        letter-spacing: 0;
+      }
+
+      .jewelry-story-copy {
+        display: grid;
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      .jewelry-story-copy p {
+        margin: 0;
+        color: #383838;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 1.9;
+      }
+
+      .jewelry-story-features {
+        display: grid;
+        gap: 14px;
+        margin: 36px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .jewelry-story-features li {
+        position: relative;
+        padding-left: 18px;
+        color: #242424;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.65;
+      }
+
+      .jewelry-story-features li::before {
+        content: "";
+        position: absolute;
+        top: 0.72em;
+        left: 1px;
+        width: 4px;
+        height: 4px;
+        background: #111111;
+      }
+
+      .jewelry-accordions {
+        border-top: 1px solid #d9d9d9;
+      }
+
+      .jewelry-accordion {
+        border-bottom: 1px solid #d9d9d9;
+        background: #ffffff;
+      }
+
+      .jewelry-accordion summary {
+        position: relative;
+        padding: 22px 48px 22px 22px;
+        cursor: pointer;
+        list-style: none;
+        color: #171717;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .jewelry-accordion summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .jewelry-accordion summary::after {
+        content: "+";
+        position: absolute;
+        top: 50%;
+        right: 22px;
+        color: #3f3f3f;
+        font-size: 22px;
+        font-weight: 300;
+        line-height: 1;
+        transform: translateY(-50%);
+      }
+
+      .jewelry-accordion[open] summary::after {
+        content: "−";
+      }
+
+      .jewelry-accordion-body {
+        padding: 0 22px 28px;
+      }
+
+      .jewelry-accordion-copy {
+        margin: 0;
+        color: #555555;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.8;
+      }
+
+      .jewelry-info-list {
+        margin: 0;
+        border-top: 1px solid #ececec;
+      }
+
+      .jewelry-info-row {
+        display: grid;
+        grid-template-columns: minmax(90px, 0.85fr) minmax(0, 1.65fr);
+        gap: 16px;
+        border-bottom: 1px solid #ececec;
+        padding: 15px 0;
+      }
+
+      .jewelry-info-row dt {
+        color: #777777;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.55;
+      }
+
+      .jewelry-info-row dd {
+        margin: 0;
+        color: #222222;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.55;
+        text-align: right;
+      }
+
+      .jewelry-info-list + .jewelry-accordion-copy {
+        margin-top: 18px;
+      }
+
+      @media (min-width: 720px) {
+        .story-v6-spec-strip {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        .story-v6-spec-strip .story-v6-spec:last-child:nth-child(odd) {
+          grid-column: auto;
+        }
+
+        .story-v6-feature {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .story-v6-benefit {
+          grid-template-columns: 1.08fr 0.92fr;
+        }
+
+        .story-v6-benefit-text {
+          display: flex;
+          min-height: 540px;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .story-v6-benefit-image img {
+          min-height: 540px;
+        }
+
+        .story-v6-feature-text {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          min-height: 540px;
+        }
+
+        .story-v6-feature-image img {
+          min-height: 540px;
+        }
+
+        .story-v6-points {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .story-v6-info-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .story-v6-policy-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      .phone-shell .story-v6-spec-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .phone-shell .story-v6-spec-strip .story-v6-spec:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+
+      .phone-shell .story-v6-feature,
+      .phone-shell .story-v6-benefit {
+        grid-template-columns: 1fr;
+      }
+
+      .phone-shell .story-v6-benefit-text {
+        min-height: auto;
+      }
+
+      .phone-shell .story-v6-benefit-image img {
+        min-height: 390px;
+      }
+
+      .phone-shell .story-v6-feature-text {
+        min-height: auto;
+      }
+
+      .phone-shell .story-v6-feature-image img {
+        min-height: 390px;
+      }
+
+      .phone-shell .story-v6-policy-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .phone-shell .story-v6-points,
+      .phone-shell .story-v6-info-grid {
+        grid-template-columns: 1fr;
       }
 
       .bottom-bar {
@@ -1979,11 +3196,12 @@
         const siteConfig = {
           brandName: "ITTEMMALL",
           logoText: "ITTEMMALL",
-          mainHeadline: "지금 필요한 데일리 아이템을\n가볍게 준비하세요",
+          mainHeadline: "생활에 가치 있는 아이템을\n잇템몰이 고릅니다",
           mainSubcopy:
-            "러닝 헤드밴드, 선풍기 조끼처럼 지금 필요한 상품을 한곳에서 확인하고 바로 주문할 수 있습니다.",
-          heroEyebrow: "ITTEMMALL SELECT",
-          heroImage: "assets/ittemmall/ittemmall-brand-hero-final.png",
+            "유행보다 쓰임, 과장보다 필요를 기준으로 매일의 생활에 도움이 되는 상품을 소개합니다.",
+          heroEyebrow: "LIFESTYLE SELECT",
+          heroImage: "assets/ittemmall/ittemmall-lifestyle-hero-v2.jpg",
+          heroImageAlt: "생활에 유용한 물건을 정돈하는 잇템몰 라이프스타일 이미지",
           heroButtonText: "상품 보기",
           productSectionTitle: "추천 상품",
           footerLinks: ["고객센터", "사업자 정보", "이용약관", "개인정보처리방침"],
@@ -2201,6 +3419,7 @@
           },
           {
             id: "product-004",
+            retired: true,
             slug: "runnerwin-headband",
             name: "러너윈 테크니컬 헤드밴드",
             cardTitle: "러너윈 테크니컬 헤드밴드",
@@ -2301,11 +3520,11 @@
           {
             id: "product-003",
             slug: "windcool-vest",
-            name: "윈드쿨 에어 선풍기 조끼",
-            cardTitle: "윈드쿨 선풍기 조끼",
-            shortDescription: "듀얼 팬으로 조끼 안쪽 공기 순환을 돕는 여름 야외활동용 선풍기 조끼",
+            name: "빙하기 선풍기조끼",
+            cardTitle: "빙하기 선풍기조끼",
+            shortDescription: "허리 양옆 듀얼 팬과 3단 풍량 조절을 갖춘 네이비 에어쿨링 조끼",
             longDescription:
-              "작업, 낚시, 캠핑처럼 더운 날 오래 밖에 있어야 할 때 입는 선풍기 조끼입니다. 보조배터리를 연결해 듀얼 팬이 조끼 안쪽 공기 순환을 돕고, 메쉬 원단과 다중 포켓으로 실용성을 더했습니다.",
+              "네이비 하이넥 조끼에 팬 2개와 유선 컨트롤러를 결합한 선풍기 조끼입니다. M(95)부터 XXL(110)까지 네 가지 사이즈 중 평소 옷차림에 맞춰 선택할 수 있습니다.",
             detailNotice:
               "* 기본 구성에는 보조배터리가 포함되지 않으며,\n필요 시 추가상품으로 선택할 수 있습니다.",
             categoryId: "seasonal",
@@ -2316,20 +3535,148 @@
             discountRate: 0,
             extraFeeLabel: "추가 비용",
             extraFee: 0,
-            image: "assets/ittemmall/fan-vest/windcool-vest-card-thumb.jpg",
+            image: "assets/ittemmall/fan-vest/windcool-vest-ice-thumb-v2.png",
+            adCreativeImage: "assets/ittemmall/fan-vest/meta-ads/windcool-vest-meta-feed-v1.png",
             cardMediaClass: "portrait",
-            detailMediaClass: "",
+            detailMediaClass: "portrait-three-four",
+            galleryThumbLimit: 6,
             hideStandaloneInfo: true,
             images: [
-              "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
-              "assets/ittemmall/fan-vest/windcool-vest-back-fans.jpg",
-              "assets/ittemmall/fan-vest/windcool-vest-fan-detail.jpg",
-              "assets/ittemmall/fan-vest/windcool-vest-pocket-detail.jpg",
+              "assets/ittemmall/fan-vest/windcool-vest-ice-thumb-v2.png",
+              "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-korean-logistics-v3.png",
+              "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-technical-v1.png",
+              "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-flower-farm-v1.png",
+              "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-detail-components-v1.png",
+              "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-size-fit-v1.png",
             ],
+            v6Detail: {
+              imageFit: "portrait",
+              textPlacement: "below",
+              proofTheme: "blue",
+              hero: {
+                image: "assets/ittemmall/fan-vest/windcool-vest-ice-thumb-v2-ai-v8-overlay-r2-logo.png",
+                alt: "젊은 남성이 네이비 빙하기 선풍기조끼를 입고 바람 효과를 표현한 이미지",
+                eyebrow: "AIR COOLING VEST",
+                titleLines: ["한여름 옷차림에", "바람을 더하는 조끼"],
+                lead:
+                  "빙하기 선풍기조끼는 네이비 하이넥 베스트에 두 개의 팬과 유선 컨트롤러를 결합한 여름용 착용 아이템입니다. 작업복이나 반팔 위에 한 겹 더해 입을 수 있습니다.",
+                modelValue: "빙하기 선풍기조끼",
+                modelText: "네이비 / 듀얼 팬",
+              },
+              specStrip: [
+                { value: "6,000RPM", label: "최대 회전 속도" },
+                { value: "3단", label: "바람 세기" },
+                { value: "2 FAN", label: "듀얼 팬" },
+                { value: "M~XXL", label: "4개 사이즈" },
+                { value: "NAVY", label: "단일 색상" },
+              ],
+              intro: {
+                titleLines: ["더운 날 오래 머물수록", "옷 안쪽은 답답해집니다"],
+                copy:
+                  "같은 자리에 오래 머물거나 천천히 움직이는 동안에도 옷 안쪽에는 열기가 남습니다. 몸 가까이에서 공기가 계속 움직일 수 있도록, 두 개의 팬을 조끼에 장착하는 방식을 선택했습니다.",
+              },
+              problem: {
+                image: "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-korean-logistics-v3-ai-v8-overlay-r2-logo.png",
+                alt: "한국 물류창고 입출고 구역에서 네이비 선풍기 조끼를 입고 바코드를 확인하는 작업자",
+                eyebrow: "LOGISTICS WORK",
+                titleLines: ["작업복 위에", "가볍게 한 겹"],
+                lead:
+                  "입고 물량을 확인하고 상자를 분류하는 물류창고에서는 작업복 위에 바로 덧입을 수 있는 형태가 필요합니다. 민소매 구조라 반팔이나 긴소매 위에 겹쳐 입을 수 있고, 앞 지퍼로 여닫습니다.",
+              },
+              feature: {
+                image: "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-technical-v1-ai-v8-overlay-r2-logo.png",
+                alt: "네이비 조끼 후면의 듀얼 팬과 3단 컨트롤러 구조",
+                eyebrow: "DUAL AIRFLOW",
+                titleLines: ["허리 양옆에서 시작해", "등과 목으로 오르는 바람"],
+                copy:
+                  "두 개의 팬이 허리 양옆에서 외부 공기를 끌어와 조끼 안쪽으로 보냅니다. 밑단과 암홀의 밴딩은 들어온 공기가 등과 목 방향으로 흐르도록 돕고, 연결된 컨트롤러는 손이 닿는 위치에서 조작할 수 있습니다.",
+              },
+              proof: {
+                eyebrow: "BUILT FOR SUMMER",
+                titleLines: ["풍량부터 수납과 세탁까지", "입고 쓰는 과정을 생각했습니다"],
+                copy: "세 단계 풍량과 이중 원단, 나누어 담는 포켓, 팬 분리 세탁 구조를 한 벌에 담았습니다.",
+                items: [
+                  {
+                    title: "3단 풍량 조절",
+                    caption: "작업 강도와 날씨에 맞춰 4,800·5,200·6,000RPM 세 단계로 조절합니다.",
+                    iconImage:
+                      "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-proof-01.png",
+                  },
+                  {
+                    title: "겉감과 은박 안감",
+                    caption: "네이비 겉감과 은박 안감의 이중 구조가 들어온 바람을 조끼 안쪽에 머물게 돕습니다.",
+                    iconImage:
+                      "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-proof-02.png",
+                  },
+                  {
+                    title: "앞뒤로 나눈 수납",
+                    caption: "앞 지퍼 포켓과 내부 포켓에 장갑, 소지품, 보조배터리를 나누어 담을 수 있습니다.",
+                    iconImage:
+                      "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-proof-03.png",
+                  },
+                  {
+                    title: "팬을 빼고 손세탁",
+                    caption: "세탁 전 팬과 케이블을 분리한 뒤 30도 이하 물에서 중성세제로 가볍게 손세탁하세요.",
+                    iconImage:
+                      "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-proof-04.png",
+                  },
+                ],
+              },
+              benefit: {
+                image: "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-flower-farm-v1-ai-v8-overlay-r2-logo.png",
+                alt: "꽃 농장 온실에서 네이비 선풍기 조끼를 입고 꽃 모종 트레이를 옮기는 작업자",
+                eyebrow: "HANDS-FREE WORK",
+                titleLines: ["두 손은 작업에", "바람은 몸 가까이에"],
+                copy:
+                  "손에 선풍기를 쥐지 않아도 팬이 조끼에 장착된 상태로 작동합니다. 상자를 옮기고 화분이나 장비를 다루는 동안 두 손은 필요한 작업에 쓰고, 옷 안쪽 공기 흐름은 계속 이어갈 수 있습니다.",
+                points: [],
+              },
+              detail: {
+                image: "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-detail-components-v1-ai-v8-overlay-r2-logo.png",
+                alt: "은박 안감이 보이는 네이비 조끼와 팬 2개, 연결 케이블 기본 구성",
+                eyebrow: "MATERIAL & COMPONENTS",
+                titleLines: ["꺼내어 확인할 수 있는", "기본 구성 한 세트"],
+                lead:
+                  "기본 구성은 네이비 조끼 1벌, 팬 2개, 연결 케이블 1개입니다. 조끼 안쪽에는 은박 안감과 등판 메쉬, 내부 포켓과 아이스팩 포켓이 있으며, 전원 사용에 필요한 보조배터리는 추가상품에서 선택합니다.",
+              },
+              infoTitle: "사이즈와 기본 구성 안내",
+              infoCaption:
+                "M(95)부터 XXL(110)까지의 실측값과 기본 구성, 보조배터리 선택 정보를 함께 정리했습니다.",
+              info: [
+                { label: "제품명", value: "빙하기 선풍기조끼" },
+                { label: "제품 유형", value: "선풍기 조끼 / 팬 베스트" },
+                { label: "색상", value: "네이비" },
+                { label: "사이즈", value: "M(95), L(100), XL(105), XXL(110)" },
+                { label: "풍량", value: "4,800·5,200·6,000RPM 3단 조절" },
+                { label: "전원", value: "USB 보조배터리 연결 방식 / 보조배터리 기본 미포함" },
+                { label: "기본 구성", value: "조끼 1벌, 팬 2개, 연결 케이블 1개" },
+                { label: "원산지", value: "중국(협력업체)" },
+                { label: "세탁", value: "팬과 케이블을 분리한 뒤 30도 이하 물에서 중성세제로 손세탁" },
+              ],
+              policy: {
+                titleLines: ["배송과 교환·반품 안내"],
+                caption: "주문 처리와 교환·반품 기준은 아래 내용을 확인해주세요.",
+                items: [
+                  {
+                    title: "배송 안내",
+                    copy: "주문 접수 후 상품별 출고 일정을 안내합니다. 제주 및 도서산간 지역은 추가 배송비나 배송 기간이 발생할 수 있습니다.",
+                  },
+                  {
+                    title: "교환·반품",
+                    copy: "미사용 상품은 수령 상태와 포장, 구성품을 확인한 뒤 교환·반품을 안내합니다. 단순 변심은 왕복 배송비가 발생할 수 있습니다.",
+                  },
+                  {
+                    title: "문의 접수",
+                    copy: "상품명과 주문자명, 연락처, 필요한 경우 상품 상태 사진을 함께 남겨주시면 순차적으로 안내합니다.",
+                  },
+                ],
+                caution: "교환·반품 전에는 팬, 케이블, 조끼를 포함한 구성품과 포장 상태를 함께 확인해주세요.",
+              },
+            },
             options: [
-              { label: "색상", values: ["차콜"] },
-              { label: "사이즈", values: ["M", "L", "XL", "2XL", "3XL"] },
-              { label: "구성", values: ["조끼+팬+케이블 세트"] },
+              { label: "색상", values: ["네이비"] },
+              { label: "사이즈", values: ["M (95)", "L (100)", "XL (105)", "XXL (110)"] },
+              { label: "구성", values: ["조끼+팬 2개+케이블 세트"] },
               { label: "추가상품", values: ["추가 안 함", "보조배터리 10,000mAh 추가 (+9,900원)"] },
             ],
             optionAddOnPrices: {
@@ -2338,114 +3685,1025 @@
               },
             },
             infoItems: [
-              { label: "제품명", value: "윈드쿨 에어 선풍기 조끼" },
+              { label: "제품명", value: "빙하기 선풍기조끼" },
               { label: "제품 유형", value: "선풍기조끼 / 팬 베스트" },
-              { label: "색상", value: "차콜" },
-              { label: "사이즈", value: "M, L, XL, 2XL, 3XL" },
+              { label: "색상", value: "네이비" },
+              { label: "사이즈", value: "M(95), L(100), XL(105), XXL(110)" },
+              { label: "풍량", value: "4,800·5,200·6,000RPM 3단 조절" },
               { label: "전원 방식", value: "USB 보조배터리 연결 방식" },
-              { label: "구성품", value: "조끼, 팬 2개, 연결 케이블" },
+              { label: "구성품", value: "조끼 1벌, 팬 2개, 연결 케이블 1개" },
               { label: "보조배터리", value: "기본 구성 미포함 / 추가상품 선택 시 +9,900원" },
+              { label: "원산지", value: "중국(협력업체)" },
             ],
             story: {
-              highlightEyebrow: "왜 윈드쿨 선풍기 조끼인가",
+              highlightEyebrow: "여름 옷차림에 더하는 듀얼 팬 조끼",
               highlightCopy:
-                "한여름 야외활동에서는 시원함만큼 착용감과 실용성이 중요합니다. 윈드쿨 에어 선풍기 조끼는 조끼 안쪽으로 공기 흐름을 만들고, 메쉬 원단과 수납 포켓을 더해 작업과 레저 모두에 맞춘 시즌 아이템입니다.",
+                "네이비 하이넥 조끼에 듀얼 팬과 유선 컨트롤러, 은박 안감과 수납 구조를 담았습니다. 손에 기기를 들지 않고 착용하는 형태로 사용할 수 있습니다.",
               brandImages: [
                 {
-                  src: "assets/ittemmall/fan-vest/windcool-vest-hero.jpg",
-                  alt: "윈드쿨 에어 선풍기 조끼 착용 이미지",
+                  src: "assets/ittemmall/fan-vest/windcool-vest-ice-thumb-v2.png",
+                  alt: "젊은 남성이 네이비 빙하기 선풍기조끼를 입고 바람 효과를 표현한 이미지",
                 },
                 {
-                  src: "assets/ittemmall/fan-vest/windcool-vest-back-fans.jpg",
-                  alt: "윈드쿨 에어 선풍기 조끼 후면 듀얼 팬 이미지",
+                  src: "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-korean-logistics-v3.png",
+                  alt: "한국 물류창고에서 빙하기 선풍기조끼를 입고 입고 물량을 확인하는 작업자",
                 },
               ],
               featureImage: {
-                src: "assets/ittemmall/fan-vest/windcool-vest-fan-detail.jpg",
-                alt: "윈드쿨 에어 선풍기 조끼 팬 디테일 이미지",
+                src: "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-technical-v1.png",
+                alt: "빙하기 선풍기조끼 후면의 듀얼 팬과 컨트롤러",
               },
               showcaseImage: {
-                src: "assets/ittemmall/fan-vest/windcool-vest-pocket-detail.jpg",
-                alt: "윈드쿨 에어 선풍기 조끼 포켓과 메쉬 디테일 이미지",
+                src: "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-detail-components-v1.png",
+                alt: "빙하기 선풍기조끼의 은박 안감과 기본 구성품",
               },
               highlights: [
-                "듀얼 팬으로 조끼 안쪽 공기 순환 보조",
-                "작업, 낚시, 캠핑, 주말 농장에 맞춘 여름 아이템",
-                "메쉬 원단과 다중 포켓으로 더운 날 실용성 강화",
-                "기본 구성은 조끼와 팬 세트, 보조배터리는 추가상품으로 선택",
-                "여름철 외부 활동 전 준비하기 좋은 시즌 아이템",
+                "4,800·5,200·6,000RPM의 3단 풍량 조절",
+                "허리 양옆의 듀얼 팬으로 조끼 안쪽 공기 흐름 보조",
+                "네이비 겉감과 은박 안감의 이중 구조",
+                "앞 지퍼 포켓, 내부 포켓, 등판 아이스팩 포켓 구성",
+                "기본 구성은 조끼·팬 2개·케이블, 보조배터리는 추가 선택",
               ],
               sections: [
                 {
                   eyebrow: "포인트 01",
-                  title: "몸 안쪽으로 바람을 순환시키는 듀얼 팬",
+                  title: "등과 목 방향으로 바람을 보내는 듀얼 팬",
                   paragraphs: [
-                    "조끼 하단에 팬을 장착해 외부 공기를 안쪽으로 보내는 구조입니다.",
-                    "가만히 서 있어도 열기가 쌓이는 여름 현장, 낚시터, 캠핑장에서 착용 쾌적감을 돕습니다.",
-                    "강한 냉방 효과를 보장하는 제품이 아니라, 더운 환경에서 공기 흐름을 보조하는 선풍기 조끼입니다.",
+                    "허리 양옆에 장착한 팬이 외부 공기를 조끼 안쪽으로 보내는 구조입니다.",
+                    "밑단과 암홀 밴딩이 들어온 공기가 위쪽으로 흐르도록 돕습니다.",
+                    "컨트롤러 버튼으로 4,800·5,200·6,000RPM 세 단계 중 필요한 바람 세기를 고를 수 있습니다.",
                   ],
                 },
                 {
                   eyebrow: "포인트 02",
-                  title: "메쉬 원단과 넉넉한 수납 포켓",
+                  title: "은박 안감과 나누어 담는 수납",
                   paragraphs: [
-                    "앞면 포켓에는 휴대폰, 장갑, 작은 공구나 소지품을 나눠 넣기 좋습니다.",
-                    "메쉬 원단 중심의 가벼운 착용감으로 티셔츠 위에 걸치기 편한 구성을 목표로 했습니다.",
-                    "기본 구성에는 보조배터리가 포함되지 않습니다. 보조배터리가 필요하면 추가상품에서 함께 선택할 수 있습니다.",
+                    "네이비 겉감 안쪽에 은박 안감과 등판 메쉬를 더해 팬이 보낸 공기가 조끼 안쪽을 지나도록 구성했습니다.",
+                    "앞 지퍼 포켓과 내부 포켓에는 장갑, 소지품, 보조배터리를 나누어 담을 수 있습니다.",
+                    "등판에는 별도의 아이스팩 포켓이 있습니다. 아이스팩은 기본 구성에 포함되지 않습니다.",
                   ],
                 },
                 {
                   eyebrow: "포인트 03",
-                  title: "작업복처럼, 레저복처럼",
+                  title: "두 손을 써야 하는 작업에",
                   paragraphs: [
-                    "건설 현장, 물류, 야외 판매, 주말 농장처럼 오래 밖에 있어야 하는 상황에 맞습니다.",
-                    "낚시, 캠핑, 등산 전후 대기 시간처럼 여름 레저에서도 부담 없이 입기 좋은 시즌 아이템입니다.",
+                    "팬이 조끼에 장착되어 있어 손에 별도 기기를 들지 않고 작업할 수 있습니다.",
+                    "상자, 화분, 공구처럼 양손으로 다뤄야 하는 물건이 있을 때도 옷 안쪽 공기 흐름을 이어갑니다.",
                   ],
                 },
               ],
-              recommendTitle: "이런 분께 추천합니다",
-              recommendations: [
-                "한여름 야외 작업 시간이 긴 분",
-                "낚시, 캠핑, 주말 농장처럼 밖에 오래 머무는 분",
-                "시원한 조끼를 찾지만 펠티어 고가 제품은 부담스러운 분",
-                "보조배터리를 이미 가지고 있어 조끼와 팬 세트만 필요한 분",
-              ],
+              recommendations: [],
               sizeGuide: {
-                title: "사이즈 선택 가이드",
-                copy: "조끼를 평평하게 펼친 상태에서 가슴둘레, 어깨너비, 총장을 기준으로 확인하세요.",
-                image: "assets/ittemmall/fan-vest/windcool-vest-size-guide-photo.jpg",
-                alt: "윈드쿨 선풍기 조끼를 펼쳐 줄자로 사이즈를 확인하는 사진",
+                hideIntro: true,
+                image:
+                  "assets/ittemmall/fan-vest/detail-factory-65453989-20260710/windcool-vest-size-fit-v1-ai-v8-overlay-r2-logo.png",
+                alt: "젊은 남성이 정면으로 네이비 선풍기 조끼를 착용한 전신 모습",
               },
+              sizeColumns: [
+                { label: "사이즈", key: "size" },
+                { label: "어깨너비(cm)", key: "shoulder" },
+                { label: "가슴 단면(cm)", key: "chest" },
+                { label: "총장(cm)", key: "length" },
+                { label: "권장 선택", key: "recommend" },
+              ],
               sizeChart: [
-                { size: "M", chest: "104", shoulder: "42", length: "62", recommend: "95 전후 / 얇은 반팔 위 착용" },
-                { size: "L", chest: "108", shoulder: "44", length: "64", recommend: "100 전후 / 기본 추천" },
-                { size: "XL", chest: "112", shoulder: "46", length: "66", recommend: "105 전후 / 여유 착용" },
-                { size: "2XL", chest: "116", shoulder: "48", length: "68", recommend: "110 전후 / 작업복 위 착용" },
-                { size: "3XL", chest: "120", shoulder: "50", length: "70", recommend: "115 전후 / 두꺼운 이너 착용" },
+                { size: "M (95)", shoulder: "39", chest: "54", length: "63.5", recommend: "95 전후" },
+                { size: "L (100)", shoulder: "40.5", chest: "56.5", length: "65.5", recommend: "100 전후" },
+                { size: "XL (105)", shoulder: "42", chest: "58.5", length: "67.5", recommend: "105 전후" },
+                { size: "XXL (110)", shoulder: "44", chest: "61.5", length: "68", recommend: "110 전후" },
               ],
               sizeNotes: [
-                "실측은 단면이 아니라 둘레 기준 안내값입니다.",
-                "작업복이나 두꺼운 티셔츠 위에 입을 경우 한 사이즈 크게 선택하는 것을 권장합니다.",
-                "측정 위치와 생산 차수에 따라 1~3cm 오차가 있을 수 있습니다.",
+                "상품 실측은 평평하게 펼친 단면 기준입니다.",
+                "측정 방법과 생산 차수에 따라 1~3cm 차이가 있을 수 있습니다.",
+                "작업복 위에 겹쳐 입을 경우 평소보다 여유 있게 선택하세요.",
               ],
               specTitle: "사이즈 / 상품 정보",
               specs: [
-                { label: "제품명", value: "윈드쿨 에어 선풍기 조끼" },
+                { label: "제품명", value: "빙하기 선풍기조끼" },
                 { label: "제품 유형", value: "선풍기조끼 / 팬 베스트" },
-                { label: "색상", value: "차콜" },
-                { label: "사이즈", value: "M, L, XL, 2XL, 3XL" },
-                { label: "구성품", value: "조끼, 팬 2개, USB 연결 케이블" },
+                { label: "색상", value: "네이비" },
+                { label: "사이즈", value: "M(95), L(100), XL(105), XXL(110)" },
+                { label: "풍량", value: "4,800·5,200·6,000RPM 3단 조절" },
+                { label: "구성품", value: "조끼 1벌, 팬 2개, 연결 케이블 1개" },
                 { label: "전원", value: "USB 보조배터리 연결 방식" },
                 { label: "보조배터리", value: "기본 구성 미포함 / 추가상품 선택 시 +9,900원" },
-                { label: "세탁", value: "팬과 케이블을 분리한 뒤 손세탁 권장" },
-                { label: "확인 필요", value: "실제 원단, 팬 규격, KC 관련 고지, 수입원/제조원 정보" },
+                { label: "원산지", value: "중국(협력업체)" },
+                { label: "세탁", value: "팬과 케이블을 분리한 뒤 30도 이하 물에서 중성세제로 손세탁" },
+              ],
+            },
+          },
+          {
+            id: "product-006",
+            slug: "mosquito-trap",
+            name: "나이트클린 LED 모기트랩",
+            cardTitle: "나이트클린 LED 모기트랩",
+            shortDescription: "침대 옆과 창가에 두는 탁상형 LED 포충 램프",
+            longDescription:
+              "창가를 열어두는 계절, 작은 날벌레가 신경 쓰이는 자리에 두는 탁상형 LED 모기트랩입니다. 블랙과 화이트 두 가지 색상 중 공간에 맞게 선택할 수 있습니다.",
+            categoryId: "seasonal",
+            categoryLabel: "시즌",
+            statusLabel: "시즌 상품",
+            price: 59900,
+            originalPrice: 0,
+            discountRate: 0,
+            extraFeeLabel: "추가 비용",
+            extraFee: 0,
+            image: "assets/ittemmall/summer-small-appliances/mosquito-trap-gallery-4x5-20260710/mosquito-trap-gallery-02-living-room-user-4x5-v1.png",
+            adCreativeImage: "assets/ittemmall/summer-small-appliances/mosquito-trap-meta-ad-v9.png",
+            cardMediaClass: "portrait",
+            detailMediaClass: "portrait",
+            hiddenFromMainSite: false,
+            standaloneStore: true,
+            hideStandaloneInfo: true,
+            theme: {
+              mode: "white",
+              brand: "#111111",
+              brandLight: "#F4F4F5",
+              accent: "#111111",
+              accent2: "#525252",
+              soft: "#F7F7F7",
+              onBrand: "#FFFFFF",
+              headerBg: "#FFFFFF",
+              headerText: "#111111",
+              headerBorder: "#E5E7EB",
+            },
+            images: [
+              "assets/ittemmall/summer-small-appliances/mosquito-trap-gallery-4x5-20260710/mosquito-trap-gallery-02-living-room-user-4x5-v1.png",
+              "assets/ittemmall/summer-small-appliances/mosquito-trap-gallery-4x5-20260710/mosquito-trap-gallery-03-airflow-4x5-v1.png",
+              "assets/ittemmall/summer-small-appliances/mosquito-trap-gallery-4x5-20260710/mosquito-trap-gallery-04-exploded-4x5-v1.png",
+            ],
+            options: [
+              { label: "색상", values: ["블랙", "화이트"] },
+              { label: "구성", values: ["본품 1개"] },
+            ],
+            infoItems: [
+              { label: "제품명", value: "나이트클린 LED 모기트랩" },
+              { label: "제품 유형", value: "LED 포충 램프" },
+              { label: "색상", value: "블랙, 화이트" },
+              { label: "구성", value: "본품 1개" },
+              { label: "크기", value: "12 x 12 x 19.5cm" },
+              { label: "전원", value: "DC5V 1A" },
+            ],
+            story: {
+              highlightEyebrow: "밤의 창가에 조용히 놓는 작은 램프",
+              highlightCopy:
+                "침실 협탁, 책상, 창가처럼 오래 머무는 자리에 두기 좋은 탁상형 LED 모기트랩입니다. 보랏빛 LED와 원통형 흡입 구조가 작은 날벌레를 아래 포집부로 모으는 흐름을 만듭니다.",
+              brandImages: [
+                {
+                  src: "assets/ittemmall/summer-small-appliances/mosquito-trap-gallery-4x5-20260710/mosquito-trap-gallery-02-living-room-user-4x5-v1.png",
+                  alt: "밤의 거실 대리석 테이블 위에 둔 나이트클린 LED 모기트랩",
+                },
+              ],
+              featureImage: {
+                src: "assets/ittemmall/summer-small-appliances/mosquito-trap-gallery-4x5-20260710/mosquito-trap-gallery-03-airflow-4x5-v1.png",
+                alt: "유인광과 흡입 흐름이 보이는 나이트클린 LED 모기트랩 구조",
+              },
+              highlights: [
+                "LED 유인 광원",
+                "흡입팬과 전격 포충 구조",
+                "탁상형 USB 전원",
+              ],
+              sections: [
+                {
+                  eyebrow: "공감 장면",
+                  title: "불을 끈 뒤에도 창가 근처가 계속 신경 쓰일 때",
+                  paragraphs: [
+                    "여름밤에는 환기를 하거나 베란다 문을 열어둔 뒤 작은 날벌레가 먼저 보입니다.",
+                    "침대 옆 협탁, 거실 테이블, 창가처럼 손이 닿는 곳에 두기 좋은 크기입니다.",
+                  ],
+                },
+                {
+                  eyebrow: "상품 특이점",
+                  title: "보랏빛 LED와 아래로 흐르는 흡입 구조",
+                  paragraphs: [
+                    "내부 LED 광원으로 작은 날벌레를 유도하고, 흡입팬이 아래쪽 포집부로 끌어들이는 구조입니다.",
+                    "램프, 흡입 흐름, 전격 포충부가 한 몸에 들어간 원통형 타입입니다.",
+                  ],
+                },
+                {
+                  eyebrow: "사용 루틴",
+                  title: "전원을 연결하고, 가까운 곳에 세워두세요",
+                  paragraphs: [
+                    "USB 전원에 연결한 뒤 평평한 곳에 세워두는 방식입니다.",
+                    "창가, 침대 옆, 책상 위처럼 오래 머무는 자리에 두면 제품을 더 자연스럽게 사용할 수 있습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "구성",
+                  title: "본품 1개, 두 가지 색상",
+                  paragraphs: [
+                    "구성은 본품 1개입니다.",
+                    "색상은 블랙과 화이트 중 선택할 수 있습니다.",
+                  ],
+                },
+              ],
+              recommendations: [
+                "침실 협탁이나 창가 가까이",
+                "책상, 작업대, 거실 테이블 위",
+                "베란다 문 가까운 실내 공간",
+                "USB 전원 연결이 가능한 캠핑 테이블",
+              ],
+              specTitle: "상품 정보",
+              specs: [
+                { label: "제품명", value: "나이트클린 LED 모기트랩" },
+                { label: "제품 유형", value: "LED 포충 램프" },
+                { label: "색상", value: "블랙, 화이트" },
+                { label: "구성", value: "본품 1개" },
+                { label: "크기", value: "12 x 12 x 19.5cm" },
+                { label: "전원", value: "DC5V 1A" },
+                { label: "정격 출력", value: "5W" },
+                { label: "전원선 길이", value: "120cm" },
+                { label: "원산지", value: "중국(협력업체)" },
+              ],
+            },
+          },
+          {
+            id: "product-007",
+            slug: "cooling-pad",
+            name: "썸머쿨 냉감패드",
+            cardTitle: "썸머쿨 냉감패드",
+            shortDescription: "여름밤 침대 위에 가볍게 더하는 냉감 침구",
+            longDescription:
+              "썸머쿨 냉감패드는 하늘색 면과 회색 안쪽면이 보이는 누빔 침구입니다. 더운 밤 자주 눕는 자리에 가볍게 펼쳐 쓰기 좋습니다.",
+            categoryId: "living",
+            categoryLabel: "생활용품",
+            statusLabel: "시즌 상품",
+            price: 59900,
+            originalPrice: 0,
+            discountRate: 0,
+            extraFeeLabel: "추가 비용",
+            extraFee: 0,
+            image: "assets/ittemmall/summer-small-appliances/cooling-pad-woman-thumb-v1.png",
+            adCreativeImage: "assets/ittemmall/summer-small-appliances/cooling-pad-meta-ad-v9.png",
+            cardMediaClass: "portrait",
+            detailMediaClass: "portrait",
+            hiddenFromMainSite: false,
+            standaloneStore: true,
+            hideStandaloneInfo: true,
+            theme: {
+              mode: "white",
+              brand: "#111111",
+              brandLight: "#F4F4F5",
+              accent: "#111111",
+              accent2: "#525252",
+              soft: "#F7F7F7",
+              onBrand: "#FFFFFF",
+              headerBg: "#FFFFFF",
+              headerText: "#111111",
+              headerBorder: "#E5E7EB",
+            },
+            images: [
+              "assets/ittemmall/summer-small-appliances/cooling-pad-woman-thumb-v1.png",
+              "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-pad-hero.png",
+              "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-pad-detail.png",
+            ],
+            options: [
+              { label: "색상", values: ["하늘색", "라벤더", "딥블루"] },
+              { label: "사이즈", values: ["150x200cm", "200x230cm"] },
+              { label: "구성", values: ["본품"] },
+            ],
+            infoItems: [
+              { label: "제품명", value: "썸머쿨 냉감패드" },
+              { label: "제품 유형", value: "냉감 침구" },
+              { label: "색상", value: "하늘색, 라벤더, 딥블루" },
+              { label: "사이즈", value: "150x200cm, 200x230cm" },
+              { label: "구성", value: "본품" },
+            ],
+            story: {
+              highlightEyebrow: "여름 침구의 첫 감촉",
+              highlightCopy:
+                "더운 계절에는 침구가 몸에 닿는 첫 느낌이 오래 남습니다. 썸머쿨 냉감패드는 침대 위에 가볍게 펼쳐 계절감을 바꾸는 여름 침구입니다.",
+              brandImages: [
+                {
+                  src: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-pad-use.png",
+                  alt: "흰 침대 위에 펼쳐진 하늘색과 회색 양면 썸머쿨 냉감패드 사용 장면",
+                },
+              ],
+              featureImage: {
+                src: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-pad-detail.png",
+                alt: "하늘색과 회색 양면 누빔 원단이 보이는 썸머쿨 냉감패드 디테일",
+              },
+              highlights: [
+                "하늘색, 라벤더, 딥블루 색상 옵션",
+                "150x200cm / 200x230cm 사이즈",
+                "양면 느낌이 보이는 누빔 침구",
+              ],
+              sections: [
+                {
+                  eyebrow: "공감 장면",
+                  title: "방은 시원한데 침구가 답답한 밤",
+                  paragraphs: [
+                    "더운 밤에는 매트리스 위에 닿는 첫 느낌이 생각보다 크게 남습니다.",
+                    "자주 눕는 자리 위에 한 장 더해 침대의 계절감을 여름용으로 바꿔보세요.",
+                  ],
+                },
+                {
+                  eyebrow: "상품 특이점",
+                  title: "하늘색 겉면과 회색 안쪽면",
+                  paragraphs: [
+                    "하늘색 면과 회색 안쪽면이 보이는 양면형 여름 침구입니다.",
+                    "누빔 라인이 있어 침대 위에 펼쳤을 때 형태가 단정하게 잡힙니다.",
+                  ],
+                },
+                {
+                  eyebrow: "선택",
+                  title: "침대 크기와 침실 톤에 맞춰 선택",
+                  paragraphs: [
+                    "색상은 하늘색, 라벤더, 딥블루로 준비했습니다.",
+                    "사이즈는 150x200cm와 200x230cm 두 가지라 침대 크기에 맞춰 고를 수 있습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "관리",
+                  title: "여름 침구답게 가볍게 관리",
+                  paragraphs: [
+                    "세탁 시에는 단독세탁, 세탁망 사용, 찬물세탁, 중성세제 사용을 권장합니다.",
+                    "처음 사용 전에는 제품 안내와 세탁 라벨을 함께 확인해 주세요.",
+                  ],
+                },
+              ],
+              recommendations: [
+                "더운 밤 침구 감촉이 답답하게 느껴지는 분",
+                "여름용 침구를 가볍게 바꾸고 싶은 분",
+                "침실 톤에 맞춰 색상과 사이즈를 고르고 싶은 분",
+              ],
+              specTitle: "상품 정보",
+              specs: [
+                { label: "제품명", value: "썸머쿨 냉감패드" },
+                { label: "상품 타입", value: "냉감 침구" },
+                { label: "제품 유형", value: "냉감패드" },
+                { label: "색상", value: "하늘색, 라벤더, 딥블루" },
+                { label: "사이즈", value: "150x200cm, 200x230cm" },
+                { label: "구성", value: "본품" },
+                { label: "소재", value: "우사면" },
+                { label: "원산지", value: "중국(협력업체)" },
+                { label: "세탁 안내", value: "단독세탁, 세탁망 사용, 찬물세탁, 중성세제 사용" },
+              ],
+            },
+          },
+          {
+            id: "product-010",
+            slug: "steam-iron2",
+            name: "모닝핏 접이식 스팀다리미",
+            cardTitle: "모닝핏 접이식 스팀다리미",
+            shortDescription: "셔츠 앞섶과 소매를 빠르게 정돈하는 접이식 핸디 다리미",
+            longDescription:
+              "20초 예열, 120ml 물탱크, 스팀/건식 겸용 모드, 접이식 손잡이를 갖춘 유선형 핸디 다리미입니다. 출근 전 셔츠와 여행 가방 속 옷의 눌린 자국을 필요한 부분부터 정돈할 수 있습니다.",
+            categoryId: "digital",
+            categoryLabel: "생활가전",
+            statusLabel: "신상품",
+            price: 42900,
+            originalPrice: 0,
+            discountRate: 0,
+            extraFeeLabel: "추가 비용",
+            extraFee: 0,
+            image: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-hero-v3.png",
+            adCreativeImage: "assets/ittemmall/summer-small-appliances/steam-iron2-meta-ad-v9.png",
+            cardMediaClass: "portrait",
+            detailMediaClass: "portrait",
+            hiddenFromMainSite: false,
+            standaloneStore: true,
+            hideStandaloneInfo: true,
+            theme: {
+              mode: "white",
+              brand: "#111111",
+              brandLight: "#F4F4F5",
+              accent: "#111111",
+              accent2: "#525252",
+              soft: "#F7F7F7",
+              onBrand: "#FFFFFF",
+              headerBg: "#FFFFFF",
+              headerText: "#111111",
+              headerBorder: "#E5E7EB",
+            },
+            images: [
+              "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-hero-v3.png",
+              "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-problem-v3.png",
+              "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-use-v3.png",
+              "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-detail-v3.png",
+              "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-feature-v3.png",
+            ],
+            options: [
+              { label: "색상", values: ["화이트"] },
+              { label: "구성", values: ["본품 세트"] },
+              { label: "사용 모드", values: ["스팀/건식 겸용"] },
+            ],
+            infoItems: [
+              { label: "제품명", value: "모닝핏 접이식 스팀다리미" },
+              { label: "모델명", value: "RC029" },
+              { label: "소비전력", value: "1000W" },
+              { label: "정격입력", value: "220V 60Hz" },
+              { label: "물탱크 용량", value: "120ml" },
+              { label: "예열시간", value: "20초" },
+              { label: "스팀사용시간", value: "8분 연속" },
+              { label: "스팀 분사량", value: "17-23g/min" },
+              { label: "사용 모드", value: "2단계 스팀(습식) & 건식모드" },
+              { label: "온도", value: "약 150-170도" },
+              { label: "제품 크기", value: "접었을 때 145 x 78 x 103mm / 펼쳤을 때 225mm" },
+              { label: "케이블 길이", value: "약 1.9m" },
+              { label: "무게", value: "665g(전원코드 포함)" },
+              { label: "재질", value: "ABS + PC + Steel" },
+              { label: "구성품", value: "본품, 단열패드, 계량컵, 벨크로타이, 파우치, 매뉴얼" },
+              { label: "원산지", value: "중국(협력업체)" },
+              { label: "인증정보", value: "R-R-CMm-RC029 / JU071953-24002" },
+            ],
+            story: {
+              highlightEyebrow: "옷장 앞에서 바로 정돈",
+              highlightCopy:
+                "셔츠를 꺼낸 뒤 눈에 띄는 앞섶과 소매를 필요한 부분부터 다듬습니다. 접이식 손잡이와 120ml 물탱크, 스팀/건식 모드를 갖춘 유선형 다리미라 옷장 앞, 세탁실, 여행 가방을 정리하는 자리에서 쓰기 좋습니다.",
+              brandImages: [
+                {
+                  src: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-use-v3.png",
+                  alt: "셔츠 앞에서 사용하는 모닝핏 접이식 스팀다리미",
+                },
+              ],
+              featureImage: {
+                src: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-feature-v3.png",
+                alt: "물 주입구와 버튼, 배수 구조가 보이는 모닝핏 접이식 스팀다리미 기능 컷",
+              },
+              highlights: [
+                "20초 예열",
+                "스팀/건식 겸용",
+                "접이식 손잡이와 보관 파우치",
+              ],
+              sections: [
+                {
+                  eyebrow: "공감 장면",
+                  title: "입기 직전, 셔츠 앞섶이 먼저 보일 때",
+                  paragraphs: [
+                    "큰 다리미판을 꺼내기 애매한 아침에도 셔츠 앞섶과 소매의 접힌 자국은 눈에 먼저 들어옵니다.",
+                    "손에 들고 필요한 부분부터 다듬는 핸디형 구조라 출근 전 옷장 앞, 세탁실, 출장 가방을 정리하는 자리에서 쓰기 좋습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "상품 특이점",
+                  title: "구성품과 조작부를 함께 보는 다리미",
+                  paragraphs: [
+                    "본품, 단열패드, 계량컵, 벨크로타이, 파우치, 매뉴얼을 함께 담은 세트입니다.",
+                    "접이식 손잡이와 120ml 물탱크, 약 1.9m 전원선, 스팀/건식 모드가 한 제품 안에 모여 있어 사용 전 준비와 사용 후 보관 흐름이 단순합니다.",
+                  ],
+                },
+                {
+                  eyebrow: "사용 루틴",
+                  title: "셔츠와 얇은 겉옷을 입기 전에",
+                  paragraphs: [
+                    "물탱크에 물을 채우고 예열한 뒤 옷감과 상황에 맞춰 스팀 또는 건식으로 사용합니다.",
+                    "사용 뒤에는 전원을 분리하고 열판과 스팀 분사구를 충분히 식힌 뒤 물탱크에 남은 물을 비워 보관해 주세요.",
+                  ],
+                },
+                {
+                  eyebrow: "구성",
+                  title: "본품과 보관에 필요한 기본 구성",
+                paragraphs: [
+                    "구성은 본품, 단열패드, 계량컵, 벨크로타이, 파우치, 매뉴얼입니다.",
+                    "전원코드 포함 무게는 665g이며, 접었을 때 145 x 78 x 103mm 크기라 보관 위치를 먼저 정하기 쉽습니다.",
+                  ],
+                },
+              ],
+              recommendations: [
+                "출근 전 셔츠를 가볍게 정돈하고 싶은 분",
+                "여행이나 출장 가방에 넣을 소형 다리미를 찾는 분",
+                "스팀과 건식 모드를 함께 쓰고 싶은 분",
+              ],
+              specTitle: "상품 정보",
+              specs: [
+                { label: "제품명", value: "모닝핏 접이식 스팀다리미" },
+                { label: "모델명", value: "RC029" },
+                { label: "소비전력", value: "1000W" },
+                { label: "정격입력", value: "220V 60Hz" },
+                { label: "물탱크 용량", value: "120ml" },
+                { label: "예열시간", value: "20초" },
+                { label: "스팀사용시간", value: "8분 연속" },
+                { label: "스팀 분사량", value: "17-23g/min" },
+                { label: "사용 모드", value: "2단계 스팀(습식) & 건식모드" },
+                { label: "온도", value: "약 150-170도" },
+                { label: "제품 크기", value: "접었을 때 145 x 78 x 103mm / 펼쳤을 때 225mm" },
+                { label: "케이블 길이", value: "약 1.9m" },
+                { label: "무게", value: "665g(전원코드 포함)" },
+                { label: "재질", value: "ABS + PC + Steel" },
+                { label: "구성품", value: "본품, 단열패드, 계량컵, 벨크로타이, 파우치, 매뉴얼" },
+                { label: "원산지", value: "중국(협력업체)" },
+                { label: "인증정보", value: "R-R-CMm-RC029 / JU071953-24002" },
+              ],
+            },
+            v6Detail: {
+              detailPlacement: "afterProof",
+              hero: {
+                image: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-hero-v3-ai-v8-overlay-r2.png",
+                alt: "옷장 앞 스튜디오 배경의 모닝핏 접이식 스팀다리미",
+                eyebrow: "HANDY STEAM IRON",
+                titleLines: ["옷장 앞에서", "바로 쓰는 다리미"],
+                lead: "20초 예열과 120ml 물탱크, 스팀/건식 모드로 셔츠와 얇은 겉옷의 접힌 자국을 필요한 부분부터 정돈합니다.",
+                modelValue: "모닝핏 접이식형",
+                modelText: "접이식 스팀다리미",
+              },
+              specStrip: [
+                { label: "예열시간", value: "20초" },
+                { label: "물탱크", value: "120ml" },
+                { label: "소비전력", value: "1000W" },
+                { label: "케이블", value: "약 1.9m" },
+                { label: "구성", value: "본품 세트" },
+              ],
+              intro: {
+                titleLines: ["큰 다리미판 없이", "보이는 곳부터"],
+                copy: "매번 다리미판을 펼치기에는 시간이 짧고, 그렇다고 구김이 보이는 옷을 그냥 입기에는 신경 쓰이는 순간이 있습니다. 옷장 앞이나 세탁실 가까이에 두고 셔츠 앞섶, 소매, 얇은 겉옷의 눌린 부분을 필요한 만큼만 정돈하는 제품입니다.",
+              },
+              problem: {
+                image: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-problem-v3-ai-v8-overlay-r2.png",
+                alt: "옷장 앞에 걸린 주름진 셔츠와 재킷",
+                eyebrow: "MORNING READY",
+                titleLines: ["입기 전에", "먼저 보이는 구김"],
+                lead: "셔츠 앞섶과 소매, 가방 안에서 눌린 옷처럼 작은 구김은 가까이서 더 잘 보입니다. 외출 직전에는 눈에 띄는 부분부터 짧게 정돈할 수 있는 다리미가 필요해집니다.",
+              },
+              feature: {
+                image: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-detail-v3-ai-v8-overlay-r2.png",
+                alt: "모닝핏 접이식 스팀다리미 본품과 단열패드, 계량컵, 파우치 구성",
+                eyebrow: "READY SET",
+                titleLines: ["받는 구성부터", "사용 준비까지"],
+                copy: "본품, 단열패드, 계량컵, 벨크로타이, 파우치, 매뉴얼까지 함께 담은 세트입니다. 물을 계량해 채우고, 사용 후 식혀 보관하는 흐름이 한 세트 안에서 이어집니다.",
+                points: [
+                  { title: "본품 세트", caption: "다리미 본품과 사용 전후에 필요한 기본 구성" },
+                  { title: "보관 파우치", caption: "접이식 손잡이와 함께 보관 위치를 줄이는 구성" },
+                  { title: "계량컵 포함", caption: "120ml 물탱크에 물을 채우기 위한 기본 구성" },
+                ],
+              },
+              proof: {
+                eyebrow: "READY ROUTINE",
+                titleLines: ["아침 준비에 맞춘", "작은 사용 흐름"],
+                copy: "빠르게 예열하고, 손잡이를 접고, 전원선을 연결해 필요한 자리에서 바로 쓰기 쉬운 흐름입니다.",
+                items: [
+                  {
+                    iconImage: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-picto-quick-heat-v4.png",
+                    title: "20초 예열 준비",
+                    caption: "전원 연결 뒤 약 20초 예열하면 외출 전 짧은 시간에도 사용을 시작하기 좋습니다.",
+                  },
+                  {
+                    iconImage: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-picto-folding-handle-v4.png",
+                    title: "접히는 손잡이",
+                    caption: "사용하지 않을 때 손잡이를 접을 수 있어 파우치나 수납 공간에 넣기 쉬운 구조입니다.",
+                  },
+                  {
+                    iconImage: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-picto-long-cord-v4.png",
+                    title: "약 1.9m 유선 사용",
+                    caption: "옷걸이 앞, 세탁실, 숙소 책상 주변처럼 콘센트와 거리가 있는 자리에서도 쓰기 좋습니다.",
+                  },
+                  {
+                    iconImage: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-picto-storage-set-v4.png",
+                    title: "파우치와 기본 구성",
+                    caption: "단열패드, 계량컵, 벨크로타이, 파우치, 매뉴얼까지 사용 전후에 필요한 구성을 담았습니다.",
+                  },
+                ],
+              },
+              detail: {
+                image: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-feature-v3-ai-v8-overlay-r2.png",
+                alt: "모닝핏 접이식 스팀다리미의 물 주입구와 버튼, 배수 구조",
+                eyebrow: "CONTROL DETAIL",
+                titleLines: ["물탱크와 버튼부를", "보고 쓰는 구조"],
+                lead: "120ml 물탱크에 물을 채우고 예열한 뒤 옷감과 상황에 맞춰 스팀 또는 건식으로 사용합니다. 사용 후에는 전원을 분리하고 충분히 식힌 뒤 남은 물을 비워 보관해 주세요.",
+              },
+              benefit: {
+                image: "assets/ittemmall/summer-small-appliances/detail-factory-rc029-20260709/steam-iron2-use-v3-ai-v8-overlay-r2-logo.png",
+                alt: "셔츠 앞에서 사용하는 모닝핏 접이식 스팀다리미",
+                eyebrow: "DAILY CARE",
+                titleLines: ["걸어 둔 옷을", "입기 좋게 마무리"],
+                copy: "옷걸이에 걸린 셔츠를 그대로 두고 앞섶과 소매처럼 시선이 먼저 가는 부분을 다듬습니다. 매일 입는 옷을 꺼내는 동선에 맞춘 작은 다리미라 출근 전, 외출 전, 출장 숙소에서 옷차림을 정돈하는 용도로 쓰기 좋습니다.",
+                points: [
+                  {
+                    title: "출근 전 옷차림 정돈",
+                    caption: "셔츠 앞섶과 소매처럼 눈에 먼저 보이는 부분을 빠르게 다듬습니다.",
+                  },
+                  {
+                    title: "여행과 출장 전후 옷 관리",
+                    caption: "가방에서 꺼낸 옷의 눌린 자국을 숙소나 집에서 다시 정돈하기 좋습니다.",
+                  },
+                  {
+                    title: "스팀과 건식 모드 선택",
+                    caption: "옷감과 상황에 맞춰 스팀 또는 건식으로 나눠 사용할 수 있습니다.",
+                  },
+                ],
+              },
+              infoTitle: "구매 전 살펴볼 제품 정보",
+              infoCaption: "모델명, 전원, 소비전력, 물탱크 용량, 구성품, 인증번호를 주문 전에 살펴보세요.",
+              info: [
+                { label: "제품명", value: "모닝핏 접이식 스팀다리미" },
+                { label: "모델명", value: "RC029" },
+                { label: "소비전력", value: "1000W" },
+                { label: "정격입력", value: "220V 60Hz" },
+                { label: "물탱크 용량", value: "120ml" },
+                { label: "예열시간", value: "20초" },
+                { label: "스팀사용시간", value: "8분 연속" },
+                { label: "스팀 분사량", value: "17-23g/min" },
+                { label: "사용 모드", value: "2단계 스팀(습식) & 건식모드" },
+                { label: "온도", value: "약 150-170도" },
+                { label: "제품 크기", value: "접었을 때 145 x 78 x 103mm / 펼쳤을 때 225mm" },
+                { label: "케이블 길이", value: "약 1.9m" },
+                { label: "무게", value: "665g(전원코드 포함)" },
+                { label: "재질", value: "ABS + PC + Steel" },
+                { label: "구성품", value: "본품, 단열패드, 계량컵, 벨크로타이, 파우치, 매뉴얼" },
+                { label: "원산지", value: "중국(협력업체)" },
+                { label: "인증정보", value: "R-R-CMm-RC029 / JU071953-24002" },
+              ],
+              policy: {
+                titleLines: ["배송 / 교환 / 반품 안내"],
+                caption: "주문 전후 확인해야 할 기본 안내입니다.",
+                items: [
+                  {
+                    title: "배송 안내",
+                    copy: "주문 접수 후 상품별 출고 일정에 맞춰 발송됩니다. 제주/도서산간 지역은 추가 비용이나 기간이 발생할 수 있습니다.",
+                  },
+                  {
+                    title: "교환 / 반품",
+                    copy: "상품 수령 후 구성품과 외관을 먼저 살펴봐 주세요. 사용 흔적, 구성품 누락, 포장 훼손 여부에 따라 교환/반품 가능 여부가 달라질 수 있습니다.",
+                  },
+                  {
+                    title: "문의 안내",
+                    copy: "상품 이상이나 배송 문의는 주문 정보와 사진을 함께 남겨 주세요. 접수 내용에 맞춰 안내드립니다.",
+                  },
+                ],
+              },
+            },
+          },
+          {
+            id: "product-009",
+            slug: "cooling-hand-fan",
+            name: "쿨터치 냉각 손선풍기",
+            cardTitle: "쿨터치 냉각 손선풍기",
+            shortDescription: "외출길 손에 들고 쓰는 냉각판 휴대용 팬",
+            longDescription:
+              "정류장, 산책길, 야외 카페처럼 더위가 길게 느껴지는 순간에 손에 들고 쓰기 좋은 휴대용 냉각 손선풍기입니다.",
+            categoryId: "seasonal",
+            categoryLabel: "시즌",
+            statusLabel: "시즌 상품",
+            price: 39900,
+            originalPrice: 0,
+            discountRate: 0,
+            extraFeeLabel: "추가 비용",
+            extraFee: 0,
+            image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-hero.png",
+            adCreativeImage: "assets/ittemmall/summer-small-appliances/cooling-hand-fan-meta-ad-v9.png",
+            cardMediaClass: "portrait",
+            detailMediaClass: "portrait",
+            hiddenFromMainSite: false,
+            standaloneStore: true,
+            hideStandaloneInfo: true,
+            theme: {
+              mode: "white",
+              brand: "#111111",
+              brandLight: "#F4F4F5",
+              accent: "#111111",
+              accent2: "#525252",
+              soft: "#F7F7F7",
+              onBrand: "#FFFFFF",
+              headerBg: "#FFFFFF",
+              headerText: "#111111",
+              headerBorder: "#E5E7EB",
+            },
+            images: [
+              "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-hero.png",
+              "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-use.png",
+              "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-detail.png",
+            ],
+            options: [
+              { label: "색상", values: ["화이트", "그레이"] },
+              { label: "구성", values: ["본품 1개"] },
+              { label: "사용 방식", values: ["휴대용"] },
+            ],
+            infoItems: [
+              { label: "제품명", value: "쿨터치 냉각 손선풍기" },
+              { label: "제품 유형", value: "휴대용 냉각 팬" },
+              { label: "색상", value: "화이트, 그레이" },
+              { label: "구성", value: "본품 1개" },
+              { label: "바람 단계", value: "5단계" },
+            ],
+            story: {
+              highlightEyebrow: "손 안에 남겨두는 바람",
+              highlightCopy:
+                "쿨터치 냉각 손선풍기는 원형 팬 헤드와 중앙 냉각판이 보이는 휴대용 팬입니다. 외출길 손이 닿는 곳에 두고, 더운 순간마다 바로 꺼내 쓰기 좋습니다.",
+              brandImages: [
+                {
+                  src: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-use.png",
+                  alt: "야외 테이블에서 손에 든 쿨터치 냉각 손선풍기 사용 장면",
+                },
+              ],
+              featureImage: {
+                src: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-detail.png",
+                alt: "화이트와 그레이 색상 쿨터치 냉각 손선풍기 비교 컷",
+              },
+              highlights: [
+                "원형 팬 헤드와 중앙 냉각판",
+                "5단계 바람",
+                "화이트 / 그레이 색상 옵션",
+              ],
+              sections: [
+                {
+                  eyebrow: "공감 장면",
+                  title: "기다리는 시간이 길어지는 여름 외출길",
+                  paragraphs: [
+                    "버스 정류장, 산책길, 야외 카페처럼 햇빛이 남아 있는 자리에서는 작은 바람도 크게 느껴집니다.",
+                    "손에 드는 휴대용 크기라 이동 중에도 바로 꺼내 쓰기 좋습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "상품 특이점",
+                  title: "원형 팬 헤드와 중앙 냉각판",
+                  paragraphs: [
+                    "앞면에는 원형 팬 헤드와 중앙 냉각판이 보이는 구조입니다.",
+                    "바람 단계는 5단계로 선택할 수 있어 외출 상황에 맞춰 조절할 수 있습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "사용 루틴",
+                  title: "가방 가까이에 두고 바로 꺼내기",
+                  paragraphs: [
+                    "외출 전 충전 상태를 확인하고, 가방 안쪽이나 손이 닿는 곳에 넣어두세요.",
+                    "야외에서 오래 기다릴 때, 실내로 들어가기 전 잠깐 식히고 싶을 때 부담 없이 꺼내기 좋습니다.",
+                  ],
+                },
+                {
+                  eyebrow: "구성",
+                  title: "선택한 색상 본품 1개",
+                  paragraphs: [
+                    "색상은 화이트와 그레이 중 선택할 수 있습니다.",
+                    "상세 이미지의 두 색상 비교 컷은 색상 안내용이며, 구성은 선택한 색상 본품 1개입니다.",
+                  ],
+                },
+              ],
+              recommendations: [
+                "출근길이나 정류장에서 손에 들 바람이 필요한 분",
+                "가방에 넣기 쉬운 휴대용 선풍기를 찾는 분",
+                "화이트와 그레이 중 깔끔한 색상을 고르고 싶은 분",
+              ],
+              specTitle: "상품 정보",
+              specs: [
+                { label: "제품명", value: "쿨터치 냉각 손선풍기" },
+                { label: "상품 타입", value: "냉각판 휴대용 손선풍기" },
+                { label: "제품 유형", value: "휴대용 냉각 팬" },
+                { label: "색상", value: "화이트, 그레이" },
+                { label: "구성", value: "본품 1개" },
+                { label: "바람 단계", value: "5단계" },
+                { label: "사용 방식", value: "무선, 휴대용, 걸이형/스탠드형" },
+                { label: "원산지", value: "중국(협력업체)" },
               ],
             },
           },
         ];
 
+        const productStoryV6Presets = {
+          "mosquito-trap": {
+            hideIntro: true,
+            hero: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-xhl01-source-aligned-20260709/mosquito-trap-xhl01-source-hero-ai-v8-overlay-r2.png",
+              alt: "침대 옆 테이블에 놓인 나이트클린 LED 모기트랩",
+              eyebrow: "LED MOSQUITO CONTROL",
+              titleLines: ["밤의 창가에", "조용히 켜두는", "포충 램프"],
+              lead: "창가를 열어두는 계절, 작은 날벌레는 멀리서보다 곁에서 먼저 신경 쓰입니다. 침대 옆과 책상 위에 두는 탁상형 LED 모기트랩입니다.",
+              modelValue: "나이트클린 LED 모기트랩",
+              modelText: "탁상형 LED 포충 램프",
+            },
+            specStrip: [
+              { value: "LED", label: "유인 광원" },
+              { value: "2색", label: "블랙 / 화이트" },
+              { value: "12 x 12 x 19.5cm", label: "탁상형 크기" },
+              { value: "DC5V 1A", label: "USB 전원" },
+              { value: "5W", label: "정격 출력" },
+            ],
+            problem: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-xhl01-source-aligned-20260709/mosquito-trap-xhl01-source-problem-ai-v8-overlay-r2.png",
+              alt: "창가 테이블 위에 놓인 나이트클린 LED 모기트랩",
+              eyebrow: "SUMMER NIGHT",
+              titleLines: ["불을 끈 뒤에도", "창가 근처는", "계속 신경 쓰입니다"],
+              lead: "환기를 하고 조명을 낮춘 뒤에도 시선은 자꾸 창가로 갑니다. 크게 준비하지 않아도 가까운 자리에 켜둘 수 있는 제품이 필요해지는 순간입니다.",
+            },
+            feature: {
+              image: "assets/ittemmall/summer-small-appliances/mosquito-trap-gallery-4x5-20260710/mosquito-trap-gallery-03-airflow-4x5-v1-ai-v8-overlay-r2.png",
+              alt: "모기가 보라색 유인광과 흡입 흐름 쪽으로 들어가는 나이트클린 LED 모기트랩 구조",
+              textPlacement: "overlay-top-left",
+              hideCopy: true,
+              eyebrow: "LIGHT + AIRFLOW",
+              titleLines: ["빛으로 유도하고", "아래로", "모으는 구조"],
+              points: [],
+            },
+            proof: {
+              eyebrow: "STRUCTURE CHECK",
+              titleLines: ["빛, 흡입,", "전격과 관리"],
+              copy: "작은 본체 안에서 빛, 공기 흐름, 포집부가 이어지는 방식을 짧게 나눠 보았습니다.",
+              items: [
+                {
+                  iconImage: "assets/ittemmall/summer-small-appliances/detail-factory-xhl01-source-aligned-20260709/pictogram-ai-led-lure.png",
+                  title: "LED 유인 광원",
+                  caption: "보라색 내부 램프가 본체 안쪽에서 켜지는 구조",
+                },
+                {
+                  iconImage: "assets/ittemmall/summer-small-appliances/detail-factory-xhl01-source-aligned-20260709/pictogram-ai-down-airflow.png",
+                  title: "하단 흡입 흐름",
+                  caption: "흡입팬의 공기 흐름이 아래 포집부로 이어지는 방식",
+                },
+                {
+                  iconImage: "assets/ittemmall/summer-small-appliances/detail-factory-xhl01-source-aligned-20260709/pictogram-ai-electric-grid.png",
+                  title: "전격 포충 구조",
+                  caption: "램프 안쪽 포충부가 함께 설계된 올인원 구조",
+                },
+                {
+                  iconImage: "assets/ittemmall/summer-small-appliances/detail-factory-xhl01-source-aligned-20260709/pictogram-ai-detachable-tray.png",
+                  title: "분리 관리 구조",
+                  caption: "상단 보호대와 포집부를 분리해 확인하는 구조",
+                },
+              ],
+            },
+            benefit: {
+              image: "assets/ittemmall/summer-small-appliances/mosquito-trap-gallery-4x5-20260710/mosquito-trap-gallery-02-living-room-user-4x5-v1-ai-v8-overlay-r2-logo.png",
+              alt: "밤의 거실 대리석 테이블 위에 놓인 나이트클린 LED 모기트랩",
+              eyebrow: "NEAR YOUR PLACE",
+              titleLines: ["작아서 가까이,", "가까워서 자주"],
+              copy: "침실 협탁, 책상, 창가 선반처럼 손이 닿는 곳에 놓기 좋은 크기입니다. 큰 기기를 꺼내는 일 없이, 여름밤 신경 쓰이는 자리 가까이에 올려둘 수 있습니다.",
+              points: [
+                { title: "협탁 위", caption: "잠들기 전 시선이 가는 침대 옆 자리" },
+                { title: "책상 가까이", caption: "늦은 밤 작업하거나 공부하는 작은 공간" },
+                { title: "USB 전원", caption: "DC5V 1A 전원으로 연결하는 탁상형 방식" },
+              ],
+            },
+            detail: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-xhl01-source-aligned-20260709/mosquito-trap-xhl01-source-detail-ai-v8-overlay-r2.png",
+              alt: "상단 보호대와 포집부가 분리된 나이트클린 LED 모기트랩",
+              eyebrow: "DETAIL CARE",
+              titleLines: ["보호대와 포집부를", "분리해 확인하는 구조"],
+              lead: "상단 보호대와 아래 포집부를 분리해 내부를 확인할 수 있는 구조입니다. 사용 후에는 전원을 분리한 뒤 포집부를 확인하고 관리해 주세요.",
+            },
+            infoTitle: "제품 정보",
+            infoCaption: "크기와 전원, 색상, 인증 정보를 구매 전에 확인하세요.",
+            recommendations: [],
+            policy: {
+              titleLines: ["배송 / 교환 / 반품 안내"],
+              caption: "주문 전후에 확인해야 할 기본 안내입니다.",
+              items: [
+                { title: "배송 안내", copy: "결제 확인 후 상품별 출고 일정에 따라 순차 발송됩니다. 지역과 수량에 따라 배송비와 도착 일정이 달라질 수 있습니다." },
+                { title: "교환 / 반품", copy: "상품 수령 후 구성품과 외관을 먼저 확인해 주세요. 사용 흔적, 구성품 누락, 포장 훼손이 있으면 교환이나 반품이 제한될 수 있습니다." },
+                { title: "문의 안내", copy: "상품 이상이나 배송 문의는 주문 정보와 사진을 함께 남겨 주세요. 확인 후 안내에 따라 처리됩니다." },
+              ],
+              caution: "사용 전 안전 주의사항을 확인하고, 청소 전에는 반드시 전원을 분리해 주세요.",
+            },
+          },
+          "cooling-pad": {
+            hero: {
+              image: "assets/ittemmall/summer-small-appliances/cooling-pad-woman-thumb-v1-ai-v8-overlay-r2.png",
+              alt: "썸머쿨 냉감패드 위에 누워 쉬는 여름 침실 장면",
+              imageFit: "square",
+              eyebrow: "SUMMER BEDDING",
+              titleLines: ["침대 위에", "가볍게 더하는", "여름 침구"],
+              lead: "썸머쿨 냉감패드는 하늘색 면과 회색 안쪽면이 보이는 누빔 침구입니다. 더운 밤 자주 눕는 자리 위에 가볍게 펼쳐 쓰기 좋은 구성입니다.",
+              modelValue: "썸머쿨 냉감패드",
+              modelText: "하늘색 / 라벤더 / 딥블루",
+            },
+            specStrip: [
+              { value: "3색", label: "하늘색 / 라벤더 / 딥블루" },
+              { value: "150x200cm", label: "선택 사이즈" },
+              { value: "200x230cm", label: "선택 사이즈" },
+              { value: "본품", label: "구성" },
+              { value: "우사면", label: "소재" },
+            ],
+            intro: {
+              titleLines: ["잠들기 전", "몸에 닿는 면부터", "가볍게"],
+              copy: "더운 계절에는 침구의 첫 감촉이 오래 남습니다. 두꺼운 분위기보다 얇고 단정한 누빔 침구를 찾는 분에게 맞는 상품입니다.",
+            },
+            problem: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-pad-use-ai-v8-overlay-r2.png",
+              alt: "여름 침대 위에 펼쳐진 썸머쿨 냉감패드",
+              eyebrow: "SUMMER NIGHT",
+              titleLines: ["방은 시원해도", "침구가 답답한", "밤이 있습니다"],
+              lead: "에어컨을 켜도 침대 위 감촉이 무겁게 느껴지는 날이 있습니다. 자주 눕는 자리 위에 여름용 침구를 먼저 바꿔보세요.",
+            },
+            feature: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-pad-detail-ai-v8-overlay-r2.png",
+              alt: "하늘색과 회색 양면 누빔이 보이는 썸머쿨 냉감패드 디테일",
+              textPlacement: "overlay-top",
+              eyebrow: "FABRIC DETAIL",
+              titleLines: ["하늘색 면과", "회색 안쪽면이", "보이는 구조"],
+              copy: "접힌 모서리에서 양면 색상이 보이고, 누빔 라인이 침대 위 형태를 단정하게 잡아줍니다. 얇은 여름 침구로 쓰기 좋은 두께감입니다.",
+              points: [],
+            },
+            proof: {
+              eyebrow: "CHECK POINT",
+              titleLines: ["침구를 고를 때", "먼저 보는 것"],
+              copy: "색상, 사이즈, 구성, 관리 방법을 구매 전에 짧게 확인하세요.",
+              items: [
+                { icon: "check", title: "양면 색감", caption: "하늘색 면과 회색 안쪽면이 보이는 여름 침구" },
+                { icon: "grille", title: "누빔 라인", caption: "침대 위에 펼쳤을 때 형태가 단정하게 잡히는 라인" },
+                { icon: "package", title: "두 가지 사이즈", caption: "150x200cm와 200x230cm 중 선택" },
+                { icon: "clean", title: "세탁 안내", caption: "단독세탁, 세탁망 사용, 찬물세탁, 중성세제 권장" },
+              ],
+            },
+            benefit: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-pad-use-ai-v8-overlay-r2-logo.png",
+              alt: "밝은 침실에 놓인 썸머쿨 냉감패드",
+              eyebrow: "THREE COLORS",
+              titleLines: ["하늘색, 라벤더,", "딥블루까지", "세 가지 색"],
+              copy: "밝은 하늘색, 은은한 라벤더, 차분한 딥블루까지 세 가지 색으로 준비했습니다. 침실 분위기와 취향에 맞는 색을 골라보세요.",
+              points: [
+                { title: "하늘색", caption: "밝고 산뜻한 느낌의 색상" },
+                { title: "라벤더", caption: "은은한 보랏빛이 도는 색상" },
+                { title: "딥블루", caption: "차분하고 짙은 파란색" },
+              ],
+            },
+            detail: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-pad-detail-ai-v8-overlay-r2.png",
+              alt: "썸머쿨 냉감패드의 접힌 모서리와 누빔 디테일",
+              eyebrow: "CARE",
+              titleLines: ["처음 사용 전", "세탁 안내를", "확인하세요"],
+              lead: "세탁 시에는 단독세탁, 세탁망 사용, 찬물세탁, 중성세제 사용을 권장합니다. 제품 라벨과 안내를 함께 확인한 뒤 관리해 주세요.",
+            },
+            infoTitle: "제품 정보",
+            infoCaption: "색상, 사이즈, 소재, 세탁 안내를 구매 전에 확인하세요.",
+          },
+          "cooling-hand-fan": {
+            hero: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-hero-ai-v8-overlay-r2.png",
+              alt: "화이트와 그레이 색상 쿨터치 냉각 손선풍기",
+              eyebrow: "PORTABLE COOLING FAN",
+              titleLines: ["외출길 손 안에", "작게 남겨두는", "여름 바람"],
+              lead: "쿨터치 냉각 손선풍기는 원형 팬 헤드와 중앙 냉각판이 보이는 휴대용 제품입니다. 화이트와 그레이 중 선택할 수 있습니다.",
+              modelValue: "쿨터치 냉각 손선풍기",
+              modelText: "화이트 / 그레이",
+            },
+            specStrip: [
+              { value: "2색", label: "화이트 / 그레이" },
+              { value: "5단계", label: "바람 단계" },
+              { value: "본품 1개", label: "구성" },
+              { value: "무선", label: "사용 방식" },
+              { value: "휴대용", label: "상품 타입" },
+            ],
+            intro: {
+              titleLines: ["기다리는 시간이", "길어지는", "여름 외출길"],
+              copy: "정류장, 산책길, 야외 카페처럼 더위가 길게 느껴지는 순간이 있습니다. 손에 들고 바로 켤 수 있는 휴대용 손선풍기입니다.",
+            },
+            problem: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-use-ai-v8-overlay-r2.png",
+              alt: "야외 테이블에서 손에 든 쿨터치 냉각 손선풍기",
+              eyebrow: "OUTDOOR SCENE",
+              titleLines: ["잠깐 기다리는", "그 시간도", "덥게 느껴집니다"],
+              lead: "햇빛이 남아 있는 자리에서는 짧은 기다림도 길어집니다. 가방 가까이에 두고, 필요할 때 손에 들기 좋은 크기입니다.",
+            },
+            feature: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-detail-ai-v8-overlay-r2.png",
+              alt: "중앙 냉각판과 버튼이 보이는 쿨터치 냉각 손선풍기",
+              eyebrow: "FRONT DETAIL",
+              titleLines: ["원형 팬 헤드와", "중앙 냉각판이", "보이는 앞면"],
+              copy: "앞면에는 원형 팬 헤드와 중앙 냉각판이 보입니다. 손잡이 앞쪽 버튼과 하단 걸이형 구조까지 함께 확인할 수 있습니다.",
+              points: [],
+            },
+            proof: {
+              eyebrow: "CHECK POINT",
+              titleLines: ["손에 들기 전", "확인할 부분"],
+              copy: "색상, 바람 단계, 구성, 사용 방식을 구매 전에 확인하세요.",
+              items: [
+                { icon: "airflow", title: "5단계 바람", caption: "상황에 맞춰 선택하는 바람 단계" },
+                { icon: "info", title: "중앙 냉각판", caption: "팬 헤드 가운데 원형 냉각판이 보이는 구조" },
+                { icon: "check", title: "화이트 / 그레이", caption: "두 가지 색상 중 선택" },
+                { icon: "package", title: "본품 1개", caption: "구성은 선택한 색상의 본품 1개" },
+              ],
+            },
+            benefit: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-use-ai-v8-overlay-r2-logo.png",
+              alt: "여름 외출길에 손에 든 쿨터치 냉각 손선풍기",
+              eyebrow: "CARRY",
+              titleLines: ["가방 가까이에", "넣어두는", "외출용 팬"],
+              copy: "외출 전 충전 상태를 확인하고, 손이 닿는 곳에 넣어두세요. 야외에서 오래 기다릴 때 부담 없이 꺼내기 좋습니다.",
+              points: [
+                { title: "정류장", caption: "기다리는 시간이 길게 느껴지는 자리" },
+                { title: "산책길", caption: "가볍게 들고 이동하는 여름 외출" },
+                { title: "야외 카페", caption: "테이블 위에 잠시 세워두기 좋은 구조" },
+              ],
+            },
+            detail: {
+              image: "assets/ittemmall/summer-small-appliances/detail-factory-v3-20260709/cooling-hand-fan-detail-ai-v8-overlay-r2.png",
+              alt: "화이트와 그레이 쿨터치 냉각 손선풍기 디테일",
+              eyebrow: "OPTION",
+              titleLines: ["두 색상 이미지는", "색상 선택을 위한", "안내입니다"],
+              lead: "화이트와 그레이 중 선택할 수 있습니다. 상세 이미지에 두 색상이 함께 보이더라도 구성은 선택한 색상의 본품 1개입니다.",
+            },
+            infoTitle: "제품 정보",
+            infoCaption: "색상, 구성, 바람 단계, 사용 방식을 구매 전에 확인하세요.",
+          },
+        };
+
         const visibleProducts = products.filter((product) => !product.retired);
-        const homeProducts = visibleProducts.filter((product) => !product.hiddenFromMainSite);
+        const isStaticFilePreview = location.protocol === "file:";
+        const staticPreviewExtraProductIds = new Set([
+          "product-006",
+          "product-007",
+          "product-009",
+          "product-010",
+        ]);
+        const staticPreviewExcludedProductIds = new Set(["product-005"]);
+        const homeProducts = visibleProducts.filter(
+          (product) =>
+            isStaticFilePreview
+              ? !staticPreviewExcludedProductIds.has(product.id) &&
+                (!product.hiddenFromMainSite || staticPreviewExtraProductIds.has(product.id))
+              : !product.hiddenFromMainSite,
+        );
+        const homeCategories = categories.filter(
+          (category) => category.id === "all" || homeProducts.some((product) => product.categoryId === category.id),
+        );
 
         const paymentMethods = {
           toss_pg: {
@@ -2555,6 +4813,9 @@
           state.selectedProductId = homeProducts[0].id;
           state.selectedOptions = getInitialSelectedOptions(homeProducts[0]);
         }
+        if (!homeCategories.some((category) => category.id === state.selectedCategory)) {
+          state.selectedCategory = "all";
+        }
 
         function productFromPathname() {
           const path = location.pathname.replace(/^\/+|\/+$/g, "");
@@ -2573,7 +4834,11 @@
         } else {
           state.page = "home";
         }
-        if (state.page === "home" && currentProduct().hiddenFromMainSite) {
+        if (
+          state.page === "home" &&
+          currentProduct().hiddenFromMainSite &&
+          !homeProducts.some((product) => product.id === currentProduct().id)
+        ) {
           state.selectedProductId = homeProducts[0].id;
           state.selectedOptions = getInitialSelectedOptions(homeProducts[0]);
         }
@@ -3045,6 +5310,13 @@
           return product ? productRouteSlug(product) : productId;
         }
 
+        function productDetailHref(product) {
+          if (!product) return "#/home";
+          const routeSlug = productRouteSlug(product);
+          if (location.protocol === "file:") return `#/product/${routeSlug}`;
+          return product.standaloneStore ? `/${routeSlug}/` : `#/product/${routeSlug}`;
+        }
+
         function productFromRouteId(routeId) {
           return (
             visibleProducts.find((product) => productRouteSlug(product) === routeId) ||
@@ -3425,28 +5697,14 @@
           }
 
           if (action === "home") {
-            if (isStandaloneProduct()) {
-              navigate("detail", {
-                origin: {
-                  page: "detail",
-                  label: `${currentProduct().name} 전용 페이지`,
-                  hash: `/${productRouteId(state.selectedProductId)}/`,
-                },
-              });
-            } else {
-              navigate("home", {
-                origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
-              });
-            }
+            navigate("home", {
+              origin: { page: "home", label: "메인 상품 탐색", hash: "/" },
+            });
           }
 
           if (action === "back") goBack();
           if (action === "history") navigate("history");
           if (action === "search") {
-            if (isStandaloneProduct()) {
-              navigate("detail");
-              return;
-            }
             navigate("home");
             window.setTimeout(() => {
               document.getElementById("productSearch")?.focus();
@@ -3468,10 +5726,6 @@
             render();
           }
           if (action === "menu-products") {
-            if (isStandaloneProduct()) {
-              navigate("detail");
-              return;
-            }
             navigate("home");
             window.setTimeout(() => {
               document.getElementById("products")?.scrollIntoView({ block: "start" });
@@ -3815,10 +6069,6 @@
 
         function resumeOrigin() {
           const origin = state.origin || { page: "home", hash: "/" };
-          if (isStandaloneProduct() && origin.page === "home") {
-            navigate("detail");
-            return;
-          }
           if (origin.page === "detail") {
             navigate("detail");
             return;
@@ -3962,7 +6212,7 @@
           const app = document.getElementById("app");
           const product = currentProduct();
           app.innerHTML = `
-            <div class="phone-shell ${isStandaloneProduct(product) ? "is-standalone-store" : ""} ${themeModeClass(product)}" style="${productThemeStyle(product)}">
+            <div class="phone-shell ${isStandaloneProduct(product) ? "is-standalone-store" : ""} ${themeModeClass(product)} ${escapeHtml(product.themeClass || "")}" style="${productThemeStyle(product)}">
               ${renderHeader()}
               ${renderPage()}
               ${renderInfoPanel()}
@@ -4060,9 +6310,9 @@
                       </button>
                     `
                 }
-                <button class="brand-button" type="button" data-action="home" aria-label="홈으로 이동">
+                <a class="brand-button" href="/" data-action="home" aria-label="홈으로 이동">
                   <p class="brand-logo">${escapeHtml(siteConfig.logoText)}</p>
-                </button>
+                </a>
                 <button
                   class="support-button"
                   type="button"
@@ -4174,22 +6424,32 @@
 
         function renderHomePage() {
           const heroProduct = mainSiteProduct();
+          const heroHref = productDetailHref(heroProduct);
           const heroImage = siteConfig.heroImage || heroProduct.image;
+          const heroHeadline = isStaticFilePreview
+            ? "생활에 가치 있는 아이템을\n잇템몰이 고릅니다"
+            : siteConfig.mainHeadline;
+          const heroCopy = isStaticFilePreview
+            ? "유행보다 쓰임, 과장보다 필요를 기준으로 매일의 생활에 도움이 되는 상품을 소개합니다."
+            : siteConfig.mainSubcopy;
+          const productSectionTitle = isStaticFilePreview
+            ? "추천 상품"
+            : siteConfig.productSectionTitle;
           return `
             <main>
               <section class="section">
                 <div class="hero">
-                  <img src="${heroImage}" alt="${escapeHtml(heroProduct.name)}" />
+                  <img src="${heroImage}" alt="${escapeHtml(siteConfig.heroImageAlt || heroProduct.name)}" />
                   <div class="hero-content">
                     <div>
                       <p class="eyebrow">${escapeHtml(siteConfig.heroEyebrow)}</p>
-                      <h1>${escapeHtml(siteConfig.mainHeadline)}</h1>
-                      <p class="hero-copy">${escapeHtml(siteConfig.mainSubcopy)}</p>
+                      <h1>${escapeHtml(heroHeadline)}</h1>
+                      <p class="hero-copy">${escapeHtml(heroCopy)}</p>
                     </div>
                     <div class="hero-actions">
-                      <button class="btn primary" type="button" data-action="select-product" data-id="${heroProduct.id}">
+                      <a class="btn primary" href="${escapeHtml(heroHref)}" data-action="select-product" data-id="${heroProduct.id}">
                         ${escapeHtml(siteConfig.heroButtonText)}
-                      </button>
+                      </a>
                       <button class="btn" type="button" data-action="history">
                         ${icon("list", 17)} 주문 내역
                       </button>
@@ -4202,7 +6462,7 @@
                 <div class="section-heading">
                   <div>
                     <p class="eyebrow">PRODUCTS</p>
-                    <h2>${escapeHtml(siteConfig.productSectionTitle)}</h2>
+                    <h2>${escapeHtml(productSectionTitle)}</h2>
                   </div>
                   <button class="link-button" type="button" data-action="history">주문 내역</button>
                 </div>
@@ -4222,7 +6482,7 @@
                 </div>
 
                 <div class="category-strip" aria-label="상품 카테고리">
-                  ${categories
+                  ${homeCategories
                     .map(
                       (category) => `
                         <button
@@ -4258,13 +6518,14 @@
         }
 
         function renderProductCard(product) {
+          const productHref = productDetailHref(product);
           return `
             <article
               class="product-card ${product.cardMediaClass ? `is-${product.cardMediaClass}` : ""}"
               data-category="${escapeHtml(product.categoryId || "")}"
               data-product-card="${escapeHtml(`${product.categoryLabel || ""} ${product.statusLabel || ""} ${product.name} ${product.shortDescription}`)}"
             >
-              <button class="product-card-main" type="button" data-action="select-product" data-id="${product.id}">
+              <a class="product-card-main" href="${escapeHtml(productHref)}" data-action="select-product" data-id="${product.id}">
                 <div class="product-media">
                   <img src="${product.image}" alt="${escapeHtml(product.name)}" />
                 </div>
@@ -4289,11 +6550,11 @@
                     }
                   </div>
                 </div>
-              </button>
+              </a>
               <div class="product-actions">
-                <button class="btn ghost" type="button" data-action="select-product" data-id="${product.id}">
+                <a class="btn ghost" href="${escapeHtml(productHref)}" data-action="select-product" data-id="${product.id}">
                   자세히 보기
-                </button>
+                </a>
               </div>
             </article>
           `;
@@ -4326,9 +6587,9 @@
                       .join("")}
                   </div>
                 </div>
-                <div class="thumb-grid">
+                <div class="thumb-grid ${Number(product.galleryThumbLimit || 5) === 6 ? "is-six" : ""}">
                   ${images
-                    .slice(0, 5)
+                    .slice(0, Number(product.galleryThumbLimit || 5))
                     .map(
                       (src, index) => `
                         <button
@@ -4347,7 +6608,7 @@
               </section>
 
               <section class="section-tight">
-                <p class="eyebrow">PRODUCT DETAIL</p>
+                <p class="eyebrow">${product.detailMode === "jewelry" ? "AQUA GLOW" : "PRODUCT DETAIL"}</p>
                 <h1 class="detail-title">${escapeHtml(product.name)}</h1>
                 <p class="detail-copy">${escapeHtml(product.longDescription)}</p>
                 ${product.detailNotice ? `<p class="detail-notice">${escapeHtml(product.detailNotice)}</p>` : ""}
@@ -4370,10 +6631,16 @@
                 <div class="option-group-grid">
                   ${product.options.map(renderOptionSelect).join("")}
                 </div>
-                <div class="summary-card" style="margin-top:14px">
-                  <p class="summary-meta">선택 총액</p>
-                  <p class="summary-price">₩ ${formatPrice(getOrderTotal(product, state.quantity))}</p>
-                </div>
+                ${
+                  product.detailMode === "jewelry"
+                    ? ""
+                    : `
+                      <div class="summary-card" style="margin-top:14px">
+                        <p class="summary-meta">선택 총액</p>
+                        <p class="summary-price">₩ ${formatPrice(getOrderTotal(product, state.quantity))}</p>
+                      </div>
+                    `
+                }
                 <div>
                   <p class="field-label">수량</p>
                   <div class="quantity-control" aria-label="수량 선택">
@@ -4408,7 +6675,7 @@
                   `
               }
 
-              ${renderTrustRow()}
+              ${product.detailMode === "jewelry" ? "" : renderTrustRow()}
               ${renderFooter()}
               ${renderDetailBottomBar()}
             </main>
@@ -4416,122 +6683,565 @@
         }
 
         function renderProductStory(product) {
-          const story = product.story;
-          if (!story) return "";
-          const highlightEyebrow = story.highlightEyebrow || `왜 ${product.name}인가`;
-          const highlightCopy = story.highlightCopy || product.longDescription;
+          if (product.detailMode === "jewelry" && product.jewelryDetail) {
+            return renderJewelryStory(product);
+          }
+          const detail = buildV6Detail(product);
+          if (!detail) return "";
+          const detailVisual = renderV6Visual("story-v6-detail", detail.detail, false);
+          const placeDetailAfterProof = detail.detailPlacement === "afterProof";
+          const fitClass =
+            detail.imageFit === "contain"
+              ? " story-v6-gallery-fit"
+              : detail.imageFit === "portrait"
+                ? " story-v6-portrait-fit"
+                : "";
+          const placementClass = detail.textPlacement === "below" ? " story-v6-text-below" : "";
+          const proofThemeClass = detail.proofTheme === "blue" ? " story-v6-proof-blue" : "";
           return `
-            <section class="divider-section story-stack">
-              ${(story.brandImages || [])
-                .map(
-                  (image) => `
-                    <figure class="story-image">
-                      <img src="${image.src}" alt="${escapeHtml(image.alt || product.name)}" />
-                    </figure>
-                  `,
-                )
-                .join("")}
-
+            <section class="story-v6${fitClass}${placementClass}${proofThemeClass}" aria-label="${escapeHtml(product.name)} 상세 본문">
+              ${renderV6Visual("story-v6-hero", detail.hero, true)}
+              ${renderV6SpecStrip(detail.specStrip)}
               ${
-                story.certification
-                  ? `
-                    <section class="certification-card">
-                      <img src="${story.certification.image}" alt="${escapeHtml(story.certification.title)}" />
-                      <div>
-                        <h2 class="story-heading">${escapeHtml(story.certification.title)}</h2>
-                        ${(story.certification.lines || [])
-                          .map((line) => `<p class="story-copy">${escapeHtml(line)}</p>`)
-                          .join("")}
-                      </div>
+                detail.hideIntro
+                  ? ""
+                  : `
+                    <section class="story-v6-intro">
+                      <h2>${renderV6Title(detail.intro.titleLines)}</h2>
+                      <p>${escapeHtml(safeV6CustomerText(detail.intro.copy))}</p>
                     </section>
                   `
-                  : ""
               }
-
-              ${
-                story.featureImage
-                  ? `
-                    <figure class="story-image story-feature-image">
-                      <img src="${story.featureImage.src}" alt="${escapeHtml(story.featureImage.alt || product.name)}" />
-                    </figure>
-                  `
-                  : ""
-              }
-
-              ${(story.highlights || []).length
-                ? `
-                  <section class="story-block why-block">
-                    <p class="eyebrow">${escapeHtml(highlightEyebrow)}</p>
-                    <ul class="highlight-list">
-                      ${story.highlights.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-                    </ul>
-                    <p class="story-copy">${escapeHtml(highlightCopy)}</p>
-                  </section>
-                `
-                : ""}
-
-              ${
-                story.showcaseImage
-                  ? `
-                    <figure class="story-image story-feature-image">
-                      <img src="${story.showcaseImage.src}" alt="${escapeHtml(story.showcaseImage.alt || product.name)}" />
-                    </figure>
-                  `
-                  : ""
-              }
-
-              ${(story.sections || [])
-                .map(
-                  (section) => `
-                    <section class="story-block">
-                      <p class="eyebrow">${escapeHtml(section.eyebrow)}</p>
-                      <h2 class="story-heading">${escapeHtml(section.title)}</h2>
-                      ${(section.paragraphs || [])
-                        .map((paragraph) => `<p class="story-copy">${escapeHtml(paragraph)}</p>`)
-                        .join("")}
-                    </section>
-                  `,
-                )
-                .join("")}
-
-              ${(story.recommendations || []).length
-                ? `
-                  <section class="story-block">
-                    <h2 class="story-heading">${escapeHtml(story.recommendTitle || "추천 대상")}</h2>
-                    <ul class="plain-list">
-                      ${story.recommendations.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-                    </ul>
-                  </section>
-                `
-                : ""}
-
-              ${renderSizeGuide(story)}
-
-              ${(story.specs || []).length
-                ? `
-                  <section class="story-block">
-                    <p class="eyebrow">${escapeHtml(story.specTitle || "제품 사양")}</p>
-                    <dl class="spec-list">
-                      ${story.specs
-                        .map(
-                          (item) => `
-                            <div class="spec-line">
-                              <dt>${escapeHtml(item.label)}</dt>
-                              <dd>${escapeHtml(item.value)}</dd>
-                            </div>
-                          `,
-                        )
-                        .join("")}
-                    </dl>
-                  </section>
-                `
-                : ""}
+              ${renderV6Visual("story-v6-problem", detail.problem, false)}
+              ${renderV6FeatureMain(detail.feature)}
+              ${renderV6Proof(detail.proof)}
+              ${placeDetailAfterProof ? detailVisual : ""}
+              ${renderV6Benefit(detail.benefit)}
+              ${placeDetailAfterProof ? "" : detailVisual}
+              ${renderV6InfoSection(detail)}
+              ${renderV6PolicyBlock(detail.policy)}
             </section>
           `;
         }
 
+        function renderJewelryStory(product) {
+          const detail = product.jewelryDetail || {};
+          const paragraphs = cleanV6TextList(detail.paragraphs || []).slice(0, 3);
+          const features = cleanV6TextList(detail.features || []).slice(0, 4);
+          const accordions = (detail.accordions || [])
+            .map((section) => ({
+              title: compactV6Text(section.title || ""),
+              copy: compactV6Text(section.copy || ""),
+              rows: cleanV6InfoItems(section.rows || []),
+            }))
+            .filter((section) => section.title && (section.copy || section.rows.length));
+
+          if (!paragraphs.length && !features.length && !accordions.length) return "";
+
+          return `
+            <section class="jewelry-story" aria-label="${escapeHtml(product.name)} 주얼리 상세 정보">
+              <div class="jewelry-story-intro">
+                <p class="jewelry-story-eyebrow">${escapeHtml(detail.eyebrow || "JEWELRY")}</p>
+                <h2>${escapeHtml(detail.title || product.name)}</h2>
+                ${
+                  paragraphs.length
+                    ? `<div class="jewelry-story-copy">${paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}</div>`
+                    : ""
+                }
+                ${
+                  features.length
+                    ? `<ul class="jewelry-story-features">${features.map((feature) => `<li>${escapeHtml(feature)}</li>`).join("")}</ul>`
+                    : ""
+                }
+              </div>
+              ${
+                accordions.length
+                  ? `
+                    <div class="jewelry-accordions">
+                      ${accordions
+                        .map(
+                          (section, index) => `
+                            <details class="jewelry-accordion" ${index === 0 ? "open" : ""}>
+                              <summary>${escapeHtml(section.title)}</summary>
+                              <div class="jewelry-accordion-body">
+                                ${
+                                  section.rows.length
+                                    ? `
+                                      <dl class="jewelry-info-list">
+                                        ${section.rows
+                                          .map(
+                                            (row) => `
+                                              <div class="jewelry-info-row">
+                                                <dt>${escapeHtml(row.label)}</dt>
+                                                <dd>${escapeHtml(row.value)}</dd>
+                                              </div>
+                                            `,
+                                          )
+                                          .join("")}
+                                      </dl>
+                                    `
+                                    : ""
+                                }
+                                ${section.copy ? `<p class="jewelry-accordion-copy">${escapeHtml(section.copy)}</p>` : ""}
+                              </div>
+                            </details>
+                          `,
+                        )
+                        .join("")}
+                    </div>
+                  `
+                  : ""
+              }
+            </section>
+          `;
+        }
+
+        function buildV6Detail(product) {
+          const story = product.story;
+          if (!story) return null;
+          const preset = productStoryV6Presets[product.slug] || product.v6Detail || story.v6Detail || {};
+          const sections = story.sections || [];
+          const images = product.images?.length ? product.images : [product.image];
+          const brandImage = story.brandImages?.[0] || {};
+          const featureImage = story.featureImage || {};
+          const showcaseImage = story.showcaseImage || {};
+          const problemSection = sections[0] || {};
+          const featureSection = sections[1] || sections[0] || {};
+          const useSection = sections[2] || sections[0] || {};
+          const detailSection = sections[1] || sections[2] || {};
+          const heroImage = preset.hero?.image || images[0] || product.image;
+          const problemImage = preset.problem?.image || brandImage.src || images[1] || heroImage;
+          const featureImageSrc = preset.feature?.image || showcaseImage.src || featureImage.src || images[2] || problemImage;
+          const detailImageSrc = preset.detail?.image || featureImage.src || images[2] || featureImageSrc;
+          const infoItems = cleanV6InfoItems(preset.info || story.specs || product.infoItems || product.detailInfo || []);
+
+          return {
+            story,
+            imageFit: preset.imageFit || "",
+            textPlacement: preset.textPlacement || "",
+            hideIntro: preset.hideIntro === true,
+            proofTheme: preset.proofTheme || "",
+            detailPlacement: preset.detailPlacement || "",
+            hero: {
+              image: heroImage,
+              alt: preset.hero?.alt || `${product.name} 제품 이미지`,
+              imageFit: preset.hero?.imageFit || "",
+              eyebrow: preset.hero?.eyebrow || cleanStoryEyebrow(product.categoryLabel || "PRODUCT", 0),
+              titleLines: getV6TitleLines(preset.hero?.titleLines || story.heroTitleLines || [product.name]),
+              lead: preset.hero?.lead || story.highlightCopy || product.longDescription,
+              modelValue: preset.hero?.modelValue || product.cardTitle || product.name,
+              modelText: preset.hero?.modelText || product.categoryLabel || "상품 상세",
+            },
+            specStrip: preset.specStrip || buildV6SpecStrip(product, story),
+            intro: {
+              titleLines: getV6TitleLines(preset.intro?.titleLines || story.introTitleLines || story.highlightEyebrow || product.shortDescription || product.name),
+              copy: preset.intro?.copy || story.highlightCopy || product.longDescription,
+            },
+            problem: {
+              image: problemImage,
+              alt: preset.problem?.alt || brandImage.alt || `${product.name} 사용 장면`,
+              eyebrow: preset.problem?.eyebrow || cleanStoryEyebrow(problemSection.eyebrow, 0),
+              titleLines: getV6TitleLines(preset.problem?.titleLines || problemSection.title || story.highlightEyebrow || product.name),
+              lead: preset.problem?.lead || paragraphsToCopy(problemSection.paragraphs, product.longDescription),
+            },
+            feature: {
+              image: featureImageSrc,
+              alt: preset.feature?.alt || showcaseImage.alt || featureImage.alt || `${product.name} 기능 이미지`,
+              textPlacement: preset.feature?.textPlacement || "",
+              eyebrow: preset.feature?.eyebrow || cleanStoryEyebrow(featureSection.eyebrow, 1),
+              titleLines: getV6TitleLines(preset.feature?.titleLines || featureSection.title || story.highlightEyebrow || product.name),
+              copy:
+                preset.feature?.hideCopy === true
+                  ? ""
+                  : preset.feature?.copy || paragraphsToCopy(featureSection.paragraphs, story.highlightCopy || product.longDescription),
+              points: normalizeV6Points(preset.feature?.points || story.highlights || []),
+            },
+            proof: normalizeV6Proof(preset.proof || story.proof || null),
+            benefit: {
+              image: preset.benefit?.image || preset.useScene?.image || images[1] || problemImage,
+              alt: preset.benefit?.alt || preset.useScene?.alt || `${product.name} 사용 장면`,
+              eyebrow: preset.benefit?.eyebrow || "USE SCENE",
+              titleLines: getV6TitleLines(preset.benefit?.titleLines || useSection.title || "생활 속에 두기 좋은 제품"),
+              copy: preset.benefit?.copy || paragraphsToCopy(useSection.paragraphs, product.longDescription),
+              points: normalizeV6Points(preset.benefit?.points || story.recommendations || []),
+            },
+            detail: {
+              image: detailImageSrc,
+              alt: preset.detail?.alt || featureImage.alt || `${product.name} 디테일 이미지`,
+              eyebrow: preset.detail?.eyebrow || cleanStoryEyebrow(detailSection.eyebrow, 2),
+              titleLines: getV6TitleLines(preset.detail?.titleLines || detailSection.title || product.name),
+              lead: preset.detail?.lead || paragraphsToCopy(detailSection.paragraphs, story.highlightCopy || product.longDescription),
+            },
+            infoTitle: preset.infoTitle || story.specTitle || "구매 전 확인할 제품 정보",
+            infoCaption: preset.infoCaption || "색상, 구성, 사용 전 확인할 정보를 구매 전에 확인하세요.",
+            infoItems,
+            policy: normalizeV6Policy(preset.policy || story.policy || {}),
+          };
+        }
+
+        function renderV6Visual(className, section, showModel) {
+          if (!section?.image) return "";
+          const imageFitClass = section.imageFit === "square" ? " story-v6-square-fit" : "";
+          const noticeSafeClass = section.image.includes("-ai-v8") ? " story-v6-notice-safe" : "";
+          return `
+            <section class="story-v6-visual ${className}${imageFitClass}${noticeSafeClass}" aria-label="${escapeHtml(section.eyebrow || section.modelText || "상세 이미지")}">
+              <img src="${escapeHtml(section.image)}" alt="${escapeHtml(section.alt || "상품 상세 이미지")}" />
+              <div class="story-v6-copy">
+                <p class="story-v6-eyebrow">${escapeHtml(section.eyebrow || "")}</p>
+                <h2 class="story-v6-title">${renderV6Title(section.titleLines)}</h2>
+                ${
+                  safeV6CustomerText(section.lead)
+                    ? `<p class="story-v6-lead">${escapeHtml(safeV6CustomerText(section.lead))}</p>`
+                    : ""
+                }
+              </div>
+              ${
+                showModel
+                  ? `<div class="story-v6-model"><b>${escapeHtml(section.modelValue || "")}</b><span>${escapeHtml(section.modelText || "")}</span></div>`
+                  : ""
+              }
+            </section>
+          `;
+        }
+
+        function renderV6SpecStrip(items) {
+          const specs = cleanV6SpecStrip(items).slice(0, 5);
+          if (!specs.length) return "";
+          return `
+            <section class="story-v6-spec-strip" aria-label="핵심 제품 정보">
+              ${specs
+                .map(
+                  (item) => `
+                    <div class="story-v6-spec">
+                      <div class="story-v6-spec-inner">
+                        <strong>${escapeHtml(item.value)}</strong>
+                        <span>${escapeHtml(item.label)}</span>
+                      </div>
+                    </div>
+                  `,
+                )
+                .join("")}
+            </section>
+          `;
+        }
+
+        function renderV6Feature(feature) {
+          if (!feature) return "";
+          return `
+            <section class="story-v6-feature" aria-label="${escapeHtml(feature.eyebrow || "제품 기능")}">
+              <div class="story-v6-feature-text">
+                <p class="story-v6-eyebrow" style="color:#6f816f">${escapeHtml(feature.eyebrow || "")}</p>
+                <h2>${renderV6Title(feature.titleLines)}</h2>
+                <p>${escapeHtml(safeV6CustomerText(feature.copy))}</p>
+                ${
+                  feature.points?.length
+                    ? `
+                      <div class="story-v6-points">
+                        ${feature.points
+                          .slice(0, 3)
+                          .map(
+                            (point) => `
+                              <div class="story-v6-point">
+                                <strong>${escapeHtml(point.title)}</strong>
+                                <span>${escapeHtml(point.caption || "")}</span>
+                              </div>
+                            `,
+                          )
+                          .join("")}
+                      </div>
+                    `
+                    : ""
+                }
+              </div>
+              ${
+                feature.image
+                  ? `
+                    <div class="story-v6-feature-image">
+                      <img src="${escapeHtml(feature.image)}" alt="${escapeHtml(feature.alt || "제품 기능 이미지")}" />
+                    </div>
+                  `
+                  : ""
+              }
+            </section>
+          `;
+        }
+
+        function renderV6FeatureMain(feature) {
+          if (!feature?.image) return "";
+          const placementClass =
+            feature.textPlacement === "below"
+              ? " story-v6-copy-below"
+              : feature.textPlacement === "overlay-top-left"
+                ? " story-v6-overlay-top-left"
+                : feature.textPlacement === "overlay-top"
+                  ? " story-v6-copy-top"
+                : "";
+          return renderV6Visual(
+            `story-v6-feature-main${placementClass}`,
+            {
+              ...feature,
+              lead: feature.lead || feature.copy || "",
+            },
+            false,
+          );
+        }
+
+        function renderV6Proof(proof) {
+          if (!proof?.items?.length) return "";
+          return `
+            <section class="story-v6-proof" aria-label="${escapeHtml(proof.eyebrow || "기능 근거")}">
+              <div class="story-v6-proof-head">
+                <p class="story-v6-eyebrow">${escapeHtml(proof.eyebrow || "")}</p>
+                <h2>${renderV6Title(proof.titleLines)}</h2>
+                ${safeV6CustomerText(proof.copy) ? `<p>${escapeHtml(safeV6CustomerText(proof.copy))}</p>` : ""}
+              </div>
+              <div class="story-v6-proof-list">
+                ${proof.items
+                  .map(
+                    (item, index) => `
+                      <div class="story-v6-proof-card">
+                        <div class="story-v6-proof-card-text">
+                          <b class="story-v6-proof-number">${String(index + 1).padStart(2, "0")}</b>
+                          <div>
+                            <strong>${escapeHtml(item.title)}</strong>
+                            <span>${escapeHtml(item.caption || "")}</span>
+                          </div>
+                        </div>
+                        <div class="story-v6-proof-icon">${
+                          item.iconImage
+                            ? `<img src="${escapeHtml(item.iconImage)}" alt="" loading="lazy" decoding="async" />`
+                            : icon(item.icon || "info", 46)
+                        }</div>
+                      </div>
+                    `,
+                  )
+                  .join("")}
+              </div>
+            </section>
+          `;
+        }
+
+        function renderV6Benefit(benefit) {
+          if (!benefit?.image) return "";
+          const points = normalizeV6Points(benefit.points || []).slice(0, 3);
+          const noticeSafeClass = benefit.image.includes("-ai-v8") ? " story-v6-benefit-notice-safe" : "";
+          return `
+            <section class="story-v6-benefit${noticeSafeClass}" aria-label="${escapeHtml(benefit.eyebrow || "생활 장점")}">
+              <div class="story-v6-benefit-image">
+                <img src="${escapeHtml(benefit.image)}" alt="${escapeHtml(benefit.alt || "상품 사용 장면")}" />
+              </div>
+              <div class="story-v6-benefit-text">
+                <p class="story-v6-eyebrow" style="color:#6f816f">${escapeHtml(benefit.eyebrow || "")}</p>
+                <h2>${renderV6Title(benefit.titleLines)}</h2>
+                <p>${escapeHtml(safeV6CustomerText(benefit.copy))}</p>
+                ${
+                  points.length
+                    ? `
+                      <div class="story-v6-benefit-points">
+                        ${points
+                          .map(
+                            (point) => `
+                              <div class="story-v6-benefit-point">
+                                <strong>${escapeHtml(point.title)}</strong>
+                                <span>${escapeHtml(point.caption || "")}</span>
+                              </div>
+                            `,
+                          )
+                          .join("")}
+                      </div>
+                    `
+                    : ""
+                }
+              </div>
+            </section>
+          `;
+        }
+
+        function renderV6InfoSection(detail) {
+          const items = cleanV6InfoItems(detail.infoItems || []).slice(0, 10);
+          const sizeGuide = renderSizeGuide(detail.story);
+          if (!items.length && !sizeGuide) return "";
+          return `
+            <section class="story-v6-info-section" aria-label="구매 전 정보">
+              <h2>${escapeHtml(detail.infoTitle)}</h2>
+              <p>${escapeHtml(safeV6CustomerText(detail.infoCaption))}</p>
+              ${sizeGuide}
+              ${
+                items.length
+                  ? `
+                    <div class="story-v6-info-grid">
+                      ${items
+                        .map(
+                          (item) => `
+                            <div class="story-v6-info">
+                              <span>${escapeHtml(item.label)}</span>
+                              <strong>${escapeHtml(item.value)}</strong>
+                            </div>
+                          `,
+                        )
+                        .join("")}
+                    </div>
+                  `
+                  : ""
+              }
+            </section>
+          `;
+        }
+
+        function renderV6PolicyBlock(policy) {
+          const normalized = normalizeV6Policy(policy);
+          if (!normalized.items.length) return "";
+          return `
+            <section class="story-v6-policy" aria-label="배송과 교환 반품 안내">
+              <h2>${renderV6Title(normalized.titleLines)}</h2>
+              <p>${escapeHtml(safeV6CustomerText(normalized.caption))}</p>
+              <div class="story-v6-policy-grid">
+                ${normalized.items
+                  .map(
+                    (item) => `
+                      <div class="story-v6-policy-item">
+                        <strong>${escapeHtml(item.title)}</strong>
+                        <p>${escapeHtml(item.copy)}</p>
+                      </div>
+                    `,
+                  )
+                  .join("")}
+              </div>
+              ${safeV6CustomerText(normalized.caution) ? `<p class="story-v6-policy-caution">${escapeHtml(safeV6CustomerText(normalized.caution))}</p>` : ""}
+            </section>
+          `;
+        }
+
+        function renderV6Title(lines) {
+          return getV6TitleLines(lines).map((line) => escapeHtml(line)).join("<br>");
+        }
+
+        function getV6TitleLines(value) {
+          if (Array.isArray(value)) {
+            const lines = value.map((line) => compactV6Text(line)).filter(Boolean);
+            return lines.length ? lines.slice(0, 4) : [""];
+          }
+          const text = compactV6Text(value);
+          if (!text) return [""];
+          return text.split(/\s*<br\s*\/?>\s*|\n+/i).map((line) => compactV6Text(line)).filter(Boolean).slice(0, 4);
+        }
+
+        function buildV6SpecStrip(product, story) {
+          const info = cleanV6InfoItems(product.infoItems || story.specs || product.detailInfo || []);
+          const compactInfo = info.filter((item) => !/제품명|상품명/i.test(item.label)).slice(0, 5);
+          if (compactInfo.length) {
+            return compactInfo.map((item) => ({ value: item.value, label: item.label }));
+          }
+          return cleanV6TextList(story.highlights || []).slice(0, 5).map((item, index) => ({
+            value: item,
+            label: `POINT ${String(index + 1).padStart(2, "0")}`,
+          }));
+        }
+
+        function normalizeV6Points(items) {
+          return (items || [])
+            .map((item) => {
+              if (typeof item === "string") return { title: item, caption: "" };
+              return { title: item.title || item.value || "", caption: item.caption || item.label || "" };
+            })
+            .filter((item) => item.title && !hasBlockedCustomerText(`${item.title} ${item.caption}`));
+        }
+
+        function normalizeV6Proof(proof) {
+          if (!proof) return null;
+          const items = (proof.items || [])
+            .map((item) => ({
+              icon: compactV6Text(item.icon || "info"),
+              iconImage: compactV6Text(item.iconImage || ""),
+              title: compactV6Text(item.title || item.value || ""),
+              caption: compactV6Text(item.caption || item.copy || item.label || ""),
+            }))
+            .filter((item) => item.title && item.caption && !hasBlockedCustomerText(`${item.title} ${item.caption}`));
+
+          if (!items.length) return null;
+          return {
+            eyebrow: compactV6Text(proof.eyebrow || "STRUCTURE CHECK"),
+            titleLines: getV6TitleLines(proof.titleLines || proof.title || "구조를 확인하세요"),
+            copy: compactV6Text(proof.copy || proof.caption || ""),
+            items,
+          };
+        }
+
+        function normalizeV6Policy(policy) {
+          const defaultItems = [
+            { title: "배송 안내", copy: "결제 확인 후 상품별 출고 일정에 따라 순차 발송됩니다. 지역과 수량에 따라 배송비와 도착 일정이 달라질 수 있습니다." },
+            { title: "교환 / 반품", copy: "상품 수령 후 구성품과 외관을 먼저 확인해 주세요. 사용 흔적, 구성품 누락, 포장 훼손이 있으면 교환이나 반품이 제한될 수 있습니다." },
+            { title: "문의 안내", copy: "상품 이상이나 배송 문의는 주문 정보와 사진을 함께 남겨 주세요. 확인 후 안내에 따라 처리됩니다." },
+          ];
+          const sourceItems = Array.isArray(policy?.items) && policy.items.length ? policy.items : defaultItems;
+          const items = sourceItems
+            .map((item) => ({
+              title: compactV6Text(item.title || item.label || ""),
+              copy: compactV6Text(item.copy || item.caption || item.description || ""),
+            }))
+            .filter((item) => item.title && item.copy && !hasBlockedCustomerText(`${item.title} ${item.copy}`));
+
+          return {
+            titleLines: getV6TitleLines(policy?.titleLines || policy?.title || "배송 / 교환 / 반품 안내"),
+            caption: compactV6Text(policy?.caption || "주문 전후에 확인해야 할 기본 안내입니다."),
+            items,
+            caution: compactV6Text(policy?.caution || ""),
+          };
+        }
+
+        function cleanV6SpecStrip(items) {
+          return (items || [])
+            .map((item) => ({ value: compactV6Text(item.value || item.title || ""), label: compactV6Text(item.label || item.caption || "") }))
+            .filter((item) => item.value && item.label && !hasBlockedCustomerText(`${item.value} ${item.label}`));
+        }
+
+        function cleanV6InfoItems(items) {
+          return (items || [])
+            .map((item) => ({ label: compactV6Text(item.label || ""), value: compactV6Text(item.value || "") }))
+            .filter((item) => item.label && item.value && !hasBlockedCustomerText(`${item.label} ${item.value}`));
+        }
+
+        function cleanV6TextList(items) {
+          return (items || []).map(compactV6Text).filter((item) => item && !hasBlockedCustomerText(item));
+        }
+
+        function cleanStoryEyebrow(value, index) {
+          const text = compactV6Text(value);
+          const map = {
+            "공감 장면": "DAILY SCENE",
+            "상품 특이점": "PRODUCT DETAIL",
+            "사용 루틴": "HOW TO USE",
+            "구성": "PACKAGE",
+            "선택": "OPTION",
+            "관리": "CARE",
+            "소재": "MATERIAL",
+          };
+          if (map[text]) return map[text];
+          if (/^포인트\s*\d+/i.test(text)) return `FEATURE ${String(index + 1).padStart(2, "0")}`;
+          return text || "PRODUCT DETAIL";
+        }
+
+        function paragraphsToCopy(paragraphs, fallback) {
+          const copy = cleanV6TextList(paragraphs || []).join(" ");
+          return copy || compactV6Text(fallback);
+        }
+
+        function compactV6Text(value) {
+          return String(value || "").replace(/\s+/g, " ").trim();
+        }
+
+        function safeV6CustomerText(value) {
+          const text = compactV6Text(value);
+          return hasBlockedCustomerText(text) ? "" : text;
+        }
+
+        function hasBlockedCustomerText(value) {
+          return /(원본 상세페이지|타겟 상세페이지|소스 이미지|source evidence|프롬프트|생성했습니다|참고했습니다|확인됩니다|확인했습니다|확인되는|표기되어|상세정보에서|구성이 확인|확인되는 구조|한 장면으로 정리|근거로 작성|제작자 설명|제작 과정|내부 설명|보여주는 편|장점\s*4가지|체크\s*포인트|쓰기 전에|이 네 가지를 보세요|테스트|조건부|검증|반응 확인|구매 의향|클릭 의도|클릭값|페이크도어|실험|테스트몰|테스트 상품|판매 테스트|실제 결제가 아닙니다|확인 필요|test|trial|validation|experiment|mvp)/i.test(String(value || ""));
+        }
+
         function renderSizeGuide(story) {
           if (!story.sizeGuide && !(story.sizeChart || []).length) return "";
+          const hideIntro = Boolean(story.sizeGuide?.hideIntro);
           const sizeColumns = story.sizeColumns || [
             { label: "사이즈", key: "size" },
             { label: "가슴둘레(cm)", key: "chest" },
@@ -4542,11 +7252,13 @@
           return `
             <section class="story-block size-guide-block">
               <div>
-                <p class="eyebrow">${escapeHtml(story.sizeGuide?.title || "사이즈 선택 가이드")}</p>
                 ${
-                  story.sizeGuide?.copy
-                    ? `<p class="story-copy">${escapeHtml(story.sizeGuide.copy)}</p>`
-                    : ""
+                  hideIntro
+                    ? ""
+                    : `
+                      <p class="eyebrow">${escapeHtml(story.sizeGuide?.title || "사이즈 선택 가이드")}</p>
+                      ${story.sizeGuide?.copy ? `<p class="story-copy">${escapeHtml(story.sizeGuide.copy)}</p>` : ""}
+                    `
                 }
                 ${
                   story.sizeGuide?.image
@@ -4657,11 +7369,13 @@
                         style="--swatch-color:${escapeHtml(getColorSwatch(item))}"
                         aria-label="${escapeHtml(item)} 색상 선택"
                         aria-pressed="${item === selectedValue ? "true" : "false"}"
-                      ></button>
+                      >
+                        <span class="color-swatch-dot" aria-hidden="true"></span>
+                        <span>${escapeHtml(item)}</span>
+                      </button>
                     `,
                   )
                   .join("")}
-                <span class="color-swatch-name">${escapeHtml(selectedValue)}</span>
               </div>
             </div>
           `;
@@ -4710,6 +7424,10 @@
           if (["white", "화이트"].includes(normalized)) return "#ffffff";
           if (["silver", "실버"].includes(normalized)) return "linear-gradient(135deg, #f8fafc 0%, #cbd5e1 48%, #f1f5f9 100%)";
           if (["gray", "grey", "그레이"].includes(normalized)) return "#d4d4d8";
+          if (["skyblue", "sky blue", "하늘색", "아이스블루", "아이스불루"].includes(normalized)) return "#BFE7F6";
+          if (["lavender", "라벤더"].includes(normalized)) return "#D8C7F2";
+          if (["deepblue", "deep blue", "딥블루"].includes(normalized)) return "#243C72";
+          if (["green", "그린"].includes(normalized)) return "#8BC78C";
           return "#e5bcc0";
         }
 
@@ -5343,6 +8061,20 @@
               '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/>',
             lock:
               '<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+            light:
+              '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M8.5 14.5a5.5 5.5 0 1 1 7 0c-.9.8-1.5 1.7-1.5 3.5h-4c0-1.8-.6-2.7-1.5-3.5Z"/><path d="M4 12H2"/><path d="M22 12h-2"/><path d="m5 5-1.4-1.4"/><path d="m20.4 3.6-1.4 1.4"/>',
+            airflow:
+              '<path d="M4 8h9a3 3 0 1 0-3-3"/><path d="M4 13h13a3 3 0 1 1-3 3"/><path d="M4 18h7"/><path d="M12 3v18"/><path d="m8 17 4 4 4-4"/>',
+            trap:
+              '<path d="M7 5h10"/><path d="M6 8h12l-1.2 11H7.2L6 8Z"/><path d="M9 11v5"/><path d="M12 11v5"/><path d="M15 11v5"/><path d="m8 5 1.5-3h5L16 5"/>',
+            clean:
+              '<path d="M7 4h10"/><path d="M9 4v15a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V4"/><path d="M6 8h12"/><path d="M10 12h4"/><path d="M10 16h4"/><path d="m4 20 2-2"/><path d="m20 20-2-2"/>',
+            grille:
+              '<rect x="5" y="4" width="14" height="16" rx="3"/><path d="M9 7v10"/><path d="M12 7v10"/><path d="M15 7v10"/>',
+            zap:
+              '<path d="M13 2 5 14h6l-1 8 9-13h-6V2Z"/><path d="M4 5l1.5 1.5"/><path d="M20 18l-1.5-1.5"/>',
+            power:
+              '<circle cx="12" cy="12" r="7"/><path d="M12 7v5"/><path d="M8.5 15.5a5 5 0 0 0 7 0"/>',
             "chevron-down": '<path d="m6 9 6 6 6-6"/>',
             "chevron-right": '<path d="m9 18 6-6-6-6"/>',
             x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',

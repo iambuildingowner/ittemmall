@@ -65,18 +65,30 @@ function ittemmallProductCatalog(): array
             'name' => '아쿠아글로우 테니스 브레이슬릿',
             'price' => 49900,
         ],
-        'product-004' => [
-            'name' => '러너윈 테크니컬 헤드밴드',
-            'price' => 7900,
-        ],
         'product-003' => [
-            'name' => '윈드쿨 에어 선풍기 조끼',
+            'name' => '빙하기 선풍기조끼',
             'price' => 59900,
             'optionAddOnPrices' => [
                 '추가상품' => [
                     '보조배터리 10,000mAh 추가 (+9,900원)' => 9900,
                 ],
             ],
+        ],
+        'product-006' => [
+            'name' => '나이트클린 LED 모기트랩',
+            'price' => 59900,
+        ],
+        'product-007' => [
+            'name' => '썸머쿨 냉감패드',
+            'price' => 59900,
+        ],
+        'product-010' => [
+            'name' => '모닝핏 접이식 스팀다리미',
+            'price' => 42900,
+        ],
+        'product-009' => [
+            'name' => '쿨터치 냉각 손선풍기',
+            'price' => 39900,
         ],
     ];
 }
